@@ -8,17 +8,42 @@
 
 /* Begin PBXBuildFile section */
 		9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC392B2659AF00790686 /* MovingTasksApp.swift */; };
-		9118BC3C2B2659AF00790686 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC3B2B2659AF00790686 /* ContentView.swift */; };
+		9118BC3C2B2659AF00790686 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC3B2B2659AF00790686 /* TaskListView.swift */; };
 		9118BC3E2B2659B100790686 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9118BC3D2B2659B100790686 /* Assets.xcassets */; };
 		9118BC412B2659B100790686 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9118BC402B2659B100790686 /* Preview Assets.xcassets */; };
+		9118BC482B265A7A00790686 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC472B265A7A00790686 /* Constants.swift */; };
+		9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */; };
+		9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4B2B265A9F00790686 /* Logger+Extension.swift */; };
+		9118BC512B265AD600790686 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4F2B265AD600790686 /* DatabaseError.swift */; };
+		9118BC552B265B1C00790686 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC542B265B1C00790686 /* Category.swift */; };
+		9118BC572B265C7F00790686 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC562B265C7F00790686 /* Task.swift */; };
+		9118BC5A2B2683EA00790686 /* EditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC592B2683EA00790686 /* EditTaskView.swift */; };
+		9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC5B2B268EA300790686 /* Binding+Extension.swift */; };
+		9118BC642B26BD8700790686 /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 9118BC632B26BD8700790686 /* FloatingPromptTextField */; };
+		9118BC662B26C90E00790686 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC652B26C90E00790686 /* Project.swift */; };
+		9118BC692B26CDD100790686 /* LocationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC682B26CDD100790686 /* LocationEnum.swift */; };
+		9118BC6B2B26D45F00790686 /* PriorityEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC6A2B26D45F00790686 /* PriorityEnum.swift */; };
+		9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC6C2B278E7C00790686 /* CategoryEnum.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9118BC362B2659AF00790686 /* MovingTasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovingTasks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9118BC392B2659AF00790686 /* MovingTasksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingTasksApp.swift; sourceTree = "<group>"; };
-		9118BC3B2B2659AF00790686 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9118BC3B2B2659AF00790686 /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		9118BC3D2B2659B100790686 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9118BC402B2659B100790686 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9118BC472B265A7A00790686 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
+		9118BC4B2B265A9F00790686 /* Logger+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+Extension.swift"; sourceTree = "<group>"; };
+		9118BC4F2B265AD600790686 /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		9118BC542B265B1C00790686 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		9118BC562B265C7F00790686 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		9118BC592B2683EA00790686 /* EditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskView.swift; sourceTree = "<group>"; };
+		9118BC5B2B268EA300790686 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
+		9118BC652B26C90E00790686 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		9118BC682B26CDD100790686 /* LocationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationEnum.swift; sourceTree = "<group>"; };
+		9118BC6A2B26D45F00790686 /* PriorityEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityEnum.swift; sourceTree = "<group>"; };
+		9118BC6C2B278E7C00790686 /* CategoryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9118BC642B26BD8700790686 /* FloatingPromptTextField in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,8 +77,13 @@
 		9118BC382B2659AF00790686 /* MovingTasks */ = {
 			isa = PBXGroup;
 			children = (
+				9118BC672B26CD9500790686 /* Enums */,
+				9118BC532B265B0C00790686 /* Models */,
+				9118BC4E2B265AD600790686 /* Error Enums */,
+				9118BC492B265A9F00790686 /* Extensions */,
+				9118BC472B265A7A00790686 /* Constants.swift */,
 				9118BC392B2659AF00790686 /* MovingTasksApp.swift */,
-				9118BC3B2B2659AF00790686 /* ContentView.swift */,
+				9118BC582B265FB400790686 /* Views */,
 				9118BC3D2B2659B100790686 /* Assets.xcassets */,
 				9118BC3F2B2659B100790686 /* Preview Content */,
 			);
@@ -65,6 +96,53 @@
 				9118BC402B2659B100790686 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9118BC492B265A9F00790686 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */,
+				9118BC4B2B265A9F00790686 /* Logger+Extension.swift */,
+				9118BC5B2B268EA300790686 /* Binding+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9118BC4E2B265AD600790686 /* Error Enums */ = {
+			isa = PBXGroup;
+			children = (
+				9118BC4F2B265AD600790686 /* DatabaseError.swift */,
+			);
+			path = "Error Enums";
+			sourceTree = "<group>";
+		};
+		9118BC532B265B0C00790686 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9118BC542B265B1C00790686 /* Category.swift */,
+				9118BC652B26C90E00790686 /* Project.swift */,
+				9118BC562B265C7F00790686 /* Task.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9118BC582B265FB400790686 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9118BC3B2B2659AF00790686 /* TaskListView.swift */,
+				9118BC592B2683EA00790686 /* EditTaskView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9118BC672B26CD9500790686 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				9118BC682B26CDD100790686 /* LocationEnum.swift */,
+				9118BC6A2B26D45F00790686 /* PriorityEnum.swift */,
+				9118BC6C2B278E7C00790686 /* CategoryEnum.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +161,9 @@
 			dependencies = (
 			);
 			name = MovingTasks;
+			packageProductDependencies = (
+				9118BC632B26BD8700790686 /* FloatingPromptTextField */,
+			);
 			productName = MovingTasks;
 			productReference = 9118BC362B2659AF00790686 /* MovingTasks.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +192,9 @@
 				Base,
 			);
 			mainGroup = 9118BC2D2B2659AF00790686;
+			packageReferences = (
+				9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
+			);
 			productRefGroup = 9118BC372B2659AF00790686 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,8 +221,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9118BC3C2B2659AF00790686 /* ContentView.swift in Sources */,
+				9118BC3C2B2659AF00790686 /* TaskListView.swift in Sources */,
+				9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */,
 				9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */,
+				9118BC482B265A7A00790686 /* Constants.swift in Sources */,
+				9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */,
+				9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */,
+				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,
+				9118BC512B265AD600790686 /* DatabaseError.swift in Sources */,
+				9118BC662B26C90E00790686 /* Project.swift in Sources */,
+				9118BC692B26CDD100790686 /* LocationEnum.swift in Sources */,
+				9118BC6B2B26D45F00790686 /* PriorityEnum.swift in Sources */,
+				9118BC572B265C7F00790686 /* Task.swift in Sources */,
+				9118BC552B265B1C00790686 /* Category.swift in Sources */,
+				9118BC5A2B2683EA00790686 /* EditTaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +440,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmilioPelaez/FloatingPromptTextField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9118BC632B26BD8700790686 /* FloatingPromptTextField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */;
+			productName = FloatingPromptTextField;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9118BC2E2B2659AF00790686 /* Project object */;
 }

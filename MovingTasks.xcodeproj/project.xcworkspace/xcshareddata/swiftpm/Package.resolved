@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "floatingprompttextfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EmilioPelaez/FloatingPromptTextField",
+      "state" : {
+        "revision" : "eac6ebeed385c7527eab8e63eb0371708a271b12",
+        "version" : "0.4.0"
+      }
+    }
+  ],
+  "version" : 2
+}
