@@ -13,6 +13,8 @@ struct TaskListView: View
 
     @Query(sort: \Task.taskTitle) var tasks: [Task]
 
+    @State private var filterType: String = FilterEnum.none.filterType
+
     @State private var path = [Task]()
 
     //  Returns the color based on the priority
@@ -50,61 +52,90 @@ struct TaskListView: View
     {
         NavigationStack(path: $path)
         {
-            VStack
+            ZStack
             {
-                if tasks.count == 0
+                LinearGradient(colors: [.gray, .teal, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    .opacity(0.25)
+                    .ignoresSafeArea()
+                
+                VStack
                 {
-                    ContentUnavailableView
+                    if tasks.count == 0
                     {
-                        Label("No tasks are available for display.", systemImage: "calendar.badge.clock")
-                    }
-                    description:
-                    {
-                        Text("Please click the plus icon to add a new task.")
-                    }
-                }
-                else
-                {
-                    List
-                    {
-                        ForEach(tasks)
+                        ContentUnavailableView
                         {
-                            task in
+                            Label("No tasks are available for display.", systemImage: "calendar.badge.clock")
+                        }
+                        description:
+                        {
+                            Text("Please click the plus icon to add a new task.")
+                        }
+                    }
+                    else
+                    {
+                        HStack
+                        {
+                            Spacer()
 
-                            HStack
+                            Text("Filter List:").font(.body).foregroundStyle(.secondary).bold()
+
+                            Picker(Constants.EMPTY_STRING, selection: $filterType)
                             {
-                                NavigationLink(value: task)
+                                ForEach(FilterEnum.allCases)
                                 {
-                                    VStack(alignment: .leading)
+                                    filter in
+
+                                    Text(filter.filterType).tag(filter.filterType)
+                                }
+                            }.pickerStyle(.menu)
+                        }.padding(.horizontal)
+
+                        List
+                        {
+                            ForEach(tasks)
+                            {
+                                task in
+
+                                HStack
+                                {
+                                    NavigationLink(value: task)
                                     {
-                                        HStack
+                                        VStack(alignment: .leading)
                                         {
-                                            Circle()
-                                                .fill(styleForPriority(task.wrappedPriority))
-                                                .frame(width: 15, height: 15)
+                                            HStack
+                                            {
+                                                Circle()
+                                                    .fill(styleForPriority(task.priority))
+                                                    .frame(width: 15, height: 15)
 
-                                            Text(task.wrappedTaskTitle).font(.headline)
+                                                Text(task.taskTitle).font(.headline)
+                                            }
+
+                                            Text(task.taskDescription).font(.callout)
+
+                                            Text("\nLocation: \(task.location)").font(.caption).bold()
+                                            Text("Category: \(task.category)").font(.caption).bold()
+                                            Text("Status: \(task.wrappedIsCompleted)").font(.caption).bold()
+                                            Text("Date Created: \(task.createdDate)").font(.caption).bold()
+
+                                            if task.isCompleted
+                                            {
+                                                Text("Date Completed: \(task.completedDate)").font(.caption).bold()
+                                            }
                                         }
-
-                                        Text(task.wrappedTaskDescription).font(.callout)
-                                        
-                                        Text("\nCategory: \(task.wrappedCategory)").font(.caption).bold()
-                                        Text("Status: \(task.wrappedIsCompleted)").font(.caption).bold()
-                                        Text("Date Created: \(task.wrappedCreatedDate)").font(.caption).bold()
                                     }
                                 }
-                            }
-                        }.onDelete(perform: deleteTask)
+                            }.onDelete(perform: deleteTask)
+                        }
+                        .listStyle(.plain)
+                        .padding()
                     }
-                    .listStyle(.plain)
-                    .padding()
                 }
-            }
-            .toolbar
-            {
-                ToolbarItem(placement: .topBarTrailing)
+                .toolbar
                 {
-                    Button(action:
+                    ToolbarItem(placement: .topBarTrailing)
+                    {
+                        Button(action:
                         {
                             let task = Task(taskTitle: Constants.EMPTY_STRING,
                                             taskDescription: Constants.EMPTY_STRING,
@@ -118,26 +149,27 @@ struct TaskListView: View
                         {
                             HStack
                             {
-                                Text("Add Task").font(.caption)
+                                Text("Add Task").font(.body)
                                 Image(systemName: "plus")
                             }
                         })
-                }
+                    }
 
-                if tasks.count > 0
-                {
-                    ToolbarItem(placement: .topBarLeading)
+                    if tasks.count > 0
                     {
-                        EditButton()
+                        ToolbarItem(placement: .topBarLeading)
+                        {
+                            EditButton()
+                        }
                     }
                 }
-            }
-            .navigationTitle("Tasks")
-            .navigationDestination(for: Task.self)
-            {
-                task in
+                .navigationTitle("Tasks")
+                .navigationDestination(for: Task.self)
+                {
+                    task in
 
-                EditTaskView(task: task)
+                    EditTaskView(task: task)
+                }
             }
         }
     }

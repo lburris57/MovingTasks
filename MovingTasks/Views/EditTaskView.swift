@@ -14,98 +14,134 @@ struct EditTaskView: View
     
     @Environment(\.modelContext) var modelContext
     
-    @State private var priority: String = PriorityEnum.medium.title
+    @Environment(\.colorScheme) var colorScheme
     
     func toggleIsComplete()
     {
-        task.isCompleted?.toggle()
-    }
-    
-    func updatePriority()
-    {
-        task.priority = priority
+        task.isCompleted.toggle()
     }
     
     var body: some View
     {
-        Form
+        ZStack 
         {
-            FloatingPromptTextField(text: $task.taskTitle.toUnwrapped(defaultValue: ""), prompt: Text("Title:"))
+            LinearGradient(colors: [.blue, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing)
+                .opacity(0.25)
+                .ignoresSafeArea()
             
-            FloatingPromptTextField(text: $task.taskDescription.toUnwrapped(defaultValue: ""), prompt: Text("Description:"))
-            
-            FloatingPromptTextField(text: $task.comment.toUnwrapped(defaultValue: ""), prompt: Text("Comment:"))
-            
-            VStack(alignment: .leading, spacing: 5)
+            Form
             {
-                Text("Category:").font(.caption2).foregroundStyle(.blue)
+                FloatingPromptTextField(text: $task.taskTitle, prompt: Text("Title:")
+                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
                 
-                Picker(Constants.EMPTY_STRING, selection: $task.category.toUnwrapped(defaultValue: "Miscellaneous"))
+                FloatingPromptTextField(text: $task.taskDescription, prompt: Text("Description:")
+                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
+                
+                FloatingPromptTextField(text: $task.comment, prompt: Text("Comment:")
+                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
+                
+                VStack(alignment: .leading, spacing: 5)
                 {
-                    ForEach(CategoryEnum.allCases)
+                    Text("Location:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    
+                    Picker(Constants.EMPTY_STRING, selection: $task.location)
                     {
-                        category in
-                        
-                        Text(category.title).tag(category.title)
+                        ForEach(LocationEnum.allCases)
+                        {
+                            location in
+                            
+                            Text(location.title).tag(location.title)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                }
+                
+                VStack(alignment: .leading, spacing: 5)
+                {
+                    Text("Category:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    
+                    Picker(Constants.EMPTY_STRING, selection: $task.category)
+                    {
+                        ForEach(CategoryEnum.allCases)
+                        {
+                            category in
+                            
+                            Text(category.title).tag(category.title)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                }
+                
+                VStack(alignment: .leading, spacing: 5)
+                {
+                    Text("Priority:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    
+                    Picker(Constants.EMPTY_STRING, selection: $task.priority)
+                    {
+                        ForEach(PriorityEnum.allCases)
+                        {
+                            priority in
+                            
+                            Text(priority.title).tag(priority.title)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                }
+                
+                VStack(alignment: .leading, spacing: 5)
+                {
+                    Text("Status:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    
+                    HStack
+                    {
+                        Text("\(task.wrappedIsCompleted)")
+                        Spacer()
+                        Button(action: 
+                        {
+                            toggleIsComplete()
+                            
+                            if task.isCompleted
+                            {
+                                task.completedDate = Date.now.formatted(date: .abbreviated, time: .shortened)
+                            }
+                            else
+                            {
+                                task.completedDate = Constants.EMPTY_STRING
+                            }
+                        },
+                        label: 
+                        {
+                            Image(systemName: task.isCompleted ? "checkmark.square" : "square")
+                                .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                        })
                     }
                 }
-                .pickerStyle(.menu)
-                .onSubmit
-                {
-                    updatePriority()
-                }
-                .labelsHidden()
-            }
-            
-            VStack(alignment: .leading, spacing: 5)
-            {
-                Text("Priority:").font(.caption2).foregroundStyle(.blue)
                 
-                Picker(Constants.EMPTY_STRING, selection: $task.priority.toUnwrapped(defaultValue: "Medium"))
+                VStack(alignment: .leading, spacing: 5)
                 {
-                    ForEach(PriorityEnum.allCases)
+                    Text("Date Created:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    Text("\(task.createdDate)")
+                }
+                
+                if task.isCompleted
+                {
+                    VStack(alignment: .leading, spacing: 5)
                     {
-                        priority in
-                        
-                        Text(priority.title).tag(priority.title)
+                        Text("Date Completed:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                        Text("\(task.completedDate)")
                     }
                 }
-                .pickerStyle(.segmented)
-                .onSubmit
-                {
-                    updatePriority()
-                }
-                .labelsHidden()
             }
-            
-            VStack(alignment: .leading, spacing: 5)
-            {
-                Text("Status:").font(.caption2).foregroundStyle(.blue)
-                
-                HStack
-                {
-                    Text("\(task.wrappedIsCompleted)")
-                    Spacer()
-                    Button(action: 
-                    {
-                        toggleIsComplete()
-                    },
-                    label: 
-                    {
-                        Image(systemName: task.isCompleted! ? "checkmark.square" : "square")
-                    })
-                }
-            }
-            
-            VStack(alignment: .leading, spacing: 5)
-            {
-                Text("Date Created:").font(.caption2).foregroundStyle(.blue)
-                Text("\(task.wrappedCreatedDate)")
-            }
+            .navigationTitle("Edit Task")
+            .navigationBarTitleDisplayMode(.inline)
+            .onDisappear(perform: validateTask)
         }
-        .navigationTitle("Edit Task")
-        .navigationBarTitleDisplayMode(.inline)
-        .onDisappear(perform: validateTask)
     }
     
     func validateTask()

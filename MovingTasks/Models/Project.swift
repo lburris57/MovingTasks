@@ -10,15 +10,15 @@ import SwiftData
 @Model
 class Project: Identifiable
 {
-    @Attribute(.unique)
-    var projectId : String? = UUID().uuidString
+    var projectId : String = UUID().uuidString
     
-    var projectTitle: String? = Constants.EMPTY_STRING
-    var projectDescription: String? = Constants.EMPTY_STRING
-    var comment: String? = Constants.EMPTY_STRING
-    var isCompleted: Bool? = false
-    var createdDate: Date? = Date.now
-    var completedDate: Date? = nil
+    var projectTitle: String = Constants.EMPTY_STRING
+    var projectDescription: String = Constants.EMPTY_STRING
+    var comment: String = Constants.EMPTY_STRING
+    var location: String = Constants.EMPTY_STRING
+    var isCompleted: Bool = false
+    var createdDate: String = Date.now.formatted(date: .abbreviated, time: .omitted)
+    var completedDate: String = Constants.EMPTY_STRING
     
     @Relationship(inverse: \Task.project)
     var tasks: [Task]? = []
@@ -28,34 +28,21 @@ class Project: Identifiable
         tasks ?? []
     }
     
-    var wrappedProjectTitle: String
-    {
-        projectTitle ?? "Unknown project title"
-    }
-    
-    var wrappedProjectDescription: String
-    {
-        projectDescription ?? "Unknown project description"
-    }
-    
-    var wrappedComment: String
-    {
-        comment ?? "Unknown comment"
-    }
-    
     init(
-            projectTitle: String? = Constants.EMPTY_STRING,
-            projectDescription: String? = Constants.EMPTY_STRING,
-            comment: String? = Constants.EMPTY_STRING,
-            isCompleted: Bool? = false,
-            createdDate: Date? = Date.now,
-            completedDate: Date? = nil,
+            projectTitle: String = Constants.EMPTY_STRING,
+            projectDescription: String = Constants.EMPTY_STRING,
+            comment: String = Constants.EMPTY_STRING,
+            location: String = Constants.EMPTY_STRING,
+            isCompleted: Bool = false,
+            createdDate: String = Date.now.formatted(date: .abbreviated, time: .omitted),
+            completedDate: String = Constants.EMPTY_STRING,
             tasks: [Task]? = [])
     {
         self.projectId = projectId
         self.projectTitle = projectTitle
         self.projectDescription = projectDescription
         self.comment = comment
+        self.location = location
         self.isCompleted = isCompleted
         self.createdDate = createdDate
         self.completedDate = completedDate

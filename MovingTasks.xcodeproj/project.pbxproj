@@ -15,7 +15,6 @@
 		9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */; };
 		9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4B2B265A9F00790686 /* Logger+Extension.swift */; };
 		9118BC512B265AD600790686 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC4F2B265AD600790686 /* DatabaseError.swift */; };
-		9118BC552B265B1C00790686 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC542B265B1C00790686 /* Category.swift */; };
 		9118BC572B265C7F00790686 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC562B265C7F00790686 /* Task.swift */; };
 		9118BC5A2B2683EA00790686 /* EditTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC592B2683EA00790686 /* EditTaskView.swift */; };
 		9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC5B2B268EA300790686 /* Binding+Extension.swift */; };
@@ -24,6 +23,8 @@
 		9118BC692B26CDD100790686 /* LocationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC682B26CDD100790686 /* LocationEnum.swift */; };
 		9118BC6B2B26D45F00790686 /* PriorityEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC6A2B26D45F00790686 /* PriorityEnum.swift */; };
 		9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC6C2B278E7C00790686 /* CategoryEnum.swift */; };
+		9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC742B27B97D00790686 /* FilterEnum.swift */; };
+		9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC762B2804B100790686 /* LaunchScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +37,6 @@
 		9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
 		9118BC4B2B265A9F00790686 /* Logger+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+Extension.swift"; sourceTree = "<group>"; };
 		9118BC4F2B265AD600790686 /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
-		9118BC542B265B1C00790686 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		9118BC562B265C7F00790686 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		9118BC592B2683EA00790686 /* EditTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskView.swift; sourceTree = "<group>"; };
 		9118BC5B2B268EA300790686 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
@@ -44,6 +44,10 @@
 		9118BC682B26CDD100790686 /* LocationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationEnum.swift; sourceTree = "<group>"; };
 		9118BC6A2B26D45F00790686 /* PriorityEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityEnum.swift; sourceTree = "<group>"; };
 		9118BC6C2B278E7C00790686 /* CategoryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnum.swift; sourceTree = "<group>"; };
+		9118BC6E2B27AB0E00790686 /* MovingTasks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MovingTasks.entitlements; sourceTree = "<group>"; };
+		9118BC6F2B27ABF000790686 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9118BC742B27B97D00790686 /* FilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEnum.swift; sourceTree = "<group>"; };
+		9118BC762B2804B100790686 /* LaunchScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,8 @@
 		9118BC382B2659AF00790686 /* MovingTasks */ = {
 			isa = PBXGroup;
 			children = (
+				9118BC6F2B27ABF000790686 /* Info.plist */,
+				9118BC6E2B27AB0E00790686 /* MovingTasks.entitlements */,
 				9118BC672B26CD9500790686 /* Enums */,
 				9118BC532B265B0C00790686 /* Models */,
 				9118BC4E2B265AD600790686 /* Error Enums */,
@@ -119,7 +125,6 @@
 		9118BC532B265B0C00790686 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9118BC542B265B1C00790686 /* Category.swift */,
 				9118BC652B26C90E00790686 /* Project.swift */,
 				9118BC562B265C7F00790686 /* Task.swift */,
 			);
@@ -129,6 +134,7 @@
 		9118BC582B265FB400790686 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9118BC762B2804B100790686 /* LaunchScreenView.swift */,
 				9118BC3B2B2659AF00790686 /* TaskListView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
 			);
@@ -139,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				9118BC682B26CDD100790686 /* LocationEnum.swift */,
+				9118BC742B27B97D00790686 /* FilterEnum.swift */,
 				9118BC6A2B26D45F00790686 /* PriorityEnum.swift */,
 				9118BC6C2B278E7C00790686 /* CategoryEnum.swift */,
 			);
@@ -226,6 +233,8 @@
 				9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */,
 				9118BC482B265A7A00790686 /* Constants.swift in Sources */,
 				9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */,
+				9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */,
+				9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */,
 				9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */,
 				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,
 				9118BC512B265AD600790686 /* DatabaseError.swift in Sources */,
@@ -233,7 +242,6 @@
 				9118BC692B26CDD100790686 /* LocationEnum.swift in Sources */,
 				9118BC6B2B26D45F00790686 /* PriorityEnum.swift in Sources */,
 				9118BC572B265C7F00790686 /* Task.swift in Sources */,
-				9118BC552B265B1C00790686 /* Category.swift in Sources */,
 				9118BC5A2B2683EA00790686 /* EditTaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,12 +373,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MovingTasks/MovingTasks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MovingTasks/Preview Content\"";
 				DEVELOPMENT_TEAM = C37927XKUL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MovingTasks/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -394,12 +404,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MovingTasks/MovingTasks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MovingTasks/Preview Content\"";
 				DEVELOPMENT_TEAM = C37927XKUL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MovingTasks/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
