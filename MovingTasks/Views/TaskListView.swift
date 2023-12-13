@@ -13,9 +13,70 @@ struct TaskListView: View
 
     @Query(sort: \Task.taskTitle) var tasks: [Task]
 
-    @State private var filterType: String = FilterEnum.none.filterType
+    @State private var filterValue: String = "All"
+    
+    @State private var selectedSearchType: FilterEnum = .none
 
     @State private var path = [Task]()
+    
+    @State private var sortOrder = [
+        SortDescriptor(\Task.createdDate, order: .reverse),
+        SortDescriptor(\Task.priority, order: .reverse)
+    ]
+    
+    var filteredTasks: [Task]
+    {
+        let filteredTasks = tasks
+        
+        print("Value of selectedSearchType is: \(selectedSearchType)")
+        print("Value of filterValue is: \(filterValue)")
+        
+        switch selectedSearchType
+        {
+            case .category:
+                if filterValue == "All"
+                {
+                    return filteredTasks
+                }
+                else
+                {
+                    return filteredTasks.filter {$0.category.lowercased().contains(filterValue.lowercased())}
+                }
+            case .location:
+                if filterValue == "All"
+                {
+                    return filteredTasks
+                }
+                else
+                {
+                    return filteredTasks.filter {$0.location.lowercased().contains(filterValue.lowercased())}
+                }
+            case .priority:
+                if filterValue == "All"
+                {
+                    return filteredTasks
+                }
+                else
+                {
+                    return filteredTasks.filter {$0.priority.lowercased().contains(filterValue.lowercased())}
+                }
+            case .status:
+                if filterValue == "Complete"
+                {
+                    return filteredTasks.filter {$0.isCompleted}
+                }
+                else if filterValue == "Incomplete"
+                {
+                    return filteredTasks.filter {!$0.isCompleted}
+                }
+                else
+                {
+                    return filteredTasks
+                }
+            case .none:
+                return filteredTasks
+        }
+    }
 
     //  Returns the color based on the priority
     private func styleForPriority(_ value: String) -> Color
@@ -47,6 +108,17 @@ struct TaskListView: View
             modelContext.delete(task)
         }
     }
+    
+    mutating func filterAndSort(isCompleted: Bool, sortOrder: [SortDescriptor<Task>])
+    {
+        _tasks = Query(filter: #Predicate<Task>
+        {
+            task in
+            
+            task.isCompleted == true
+        }, 
+            sort: sortOrder)
+    }
 
     var body: some View
     {
@@ -71,28 +143,109 @@ struct TaskListView: View
                             Text("Please click the plus icon to add a new task.")
                         }
                     }
+                    else if filteredTasks.count == 0
+                    {
+                        FilterView(filterValue: $filterValue, selectedSearchType: $selectedSearchType)
+                        
+                        ContentUnavailableView
+                        {
+                            Label("No tasks were found for display.", systemImage: "calendar.badge.clock")
+                        }
+                        description:
+                        {
+                            Text("Please refine your filter.")
+                        }
+                    }
                     else
                     {
-                        HStack
-                        {
-                            Spacer()
-
-                            Text("Filter List:").font(.body).foregroundStyle(.secondary).bold()
-
-                            Picker(Constants.EMPTY_STRING, selection: $filterType)
-                            {
-                                ForEach(FilterEnum.allCases)
-                                {
-                                    filter in
-
-                                    Text(filter.filterType).tag(filter.filterType)
-                                }
-                            }.pickerStyle(.menu)
-                        }.padding(.horizontal)
+                        FilterView(filterValue: $filterValue, selectedSearchType: $selectedSearchType)
+//                        VStack(spacing: 0)
+//                        {
+//                            HStack
+//                            {
+//                                Text("Filter List:   ").font(.body).foregroundStyle(.secondary).bold()
+//                                
+//                                Picker(Constants.EMPTY_STRING, selection: $selectedSearchType)
+//                                {
+//                                    ForEach(FilterEnum.allCases)
+//                                    {
+//                                        filter in
+//                                        
+//                                        Text(filter.filterType).tag(filter)
+//                                    }
+//                                }.pickerStyle(.menu)
+//                                
+//                                Spacer()
+//                            }
+//                            .padding(.horizontal)
+//                            
+//                            HStack
+//                            {
+//                                if selectedSearchType != .none
+//                                {
+//                                    Text("Filter Value:").font(.body).foregroundStyle(.secondary).bold()
+//                                    
+//                                    if selectedSearchType == .location
+//                                    {
+//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+//                                        {
+//                                            ForEach(LocationEnum.allCases)
+//                                            {
+//                                                location in
+//                                                
+//                                                Text(location.title).tag(location.title)
+//                                            }
+//                                        }.pickerStyle(.menu)
+//                                    }
+//                                    
+//                                    if selectedSearchType == .category
+//                                    {
+//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+//                                        {
+//                                            ForEach(CategoryEnum.allCases)
+//                                            {
+//                                                category in
+//                                                
+//                                                Text(category.title).tag(category.title)
+//                                            }
+//                                        }.pickerStyle(.menu)
+//                                    }
+//                                    
+//                                    if selectedSearchType == .priority
+//                                    {
+//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+//                                        {
+//                                            ForEach(PriorityEnum.allCases)
+//                                            {
+//                                                priority in
+//                                                
+//                                                Text(priority.title).tag(priority.title)
+//                                            }
+//                                        }.pickerStyle(.menu)
+//                                    }
+//                                    
+//                                    if selectedSearchType == .status
+//                                    {
+//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+//                                        {
+//                                            ForEach(StatusEnum.allCases)
+//                                            {
+//                                                status in
+//                                                
+//                                                Text(status.title).tag(status.rawValue)
+//                                            }
+//                                        }.pickerStyle(.menu)
+//                                    }
+//                                }
+//                                
+//                                Spacer()
+//                            }
+//                            .padding(.horizontal)
+//                        }
 
                         List
                         {
-                            ForEach(tasks)
+                            ForEach(filteredTasks)
                             {
                                 task in
 
@@ -171,6 +324,111 @@ struct TaskListView: View
                     EditTaskView(task: task)
                 }
             }
+        }
+    }
+}
+
+struct FilterView: View
+{
+    @Binding  var filterValue: String
+    
+    @Binding var selectedSearchType: FilterEnum
+    
+    func setFilterValue()
+    {
+        filterValue = "All"
+    }
+    
+    var body: some View
+    {
+        VStack(spacing: 0)
+        {
+            HStack
+            {
+                Text("Filter List:   ").font(.body).foregroundStyle(.secondary).bold()
+                
+                Picker(Constants.EMPTY_STRING, selection: $selectedSearchType)
+                {
+                    ForEach(FilterEnum.allCases)
+                    {
+                        filter in
+                        
+                        Text(filter.filterType).tag(filter)
+                    }
+                }
+                .pickerStyle(.menu)
+                .onTapGesture(perform: setFilterValue)
+                .onChange(of: selectedSearchType) 
+                {
+                    setFilterValue()
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            HStack
+            {
+                if selectedSearchType != .none
+                {
+                    Text("Filter Value:").font(.body).foregroundStyle(.secondary).bold()
+                    
+                    if selectedSearchType == .location
+                    {
+                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+                        {
+                            ForEach(LocationEnum.allCases)
+                            {
+                                location in
+                                
+                                Text(location.title).tag(location.title)
+                            }
+                        }.pickerStyle(.menu)
+                    }
+                    
+                    if selectedSearchType == .category
+                    {
+                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+                        {
+                            ForEach(CategoryEnum.allCases)
+                            {
+                                category in
+                                
+                                Text(category.title).tag(category.title)
+                            }
+                        }.pickerStyle(.menu)
+                    }
+                    
+                    if selectedSearchType == .priority
+                    {
+                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+                        {
+                            ForEach(PriorityEnum.allCases)
+                            {
+                                priority in
+                                
+                                Text(priority.title).tag(priority.title)
+                            }
+                        }.pickerStyle(.menu)
+                    }
+                    
+                    if selectedSearchType == .status
+                    {
+                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
+                        {
+                            ForEach(StatusEnum.allCases)
+                            {
+                                status in
+                                
+                                Text(status.title).tag(status.rawValue)
+                            }
+                        }.pickerStyle(.menu)
+                    }
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
         }
     }
 }

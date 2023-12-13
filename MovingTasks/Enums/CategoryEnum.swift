@@ -13,6 +13,7 @@ enum CategoryEnum: String, Identifiable, CaseIterable, Hashable
         return UUID()
     }
 
+    case all = "All"
     case cleaning = "Cleaning"
     case miscellaneous = "Miscellaneous"
     case packing = "Packing"
@@ -29,6 +30,8 @@ extension CategoryEnum
     {
         switch self
         {
+            case .all:
+                return "All"
             case .cleaning:
                 return "Cleaning"
             case .miscellaneous:

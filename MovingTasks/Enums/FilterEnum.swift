@@ -14,12 +14,10 @@ enum FilterEnum: String, Identifiable, CaseIterable, Hashable
     }
 
     case none = "None"
-    case status = "Status"
-    case location = "Location"
     case category = "Category"
+    case location = "Location"
     case priority = "Priority"
-    case creationDate = "Creation Date"
-    case completionDate = "Completion Date"
+    case status = "Status"
 }
 
 extension FilterEnum
@@ -30,18 +28,14 @@ extension FilterEnum
         {
             case .none:
                 return "None"
-            case .status:
-                return "Status"
-            case .location:
-                return "Location"
             case .category:
                 return "Category"
+            case .location:
+                return "Location"
             case .priority:
                 return "Priority"
-            case .creationDate:
-                return "Creation Date"
-            case .completionDate:
-                return "Completion Date"
+            case .status:
+                return "Status"
         }
     }
 }

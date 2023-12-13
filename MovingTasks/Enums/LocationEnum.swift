@@ -13,6 +13,7 @@ enum LocationEnum: String, Identifiable, CaseIterable, Hashable
         return UUID()
     }
 
+    case all = "All"
     case amandasRoom = "Amanda's Room"
     case backBedroom = "Back Bedroom"
     case basement = "Basement"
@@ -37,6 +38,8 @@ extension LocationEnum
     {
         switch self
         {
+            case .all:
+                return "All"
             case .amandasRoom:
                 return "Amanda's Room"
             case .backBedroom:

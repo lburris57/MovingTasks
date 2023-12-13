@@ -13,6 +13,7 @@ enum PriorityEnum: String, Identifiable, CaseIterable, Hashable
         return UUID()
     }
 
+    case all = "All"
     case low = "Low"
     case medium = "Medium"
     case high = "High"
@@ -24,6 +25,8 @@ extension PriorityEnum
     {
         switch self
         {
+            case .all:
+                return "All"
             case .low:
                 return "Low"
             case .medium:

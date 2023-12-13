@@ -25,6 +25,7 @@
 		9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC6C2B278E7C00790686 /* CategoryEnum.swift */; };
 		9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC742B27B97D00790686 /* FilterEnum.swift */; };
 		9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC762B2804B100790686 /* LaunchScreenView.swift */; };
+		9118BC792B29105800790686 /* StatusEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC782B29105800790686 /* StatusEnum.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		9118BC6F2B27ABF000790686 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9118BC742B27B97D00790686 /* FilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEnum.swift; sourceTree = "<group>"; };
 		9118BC762B2804B100790686 /* LaunchScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		9118BC782B29105800790686 /* StatusEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEnum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 				9118BC742B27B97D00790686 /* FilterEnum.swift */,
 				9118BC6A2B26D45F00790686 /* PriorityEnum.swift */,
 				9118BC6C2B278E7C00790686 /* CategoryEnum.swift */,
+				9118BC782B29105800790686 /* StatusEnum.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */,
 				9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */,
 				9118BC482B265A7A00790686 /* Constants.swift in Sources */,
+				9118BC792B29105800790686 /* StatusEnum.swift in Sources */,
 				9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */,
 				9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */,
 				9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */,
