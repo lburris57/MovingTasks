@@ -26,6 +26,8 @@
 		9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC742B27B97D00790686 /* FilterEnum.swift */; };
 		9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC762B2804B100790686 /* LaunchScreenView.swift */; };
 		9118BC792B29105800790686 /* StatusEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC782B29105800790686 /* StatusEnum.swift */; };
+		9118BC7B2B29437000790686 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7A2B29437000790686 /* TaskItem.swift */; };
+		9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		9118BC742B27B97D00790686 /* FilterEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEnum.swift; sourceTree = "<group>"; };
 		9118BC762B2804B100790686 /* LaunchScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		9118BC782B29105800790686 /* StatusEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEnum.swift; sourceTree = "<group>"; };
+		9118BC7A2B29437000790686 /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
+		9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 			children = (
 				9118BC652B26C90E00790686 /* Project.swift */,
 				9118BC562B265C7F00790686 /* Task.swift */,
+				9118BC7A2B29437000790686 /* TaskItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			children = (
 				9118BC762B2804B100790686 /* LaunchScreenView.swift */,
 				9118BC3B2B2659AF00790686 /* TaskListView.swift */,
+				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
 			);
 			path = Views;
@@ -233,11 +239,13 @@
 			files = (
 				9118BC3C2B2659AF00790686 /* TaskListView.swift in Sources */,
 				9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */,
+				9118BC7B2B29437000790686 /* TaskItem.swift in Sources */,
 				9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */,
 				9118BC482B265A7A00790686 /* Constants.swift in Sources */,
 				9118BC792B29105800790686 /* StatusEnum.swift in Sources */,
 				9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */,
 				9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */,
+				9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */,
 				9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */,
 				9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */,
 				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,

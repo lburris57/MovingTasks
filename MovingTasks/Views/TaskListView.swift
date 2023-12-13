@@ -17,7 +17,7 @@ struct TaskListView: View
     
     @State private var selectedSearchType: FilterEnum = .none
 
-    @State private var path = [Task]()
+    @State private var path = NavigationPath()
     
     @State private var sortOrder = [
         SortDescriptor(\Task.createdDate, order: .reverse),
@@ -64,7 +64,7 @@ struct TaskListView: View
             }
                 
             case .status:
-            if filterValue == "Complete"
+            if filterValue == "Completed"
             {
                 return filteredTasks.filter {$0.isCompleted}
             }
@@ -180,6 +180,16 @@ struct TaskListView: View
                                                     .frame(width: 15, height: 15)
 
                                                 Text(task.taskTitle).font(.headline)
+                                                
+                                                Spacer()
+                                                
+                                                Text("Task Items:").font(.callout)
+                                                
+                                                Text("\(task.taskItemsArray.count)").font(.body).bold()
+                                                    .frame(width: 25, height: 25)
+                                                    .foregroundStyle(.white)
+                                                    .background(.blue)
+                                                    .clipShape(.capsule)
                                             }
 
                                             Text(task.taskDescription).font(.callout)
@@ -195,6 +205,12 @@ struct TaskListView: View
                                             }
                                         }
                                     }
+                                }
+                                .navigationDestination(for: Task.self)
+                                {
+                                    task in
+
+                                    EditTaskView(task: task, path: $path)
                                 }
                             }.onDelete(perform: deleteTask)
                         }
@@ -214,7 +230,7 @@ struct TaskListView: View
 
                             modelContext.insert(task)
 
-                            path = [task]
+                            path.append(task)
                         },
                         label:
                         {
@@ -235,12 +251,6 @@ struct TaskListView: View
                     }
                 }
                 .navigationTitle("Tasks")
-                .navigationDestination(for: Task.self)
-                {
-                    task in
-
-                    EditTaskView(task: task)
-                }
             }
         }
     }
@@ -357,7 +367,7 @@ struct FilterView: View
     {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
 
-        let container = try ModelContainer(for: Task.self, configurations: config)
+        let container = try ModelContainer(for: Task.self, TaskItem.self, configurations: config)
 
         return TaskListView().modelContainer(container)
     }

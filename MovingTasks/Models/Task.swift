@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Task: Identifiable
+class Task: Identifiable, Hashable
 {
     var taskId : String = UUID().uuidString
     
@@ -22,11 +22,19 @@ class Task: Identifiable
     var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
     var completedDate: String = Constants.EMPTY_STRING
     
+    @Relationship(deleteRule: .cascade)
+    var taskItems: [TaskItem]? = [TaskItem]()
+    
     var project: Project?
     
     var wrappedIsCompleted: String
     {
         isCompleted ? "Complete" : "Incomplete"
+    }
+    
+    var taskItemsArray: [TaskItem]
+    {
+        taskItems ?? []
     }
     
     init(taskTitle: String = Constants.EMPTY_STRING,

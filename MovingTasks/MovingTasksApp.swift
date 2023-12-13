@@ -14,9 +14,10 @@ struct MovingTasksApp: App
     {
         WindowGroup
         {
-            LaunchScreenView()
+            //LaunchScreenView()
+            TaskListView()
         }
-        .modelContainer(for: Task.self)
+        .modelContainer(for: [Task.self, TaskItem.self])
     }
     
     init()
