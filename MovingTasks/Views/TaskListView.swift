@@ -28,53 +28,54 @@ struct TaskListView: View
     {
         let filteredTasks = tasks
         
-        print("Value of selectedSearchType is: \(selectedSearchType)")
-        print("Value of filterValue is: \(filterValue)")
-        
         switch selectedSearchType
         {
-            case .category:
-                if filterValue == "All"
-                {
-                    return filteredTasks
-                }
-                else
-                {
-                    return filteredTasks.filter {$0.category.lowercased().contains(filterValue.lowercased())}
-                }
-            case .location:
-                if filterValue == "All"
-                {
-                    return filteredTasks
-                }
-                else
-                {
-                    return filteredTasks.filter {$0.location.lowercased().contains(filterValue.lowercased())}
-                }
-            case .priority:
-                if filterValue == "All"
-                {
-                    return filteredTasks
-                }
-                else
-                {
-                    return filteredTasks.filter {$0.priority.lowercased().contains(filterValue.lowercased())}
-                }
-            case .status:
-                if filterValue == "Complete"
-                {
-                    return filteredTasks.filter {$0.isCompleted}
-                }
-                else if filterValue == "Incomplete"
-                {
-                    return filteredTasks.filter {!$0.isCompleted}
-                }
-                else
-                {
-                    return filteredTasks
-                }
             case .none:
                 return filteredTasks
+            
+            case .category:
+            if filterValue == "All"
+            {
+                return filteredTasks
+            }
+            else
+            {
+                return filteredTasks.filter {$0.category.lowercased().contains(filterValue.lowercased())}
+            }
+                
+            case .location:
+            if filterValue == "All"
+            {
+                return filteredTasks
+            }
+            else
+            {
+                return filteredTasks.filter {$0.location.lowercased().contains(filterValue.lowercased())}
+            }
+                
+            case .priority:
+            if filterValue == "All"
+            {
+                return filteredTasks
+            }
+            else
+            {
+                return filteredTasks.filter {$0.priority.lowercased().contains(filterValue.lowercased())}
+            }
+                
+            case .status:
+            if filterValue == "Complete"
+            {
+                return filteredTasks.filter {$0.isCompleted}
+            }
+            else if filterValue == "Incomplete"
+            {
+                return filteredTasks.filter {!$0.isCompleted}
+            }
+            else
+            {
+                return filteredTasks
+            }
         }
     }
 
@@ -159,89 +160,6 @@ struct TaskListView: View
                     else
                     {
                         FilterView(filterValue: $filterValue, selectedSearchType: $selectedSearchType)
-//                        VStack(spacing: 0)
-//                        {
-//                            HStack
-//                            {
-//                                Text("Filter List:   ").font(.body).foregroundStyle(.secondary).bold()
-//                                
-//                                Picker(Constants.EMPTY_STRING, selection: $selectedSearchType)
-//                                {
-//                                    ForEach(FilterEnum.allCases)
-//                                    {
-//                                        filter in
-//                                        
-//                                        Text(filter.filterType).tag(filter)
-//                                    }
-//                                }.pickerStyle(.menu)
-//                                
-//                                Spacer()
-//                            }
-//                            .padding(.horizontal)
-//                            
-//                            HStack
-//                            {
-//                                if selectedSearchType != .none
-//                                {
-//                                    Text("Filter Value:").font(.body).foregroundStyle(.secondary).bold()
-//                                    
-//                                    if selectedSearchType == .location
-//                                    {
-//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
-//                                        {
-//                                            ForEach(LocationEnum.allCases)
-//                                            {
-//                                                location in
-//                                                
-//                                                Text(location.title).tag(location.title)
-//                                            }
-//                                        }.pickerStyle(.menu)
-//                                    }
-//                                    
-//                                    if selectedSearchType == .category
-//                                    {
-//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
-//                                        {
-//                                            ForEach(CategoryEnum.allCases)
-//                                            {
-//                                                category in
-//                                                
-//                                                Text(category.title).tag(category.title)
-//                                            }
-//                                        }.pickerStyle(.menu)
-//                                    }
-//                                    
-//                                    if selectedSearchType == .priority
-//                                    {
-//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
-//                                        {
-//                                            ForEach(PriorityEnum.allCases)
-//                                            {
-//                                                priority in
-//                                                
-//                                                Text(priority.title).tag(priority.title)
-//                                            }
-//                                        }.pickerStyle(.menu)
-//                                    }
-//                                    
-//                                    if selectedSearchType == .status
-//                                    {
-//                                        Picker(Constants.EMPTY_STRING, selection: $filterValue)
-//                                        {
-//                                            ForEach(StatusEnum.allCases)
-//                                            {
-//                                                status in
-//                                                
-//                                                Text(status.title).tag(status.rawValue)
-//                                            }
-//                                        }.pickerStyle(.menu)
-//                                    }
-//                                }
-//                                
-//                                Spacer()
-//                            }
-//                            .padding(.horizontal)
-//                        }
 
                         List
                         {
