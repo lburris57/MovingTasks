@@ -16,12 +16,18 @@ class TaskItem:  Identifiable, Hashable
     var itemDescription: String = Constants.EMPTY_STRING
     var comment: String = Constants.EMPTY_STRING
     var wasPurchased: Bool = false
-    var quantity: Int = 0
-    var purchasedPrice: Double = 0.0
+    var quantity: String = "1"
+    var purchasedPrice: String = 10.0.formatted(.currency(code: "USD"))
+    var purchaseDate: Date = Date.now
     
     var task: Task?
     
     var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
+    
+    var wrappedWasPurchased: String
+    {
+        wasPurchased ? "Yes" : "No"
+    }
     
     init(itemTitle: String, itemDescription: String, comment: String)
     {

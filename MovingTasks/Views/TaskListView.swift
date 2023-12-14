@@ -166,7 +166,7 @@ struct TaskListView: View
                             ForEach(filteredTasks)
                             {
                                 task in
-
+                                
                                 HStack
                                 {
                                     NavigationLink(value: task)
@@ -178,7 +178,7 @@ struct TaskListView: View
                                                 Circle()
                                                     .fill(styleForPriority(task.priority))
                                                     .frame(width: 15, height: 15)
-
+                                                
                                                 Text(task.taskTitle).font(.headline)
                                                 
                                                 Spacer()
@@ -191,14 +191,14 @@ struct TaskListView: View
                                                     .background(.blue)
                                                     .clipShape(.capsule)
                                             }
-
+                                            
                                             Text(task.taskDescription).font(.callout)
-
+                                            
                                             Text("\nLocation: \(task.location)").font(.caption).bold()
                                             Text("Category: \(task.category)").font(.caption).bold()
                                             Text("Status: \(task.wrappedIsCompleted)").font(.caption).bold()
                                             Text("Date Created: \(task.createdDate)").font(.caption).bold()
-
+                                            
                                             if task.isCompleted
                                             {
                                                 Text("Date Completed: \(task.completedDate)").font(.caption).bold()
@@ -209,10 +209,11 @@ struct TaskListView: View
                                 .navigationDestination(for: Task.self)
                                 {
                                     task in
-
+                                    
                                     EditTaskView(task: task, path: $path)
                                 }
-                            }.onDelete(perform: deleteTask)
+                            }
+                            .onDelete(perform: deleteTask)
                         }
                         .listStyle(.plain)
                         .padding()

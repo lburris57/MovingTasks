@@ -22,19 +22,6 @@ struct EditTaskView: View
     {
         task.isCompleted.toggle()
     }
-    
-    private func deleteTaskItem(at indexSet: IndexSet)
-    {
-        indexSet.forEach
-        {
-            index in
-
-            let taskItem = task.taskItemsArray[index]
-
-            // Delete the task item
-            modelContext.delete(taskItem)
-        }
-    }
 
     var body: some View
     {
@@ -59,6 +46,29 @@ struct EditTaskView: View
                     FloatingPromptTextField(text: $task.comment, prompt: Text("Comment:")
                         .foregroundStyle(colorScheme == .dark ? .gray : .blue))
                     .floatingPromptScale(1.0)
+                    
+                    Group
+                    {
+                        if task.taskItemsArray.count > 0
+                        {
+                            VStack(alignment: .leading, spacing: 5)
+                            {
+                                //Text("Task Items:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                
+                                NavigationLink(value: task.taskItems)
+                                {
+                                    Button
+                                    {
+                                        path.append(task.taskItems)
+                                    }
+                                    label:
+                                    {
+                                        Text("Task Item List")
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 Group
@@ -163,75 +173,52 @@ struct EditTaskView: View
                         }
                     }
                 }
-                
-                if task.taskItemsArray.count > 0
-                {
-                    VStack(alignment: .leading)
-                    {
-                        Text("Task Items").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        
-                        List
-                        {
-                            ForEach(task.taskItemsArray)
-                            {
-                                taskItem in
-                                
-                                NavigationLink(value: taskItem)
-                                {
-                                    Text("Created date: \(taskItem.createdDate)")
-                                }
-                            }
-                            .onDelete(perform: deleteTaskItem)
-                            .listStyle(.plain)
-                            .padding(.bottom)
-                        }
-                    }
-                    .navigationDestination(for: TaskItem.self)
-                    {
-                        taskItem in
-                        
-                        EditTaskItemView(taskItem: taskItem, path: $path)
-                    }
-                }
             }
             .toolbar
             {
+                ToolbarItem(placement: .topBarLeading)
+                {
+                    Button(validateFields() ? "Save" : "<  Back")
+                    {
+                        path = NavigationPath()
+                    }
+                    .padding(.horizontal)
+                }
+                
                 ToolbarItem
                 {
-                    VStack(alignment: .trailing, spacing: 0)
+                    Button(action:
                     {
-                        Button("Save")
-                        {
-                            path = NavigationPath()
-                        }
-                        .padding(.horizontal)
+                        let taskItem = TaskItem(itemTitle: Constants.EMPTY_STRING,
+                                                itemDescription: Constants.EMPTY_STRING,
+                                                comment: Constants.EMPTY_STRING)
                         
-                        Button(action:
+                        taskItem.task = task
+                        
+                        modelContext.insert(taskItem)
+                        
+                        path.append(taskItem)
+                    },
+                    label:
+                    {
+                        HStack
                         {
-                            let taskItem = TaskItem(itemTitle: Constants.EMPTY_STRING,
-                                                    itemDescription: Constants.EMPTY_STRING,
-                                                    comment: Constants.EMPTY_STRING)
-                            
-                            taskItem.task = task
-                            
-                            modelContext.insert(taskItem)
-                            
-                            path.append(taskItem)
-                        },
-                        label:
-                        {
-                            HStack
-                            {
-                                Text("Add Task Item").font(.callout)
-                                Image(systemName: "plus")
-                            }
-                        })
-                    }
+                            Text("Add Task Item").font(.callout)
+                            Image(systemName: "plus")
+                        }
+                    })
                 }
             }
             .navigationTitle(validateFields() ? "Edit Task" : "Add Task")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .onDisappear(perform: validateTask)
+            .navigationDestination(for: [TaskItem].self)
+            {
+                taskItems in
+                
+                TaskItemListView(taskItems: taskItems, path: $path)
+            }
             .navigationDestination(for: TaskItem.self)
             {
                 taskItem in

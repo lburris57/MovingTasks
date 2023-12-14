@@ -28,6 +28,7 @@
 		9118BC792B29105800790686 /* StatusEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC782B29105800790686 /* StatusEnum.swift */; };
 		9118BC7B2B29437000790686 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7A2B29437000790686 /* TaskItem.swift */; };
 		9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */; };
+		9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7E2B2A392B00790686 /* TaskItemListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		9118BC782B29105800790686 /* StatusEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusEnum.swift; sourceTree = "<group>"; };
 		9118BC7A2B29437000790686 /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
 		9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskItemView.swift; sourceTree = "<group>"; };
+		9118BC7E2B2A392B00790686 /* TaskItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 			children = (
 				9118BC762B2804B100790686 /* LaunchScreenView.swift */,
 				9118BC3B2B2659AF00790686 /* TaskListView.swift */,
+				9118BC7E2B2A392B00790686 /* TaskItemListView.swift */,
 				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
 			);
@@ -248,6 +251,7 @@
 				9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */,
 				9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */,
 				9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */,
+				9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */,
 				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,
 				9118BC512B265AD600790686 /* DatabaseError.swift in Sources */,
 				9118BC662B26C90E00790686 /* Project.swift in Sources */,
