@@ -20,6 +20,19 @@ struct EditTaskItemView: View
     
     @Environment(\.colorScheme) var colorScheme
     
+    func validateTaskItem()
+    {
+        if taskItem.itemTitle == Constants.EMPTY_STRING ||
+             taskItem.itemDescription == Constants.EMPTY_STRING ||
+             taskItem.comment == Constants.EMPTY_STRING
+        {
+            withAnimation
+            {
+                modelContext.delete(taskItem)
+            }
+        }
+    }
+    
     func validateFields() -> Bool
     {
         if taskItem.itemTitle == Constants.EMPTY_STRING || 
@@ -137,6 +150,7 @@ struct EditTaskItemView: View
             }
             .padding(.horizontal)
         }
+        .onDisappear(perform: validateTaskItem)
         .navigationTitle(validateFields() ? "Edit Task Item" : "Add Task Item")
         .navigationBarTitleDisplayMode(.inline)
     }

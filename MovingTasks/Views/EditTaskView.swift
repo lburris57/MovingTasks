@@ -247,7 +247,9 @@ struct EditTaskView: View
 
     func validateFields() -> Bool
     {
-        if task.taskTitle == Constants.EMPTY_STRING || task.taskDescription == Constants.EMPTY_STRING || task.comment == Constants.EMPTY_STRING
+        if task.taskTitle == Constants.EMPTY_STRING || 
+             task.taskDescription == Constants.EMPTY_STRING ||
+             task.comment == Constants.EMPTY_STRING
         {
             return false
         }
