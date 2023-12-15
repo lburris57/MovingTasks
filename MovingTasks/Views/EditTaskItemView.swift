@@ -14,6 +14,8 @@ struct EditTaskItemView: View
     
     @Binding var path: NavigationPath
     
+    @State private var quantityInt = 0
+    
     @Environment(\.modelContext) var modelContext
     
     @Environment(\.colorScheme) var colorScheme
@@ -21,8 +23,8 @@ struct EditTaskItemView: View
     func validateFields() -> Bool
     {
         if taskItem.itemTitle == Constants.EMPTY_STRING || 
-            taskItem.itemDescription == Constants.EMPTY_STRING ||
-            taskItem.comment == Constants.EMPTY_STRING
+             taskItem.itemDescription == Constants.EMPTY_STRING ||
+             taskItem.comment == Constants.EMPTY_STRING
         {
             return false
         }
@@ -37,68 +39,77 @@ struct EditTaskItemView: View
     
     var body: some View
     {
-        VStack
+        VStack(spacing: 8)
         {
             Form
             {
-                FloatingPromptTextField(text: $taskItem.itemTitle, prompt: Text("Title:")
-                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                .floatingPromptScale(1.0)
-                
-                FloatingPromptTextField(text: $taskItem.itemDescription, prompt: Text("Description:")
-                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                .floatingPromptScale(1.0)
-                
-                FloatingPromptTextField(text: $taskItem.comment, prompt: Text("Comment:")
-                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                .floatingPromptScale(1.0)
-                
-                VStack(alignment: .leading, spacing: 5)
+                Section("Task Item Information")
                 {
-                    Text("Was this item purchased?").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                    FloatingPromptTextField(text: $taskItem.itemTitle, prompt: Text("Title:")
+                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
                     
-                    HStack
-                    {
-                        Text(taskItem.wrappedWasPurchased)
-                        
-                        Spacer()
-                        
-                        Button(action:
-                        {
-                            toggleWasPurchased()
-                            
-                            if taskItem.wasPurchased
-                            {
-                                taskItem.purchaseDate = Date.now//.formatted(date: .abbreviated, time: .shortened)
-                            }
-                            else
-                            {
-                                taskItem.purchaseDate = Date.distantFuture
-                            }
-                        },
-                        label:
-                        {
-                            Image(systemName: taskItem.wasPurchased ? "checkmark.square" : "square")
-                                .foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        })
-                    }
+                    FloatingPromptTextField(text: $taskItem.itemDescription, prompt: Text("Description:")
+                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
                     
-                    if taskItem.wasPurchased
+                    FloatingPromptTextField(text: $taskItem.comment, prompt: Text("Comment:")
+                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                    .floatingPromptScale(1.0)
+                }
+                
+                Section("Purchase Information")
+                {
+                    VStack(alignment: .leading, spacing: 12)
                     {
-                        FloatingPromptTextField(text: $taskItem.quantity, prompt: Text("Quantity:")
-                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                        .floatingPromptScale(1.0)
+                        Text("Was this item purchased?").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
                         
-                        FloatingPromptTextField(text: $taskItem.purchasedPrice, prompt: Text("Purchase Price:")
-                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                        .floatingPromptScale(1.0)
-                        
-                        VStack(alignment: .leading)
+                        HStack
                         {
-                            Text("Purchase Date:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            Text(taskItem.wrappedWasPurchased)
                             
-                            DatePicker("Please enter a date", selection: $taskItem.purchaseDate, displayedComponents: .date)
-                                .labelsHidden()
+                            Spacer()
+                            
+                            Button(action:
+                            {
+                                toggleWasPurchased()
+                                
+                                if taskItem.wasPurchased
+                                {
+                                    taskItem.purchaseDate = Date.now//.formatted(date: .abbreviated, time: .shortened)
+                                }
+                                else
+                                {
+                                    taskItem.purchaseDate = Date.distantFuture
+                                }
+                            },
+                            label:
+                            {
+                                Image(systemName: taskItem.wasPurchased ? "checkmark.square" : "square")
+                                    .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            })
+                        }
+                        
+                        if taskItem.wasPurchased
+                        {
+                            FloatingPromptTextField(text: $taskItem.quantity, prompt: Text("Quantity:")
+                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                            .floatingPromptScale(1.0)
+                            
+                            FloatingPromptTextField(text: $taskItem.purchasedPrice, prompt: Text("Purchase Price:")
+                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                            .floatingPromptScale(1.0)
+                            
+                            VStack(alignment: .leading, spacing: 12)
+                            {
+                                Text("Total Price:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                Text("\(taskItem.totalPrice)").font(.body).bold()
+                                
+                                Text("Purchase Date:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                
+                                DatePicker("Please enter a date", selection: $taskItem.purchaseDate, displayedComponents: .date)
+                                    .labelsHidden()
+                            }
                         }
                     }
                 }
@@ -109,15 +120,20 @@ struct EditTaskItemView: View
         {
             Menu("\(Image(systemName: "arrowshape.turn.up.left.fill"))")
             {
-                    Button("Edit Task")
-                    {
-                        path.removeLast(taskItem.task!.taskItems!.count)
-                    }
-                
-                    Button("Task List")
-                    {
-                        path = NavigationPath()
-                    }
+                Button("Go to Task Item List")
+                {
+                    path.removeLast(taskItem.task!.taskItems!.count)
+                }
+            
+                Button("Go to Edit Task")
+                {
+                    path.removeLast(2)
+                }
+            
+                Button("Go to Task List")
+                {
+                    path = NavigationPath()
+                }
             }
             .padding(.horizontal)
         }

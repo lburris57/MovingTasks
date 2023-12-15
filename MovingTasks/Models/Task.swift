@@ -29,7 +29,7 @@ class Task: Identifiable, Hashable
     
     var wrappedIsCompleted: String
     {
-        isCompleted ? "Complete" : "Incomplete"
+        isCompleted ? Constants.COMPLETE : Constants.INCOMPLETE
     }
     
     var taskItemsArray: [TaskItem]

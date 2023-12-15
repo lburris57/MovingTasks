@@ -109,17 +109,6 @@ struct TaskListView: View
             modelContext.delete(task)
         }
     }
-    
-    mutating func filterAndSort(isCompleted: Bool, sortOrder: [SortDescriptor<Task>])
-    {
-        _tasks = Query(filter: #Predicate<Task>
-        {
-            task in
-            
-            task.isCompleted == true
-        }, 
-            sort: sortOrder)
-    }
 
     var body: some View
     {

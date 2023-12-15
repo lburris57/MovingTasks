@@ -33,100 +33,110 @@ struct EditTaskView: View
             
             Form
             {
-                Group
+                Section("Task Information")
                 {
-                    FloatingPromptTextField(text: $task.taskTitle, prompt: Text("Title:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
-                    
-                    FloatingPromptTextField(text: $task.taskDescription, prompt: Text("Description:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
-                    
-                    FloatingPromptTextField(text: $task.comment, prompt: Text("Comment:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
+                    Group
+                    {
+                        FloatingPromptTextField(text: $task.taskTitle, prompt: Text("Title:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
+                        
+                        FloatingPromptTextField(text: $task.taskDescription, prompt: Text("Description:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
+                        
+                        FloatingPromptTextField(text: $task.comment, prompt: Text("Comment:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
+                    }
                     
                     Group
                     {
-                        if task.taskItemsArray.count > 0
+                        VStack(alignment: .leading, spacing: 5)
                         {
-                            VStack(alignment: .leading, spacing: 5)
+                            Text("Location:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            
+                            Picker(Constants.EMPTY_STRING, selection: $task.location)
                             {
-                                //Text("Task Items:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                                
-                                NavigationLink(value: task.taskItems)
+                                ForEach(LocationEnum.allCases)
                                 {
-                                    Button
+                                    location in
+                                    
+                                    Text(location.title).tag(location.title)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5)
+                        {
+                            Text("Category:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            
+                            Picker(Constants.EMPTY_STRING, selection: $task.category)
+                            {
+                                ForEach(CategoryEnum.allCases)
+                                {
+                                    category in
+                                    
+                                    Text(category.title).tag(category.title)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5)
+                        {
+                            Text("Priority:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            
+                            Picker(Constants.EMPTY_STRING, selection: $task.priority)
+                            {
+                                ForEach(PriorityEnum.allCases)
+                                {
+                                    priority in
+                                    
+                                    if priority.title != "All"
                                     {
-                                        path.append(task.taskItems)
+                                        Text(priority.title).tag(priority.title)
                                     }
-                                    label:
-                                    {
-                                        Text("Task Item List")
-                                    }
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .labelsHidden()
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 5)
+                        {
+                            Text("Date Created:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                            Text("\(task.createdDate)")
+                        }
+                    }
+                }
+                
+                if task.taskItemsArray.count > 0
+                {
+                    Section("Task Items")
+                    {
+                        VStack(alignment: .leading, spacing: 5)
+                        {
+                            NavigationLink(value: task.taskItems)
+                            {
+                                Button
+                                {
+                                    path.append(task.taskItems)
+                                }
+                                label:
+                                {
+                                    Text("Task Item List")
                                 }
                             }
                         }
                     }
                 }
                 
-                Group
+                Section("Status Information")
                 {
-                    VStack(alignment: .leading, spacing: 5)
-                    {
-                        Text("Location:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        
-                        Picker(Constants.EMPTY_STRING, selection: $task.location)
-                        {
-                            ForEach(LocationEnum.allCases)
-                            {
-                                location in
-                                
-                                Text(location.title).tag(location.title)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .labelsHidden()
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 5)
-                    {
-                        Text("Category:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        
-                        Picker(Constants.EMPTY_STRING, selection: $task.category)
-                        {
-                            ForEach(CategoryEnum.allCases)
-                            {
-                                category in
-                                
-                                Text(category.title).tag(category.title)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .labelsHidden()
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 5)
-                    {
-                        Text("Priority:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        
-                        Picker(Constants.EMPTY_STRING, selection: $task.priority)
-                        {
-                            ForEach(PriorityEnum.allCases)
-                            {
-                                priority in
-                                
-                                if priority.title != "All"
-                                {
-                                    Text(priority.title).tag(priority.title)
-                                }
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .labelsHidden()
-                    }
-                    
                     VStack(alignment: .leading, spacing: 5)
                     {
                         Text("Status:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
@@ -158,12 +168,6 @@ struct EditTaskView: View
                         }
                     }
                     
-                    VStack(alignment: .leading, spacing: 5)
-                    {
-                        Text("Date Created:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                        Text("\(task.createdDate)")
-                    }
-                    
                     if task.isCompleted
                     {
                         VStack(alignment: .leading, spacing: 5)
@@ -178,7 +182,7 @@ struct EditTaskView: View
             {
                 ToolbarItem(placement: .topBarLeading)
                 {
-                    Button(validateFields() ? "Save" : "<  Back")
+                    Button(validateFields() ? "Save" : "<  Task Item List")
                     {
                         path = NavigationPath()
                     }

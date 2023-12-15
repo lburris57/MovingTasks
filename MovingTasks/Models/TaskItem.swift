@@ -16,17 +16,27 @@ class TaskItem:  Identifiable, Hashable
     var itemDescription: String = Constants.EMPTY_STRING
     var comment: String = Constants.EMPTY_STRING
     var wasPurchased: Bool = false
-    var quantity: String = "1"
-    var purchasedPrice: String = 10.0.formatted(.currency(code: "USD"))
+    var quantity: String = Constants.ZERO_STRING
+    var purchasedPrice: String = Constants.ZERO.formatted(.currency(code: Constants.US_DOLLARS_CODE))
     var purchaseDate: Date = Date.now
+    var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
     
     var task: Task?
     
-    var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
-    
     var wrappedWasPurchased: String
     {
-        wasPurchased ? "Yes" : "No"
+        wasPurchased ? Constants.YES : Constants.NO
+    }
+    
+    var totalPrice: String
+    {
+        guard let decimalQuantity = Decimal(string: quantity) else { return Constants.ZERO_CURRENCY}
+        
+        guard let decimalPurchasedPrice =
+                Decimal(string: purchasedPrice.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING))
+                else { return Constants.ZERO_CURRENCY}
+        
+        return (decimalQuantity * decimalPurchasedPrice).formatted(.currency(code: Constants.US_DOLLARS_CODE))
     }
     
     init(itemTitle: String, itemDescription: String, comment: String)

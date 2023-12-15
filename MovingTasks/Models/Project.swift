@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Project: Identifiable
+class Project: Identifiable, Hashable
 {
     var projectId : String = UUID().uuidString
     

@@ -4,7 +4,6 @@
 //
 //  Created by Larry Burris on 12/13/23.
 //
-
 import SwiftUI
 
 struct TaskItemListView: View 
@@ -32,7 +31,7 @@ struct TaskItemListView: View
     
     var body: some View
     {
-        VStack(alignment: .leading)
+        VStack(alignment: .leading, spacing: 5)
         {
             List
             {
@@ -55,6 +54,17 @@ struct TaskItemListView: View
                 .navigationTitle("Task Item List")
                 .navigationBarTitleDisplayMode(.inline)
             }
+            .toolbar
+            {
+                Menu("\(Image(systemName: "arrowshape.turn.up.left.fill"))")
+                {
+                    Button("Go to Task List")
+                    {
+                        path = NavigationPath()
+                    }
+                }
+                .padding(.horizontal)
+            }
         }
         .navigationDestination(for: TaskItem.self)
         {
@@ -64,7 +74,3 @@ struct TaskItemListView: View
         }
     }
 }
-
-//#Preview {
-//    TaskItemListView()
-//}
