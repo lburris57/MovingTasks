@@ -29,6 +29,8 @@
 		9118BC7B2B29437000790686 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7A2B29437000790686 /* TaskItem.swift */; };
 		9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */; };
 		9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7E2B2A392B00790686 /* TaskItemListView.swift */; };
+		9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */ = {isa = PBXBuildFile; productRef = 9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */; };
+		9118BC872B30058F00790686 /* TextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC862B30058F00790686 /* TextInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,7 @@
 		9118BC7A2B29437000790686 /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
 		9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskItemView.swift; sourceTree = "<group>"; };
 		9118BC7E2B2A392B00790686 /* TaskItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemListView.swift; sourceTree = "<group>"; };
+		9118BC862B30058F00790686 /* TextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9118BC642B26BD8700790686 /* FloatingPromptTextField in Frameworks */,
+				9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				9118BC762B2804B100790686 /* LaunchScreenView.swift */,
+				9118BC862B30058F00790686 /* TextInputView.swift */,
 				9118BC3B2B2659AF00790686 /* TaskListView.swift */,
 				9118BC7E2B2A392B00790686 /* TaskItemListView.swift */,
 				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
@@ -182,6 +187,7 @@
 			name = MovingTasks;
 			packageProductDependencies = (
 				9118BC632B26BD8700790686 /* FloatingPromptTextField */,
+				9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */,
 			);
 			productName = MovingTasks;
 			productReference = 9118BC362B2659AF00790686 /* MovingTasks.app */;
@@ -213,6 +219,7 @@
 			mainGroup = 9118BC2D2B2659AF00790686;
 			packageReferences = (
 				9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
+				9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */,
 			);
 			productRefGroup = 9118BC372B2659AF00790686 /* Products */;
 			projectDirPath = "";
@@ -250,6 +257,7 @@
 				9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */,
 				9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */,
 				9118BC752B27B97D00790686 /* FilterEnum.swift in Sources */,
+				9118BC872B30058F00790686 /* TextInputView.swift in Sources */,
 				9118BC5C2B268EA300790686 /* Binding+Extension.swift in Sources */,
 				9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */,
 				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,
@@ -478,6 +486,14 @@
 				minimumVersion = 0.4.0;
 			};
 		};
+		9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/reddavis/FloatingLabelTextFieldStyle?tab=readme-ov-file";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -485,6 +501,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */;
 			productName = FloatingPromptTextField;
+		};
+		9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */;
+			productName = FloatingLabelTextFieldStyle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

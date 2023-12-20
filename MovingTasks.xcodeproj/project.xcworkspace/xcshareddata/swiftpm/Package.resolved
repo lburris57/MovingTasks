@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "floatinglabeltextfieldstyle?tab=readme-ov-file",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/reddavis/FloatingLabelTextFieldStyle?tab=readme-ov-file",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2c048897b4e68ddcdc78d33c2707c1c336dcc5e1"
+      }
+    },
+    {
       "identity" : "floatingprompttextfield",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/EmilioPelaez/FloatingPromptTextField",
