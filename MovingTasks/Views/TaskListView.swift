@@ -12,6 +12,10 @@ struct TaskListView: View
     @Environment(\.modelContext) private var modelContext
 
     @Query(sort: \Task.taskTitle) var tasks: [Task]
+    
+    @Query var taskItems: [TaskItem]
+    
+    @State private var grandTotal: String = Constants.ZERO_STRING
 
     @State private var filterValue: String = "All"
     
@@ -19,7 +23,8 @@ struct TaskListView: View
 
     @State private var path = NavigationPath()
     
-    @State private var sortOrder = [
+    @State private var sortOrder = 
+    [
         SortDescriptor(\Task.createdDate, order: .reverse),
         SortDescriptor(\Task.priority, order: .reverse)
     ]
@@ -109,6 +114,25 @@ struct TaskListView: View
             modelContext.delete(task)
         }
     }
+    
+    private func populateGrandTotal()
+    {
+        var total: Decimal = 0.00
+        
+        for taskItem in taskItems
+        {
+            let totalPrice = Decimal(string: taskItem.totalPriceString.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING))
+            
+            print("Total price string from taskItem is: \( taskItem.totalPriceString)")
+            print("Total price from taskItem is: \(totalPrice ?? 0.00)")
+            
+            total += totalPrice ?? 0.00
+            
+            print("Total is: \(total)")
+        }
+        
+        grandTotal = total.formatted(.currency(code: "USD"))
+    }
 
     var body: some View
     {
@@ -150,6 +174,15 @@ struct TaskListView: View
                     {
                         FilterView(filterValue: $filterValue, selectedSearchType: $selectedSearchType)
 
+                        HStack
+                        {
+                            Spacer()
+                            
+                            Text("Grand Total: " + grandTotal).font(.body).bold()
+                            
+                            Spacer()
+                        }
+                        
                         List
                         {
                             ForEach(filteredTasks)
@@ -241,7 +274,7 @@ struct TaskListView: View
                     }
                 }
                 .navigationTitle("Tasks")
-            }
+            }.onAppear(perform: populateGrandTotal)
         }
     }
 }

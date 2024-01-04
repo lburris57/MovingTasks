@@ -105,6 +105,10 @@ struct EditTaskItemView: View
                         
                         if taskItem.wasPurchased
                         {
+                            FloatingPromptTextField(text: $taskItem.url, prompt: Text("URL:")
+                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                            .floatingPromptScale(1.0)
+                            
                             FloatingPromptTextField(text: $taskItem.quantity, prompt: Text("Quantity:")
                                 .foregroundStyle(colorScheme == .dark ? .gray : .blue))
                             .floatingPromptScale(1.0)
@@ -116,7 +120,8 @@ struct EditTaskItemView: View
                             VStack(alignment: .leading, spacing: 12)
                             {
                                 Text("Total Price:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                                Text("\(taskItem.totalPrice)").font(.body).bold()
+                                
+                                Text("\(taskItem.formattedTotalPriceString)").font(.body).bold()
                                 
                                 Text("Purchase Date:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
                                 

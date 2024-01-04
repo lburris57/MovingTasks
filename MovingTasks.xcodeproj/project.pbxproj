@@ -31,6 +31,10 @@
 		9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC7E2B2A392B00790686 /* TaskItemListView.swift */; };
 		9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */ = {isa = PBXBuildFile; productRef = 9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */; };
 		9118BC872B30058F00790686 /* TextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC862B30058F00790686 /* TextInputView.swift */; };
+		91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */; };
+		91C25D412B474AE700A9FE50 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D402B474AE700A9FE50 /* ImagePicker.swift */; };
+		91FCE8672B436995002A6CF0 /* Routing in Frameworks */ = {isa = PBXBuildFile; productRef = 91FCE8662B436995002A6CF0 /* Routing */; };
+		91FCE8862B4736B1002A6CF0 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 91FCE8852B4736B1002A6CF0 /* SwiftUIImageViewer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +63,8 @@
 		9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskItemView.swift; sourceTree = "<group>"; };
 		9118BC7E2B2A392B00790686 /* TaskItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemListView.swift; sourceTree = "<group>"; };
 		9118BC862B30058F00790686 /* TextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputView.swift; sourceTree = "<group>"; };
+		91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
+		91C25D402B474AE700A9FE50 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +72,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91FCE8672B436995002A6CF0 /* Routing in Frameworks */,
 				9118BC642B26BD8700790686 /* FloatingPromptTextField in Frameworks */,
+				91FCE8862B4736B1002A6CF0 /* SwiftUIImageViewer in Frameworks */,
 				9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,6 +108,7 @@
 				9118BC4E2B265AD600790686 /* Error Enums */,
 				9118BC492B265A9F00790686 /* Extensions */,
 				9118BC472B265A7A00790686 /* Constants.swift */,
+				91C25D402B474AE700A9FE50 /* ImagePicker.swift */,
 				9118BC392B2659AF00790686 /* MovingTasksApp.swift */,
 				9118BC582B265FB400790686 /* Views */,
 				9118BC3D2B2659B100790686 /* Assets.xcassets */,
@@ -120,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				9118BC4A2B265A9F00790686 /* FileManager+Extension.swift */,
+				91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */,
 				9118BC4B2B265A9F00790686 /* Logger+Extension.swift */,
 				9118BC5B2B268EA300790686 /* Binding+Extension.swift */,
 			);
@@ -188,6 +198,8 @@
 			packageProductDependencies = (
 				9118BC632B26BD8700790686 /* FloatingPromptTextField */,
 				9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */,
+				91FCE8662B436995002A6CF0 /* Routing */,
+				91FCE8852B4736B1002A6CF0 /* SwiftUIImageViewer */,
 			);
 			productName = MovingTasks;
 			productReference = 9118BC362B2659AF00790686 /* MovingTasks.app */;
@@ -220,6 +232,8 @@
 			packageReferences = (
 				9118BC622B26BD8700790686 /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
 				9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */,
+				91FCE8652B436995002A6CF0 /* XCRemoteSwiftPackageReference "Routing" */,
+				91FCE8842B4736B1002A6CF0 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 			);
 			productRefGroup = 9118BC372B2659AF00790686 /* Products */;
 			projectDirPath = "";
@@ -250,9 +264,11 @@
 				9118BC3C2B2659AF00790686 /* TaskListView.swift in Sources */,
 				9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */,
 				9118BC7B2B29437000790686 /* TaskItem.swift in Sources */,
+				91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */,
 				9118BC3A2B2659AF00790686 /* MovingTasksApp.swift in Sources */,
 				9118BC482B265A7A00790686 /* Constants.swift in Sources */,
 				9118BC792B29105800790686 /* StatusEnum.swift in Sources */,
+				91C25D412B474AE700A9FE50 /* ImagePicker.swift in Sources */,
 				9118BC4D2B265A9F00790686 /* Logger+Extension.swift in Sources */,
 				9118BC772B2804B100790686 /* LaunchScreenView.swift in Sources */,
 				9118BC7D2B294F8E00790686 /* EditTaskItemView.swift in Sources */,
@@ -494,6 +510,22 @@
 				kind = branch;
 			};
 		};
+		91FCE8652B436995002A6CF0 /* XCRemoteSwiftPackageReference "Routing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/obvios/Routing.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		91FCE8842B4736B1002A6CF0 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fuzzzlove/swiftui-image-viewer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -506,6 +538,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */;
 			productName = FloatingLabelTextFieldStyle;
+		};
+		91FCE8662B436995002A6CF0 /* Routing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91FCE8652B436995002A6CF0 /* XCRemoteSwiftPackageReference "Routing" */;
+			productName = Routing;
+		};
+		91FCE8852B4736B1002A6CF0 /* SwiftUIImageViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91FCE8842B4736B1002A6CF0 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
+			productName = SwiftUIImageViewer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

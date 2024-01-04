@@ -16,6 +16,7 @@ class TaskItem:  Identifiable, Hashable
     var itemDescription: String = Constants.EMPTY_STRING
     var comment: String = Constants.EMPTY_STRING
     var wasPurchased: Bool = false
+    var url: String = Constants.NOT_APPLICABLE
     var quantity: String = Constants.ZERO_STRING
     var purchasedPrice: String = Constants.ZERO.formatted(.currency(code: Constants.US_DOLLARS_CODE))
     var purchaseDate: Date = Date.now
@@ -28,15 +29,35 @@ class TaskItem:  Identifiable, Hashable
         wasPurchased ? Constants.YES : Constants.NO
     }
     
-    var totalPrice: String
+    var totalPrice: Decimal
+    {
+        guard let decimalQuantity = Decimal(string: quantity) else { return Constants.ZERO_DECIMAL}
+        
+        guard let decimalPurchasedPrice = Decimal(string: purchasedPrice) else { return Constants.ZERO_DECIMAL }
+        
+        return decimalQuantity * decimalPurchasedPrice
+    }
+    
+    var totalPriceString: String
     {
         guard let decimalQuantity = Decimal(string: quantity) else { return Constants.ZERO_CURRENCY}
         
         guard let decimalPurchasedPrice =
                 Decimal(string: purchasedPrice.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING))
-                else { return Constants.ZERO_CURRENCY}
+                else { return Constants.ZERO_CURRENCY }
         
-        return (decimalQuantity * decimalPurchasedPrice).formatted(.currency(code: Constants.US_DOLLARS_CODE))
+        return ("\(decimalQuantity * decimalPurchasedPrice)")
+    }
+    
+    var formattedTotalPriceString: String
+    {
+        guard let decimalQuantity = Decimal(string: quantity) else { return Constants.ZERO_CURRENCY}
+        
+        guard let decimalPurchasedPrice =
+                Decimal(string: purchasedPrice.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING))
+                else { return Constants.ZERO_CURRENCY }
+        
+        return (decimalQuantity * decimalPurchasedPrice).formatted(.currency(code: "USD"))
     }
     
     init(itemTitle: String, itemDescription: String, comment: String)
