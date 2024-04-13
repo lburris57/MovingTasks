@@ -22,6 +22,12 @@ class Task: Identifiable, Hashable
     var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
     var completedDate: String = Constants.EMPTY_STRING
     
+    @Attribute(.externalStorage)
+    var beforeImage: Data?
+    
+    @Attribute(.externalStorage)
+    var afterImage: Data?
+    
     @Relationship(deleteRule: .cascade)
     var taskItems: [TaskItem]? = [TaskItem]()
     

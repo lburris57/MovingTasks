@@ -7,6 +7,7 @@
 import FloatingPromptTextField
 import SwiftData
 import SwiftUI
+import PhotosUI
 
 struct EditTaskView: View
 {
@@ -15,6 +16,9 @@ struct EditTaskView: View
     @Environment(\.modelContext) var modelContext
 
     @Environment(\.colorScheme) var colorScheme
+    
+    @State var selectedBeforePhoto: PhotosPickerItem?
+    @State var selectedAfterPhoto: PhotosPickerItem?
 
     @Binding var path: NavigationPath
 
@@ -110,6 +114,94 @@ struct EditTaskView: View
                         {
                             Text("Date Created:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
                             Text("\(task.createdDate)")
+                        }
+                    }
+                }
+                
+                Section("Before & After Images")
+                {
+                    HStack
+                    {
+                        VStack
+                        {
+                            if let selectedBeforePhotoData = task.beforeImage, let uiImage = UIImage(data: selectedBeforePhotoData)
+                            {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 150, maxHeight: 150)
+                                    .cornerRadius(15)
+                                    .overlay(alignment: .bottomTrailing)
+                                {
+                                    Text("BEFORE").font(.caption).backgroundStyle(.black).foregroundStyle(.white).bold().padding(.horizontal)
+                                }
+                            }
+                            
+//                            if task.beforeImage == nil
+//                            {
+                                PhotosPicker(selection: $selectedBeforePhoto, matching: .images, photoLibrary: .shared())
+                                {
+                                    Label("Add Before Image", systemImage: "photo").font(.caption)
+                                }
+//                            }
+                            
+//                            if task.beforeImage != nil
+//                            {
+//                                Button(role: .destructive)
+//                                {
+//                                    withAnimation
+//                                    {
+//                                        selectedBeforePhoto = nil
+//                                        //task.beforeImage = nil
+//                                    }
+//                                }
+//                                label:
+//                                {
+//                                    Label("Remove Image", systemImage: "xmark").font(.caption).foregroundStyle(.red)
+//                                }.padding()
+//                            }
+                        }
+                        
+                        Spacer()
+                        
+                        VStack
+                        {
+                            if let selectedAfterPhotoData = task.afterImage, let uiImage2 = UIImage(data: selectedAfterPhotoData)
+                            {
+                                Image(uiImage: uiImage2)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 150, maxHeight: 150)
+                                    .cornerRadius(15)
+                                    .overlay(alignment: .bottomTrailing)
+                                {
+                                    Text("AFTER").font(.caption).backgroundStyle(.black).foregroundStyle(.white).bold().padding(.horizontal)
+                                }
+                            }
+                            
+//                            if task.afterImage == nil
+//                            {
+                                PhotosPicker(selection: $selectedAfterPhoto, matching: .images, photoLibrary: .shared())
+                                {
+                                    Label("Add After Image", systemImage: "photo").font(.caption)
+                                }
+//                            }
+                            
+//                            if task.afterImage != nil
+//                            {
+//                                Button(role: .destructive)
+//                                {
+//                                    withAnimation
+//                                    {
+//                                        selectedAfterPhoto = nil
+//                                        //task.afterImage = nil
+//                                    }
+//                                }
+//                                label:
+//                                {
+//                                    Label("Remove Image", systemImage: "xmark").font(.caption).foregroundStyle(.red)
+//                                }.padding()
+//                            }
                         }
                     }
                 }
@@ -228,6 +320,20 @@ struct EditTaskView: View
                 taskItem in
                 
                 EditTaskItemView(taskItem: taskItem, path: $path)
+            }
+            .task(id: selectedBeforePhoto) 
+            {
+                if let data = try? await selectedBeforePhoto?.loadTransferable(type: Data.self)
+                {
+                    task.beforeImage = data
+                }
+            }
+            .task(id: selectedAfterPhoto) 
+            {
+                if let data = try? await selectedAfterPhoto?.loadTransferable(type: Data.self) 
+                {
+                    task.afterImage = data
+                }
             }
         }
     }

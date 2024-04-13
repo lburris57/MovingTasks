@@ -3,4 +3,126 @@
    uuid = "F6C604E4-8BC6-416C-B23B-B8D9C2816184"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "35E32141-B7C9-49E3-8075-008A50813506"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MovingTasks/Views/EditTaskView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "EditTaskView"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "35E32141-B7C9-49E3-8075-008A50813506 - fe284bb3bf590be7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #5 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "328"
+                  endingLineNumber = "328">
+               </Location>
+               <Location
+                  uuid = "35E32141-B7C9-49E3-8075-008A50813506 - cebed40ea08321e4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #5 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "328"
+                  endingLineNumber = "328">
+               </Location>
+               <Location
+                  uuid = "35E32141-B7C9-49E3-8075-008A50813506 - 84cf3f3dce6c6de6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #5 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "328"
+                  endingLineNumber = "328">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "06C70DF5-31D9-444B-B9C4-66A1DB08C2DB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MovingTasks/Views/EditTaskView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
+            landmarkName = "EditTaskView"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "06C70DF5-31D9-444B-B9C4-66A1DB08C2DB - fe284bb3bf590b0e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #6 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "335"
+                  endingLineNumber = "335">
+               </Location>
+               <Location
+                  uuid = "06C70DF5-31D9-444B-B9C4-66A1DB08C2DB - cebed40ea083210d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #6 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "335"
+                  endingLineNumber = "335">
+               </Location>
+               <Location
+                  uuid = "06C70DF5-31D9-444B-B9C4-66A1DB08C2DB - 84cf3f3dce6c6d0f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #6 @Sendable () async -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.ignoresSafeArea(_: SwiftUI.SafeAreaRegions, edges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.task&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(id: &#x3c4;_1_0, priority: Swift.TaskPriority, _: @Sendable () async -&gt; ()) -&gt; some&gt;&gt;.0)&gt; in MovingTasks.EditTaskView.body.getter : some"
+                  moduleName = "MovingTasks"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/larryburris/Desktop/MovingTasks/MovingTasks/Views/EditTaskView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "335"
+                  endingLineNumber = "335">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
