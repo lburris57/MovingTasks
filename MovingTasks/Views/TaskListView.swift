@@ -228,14 +228,14 @@ struct TaskListView: View
                                         }
                                     }
                                 }
-                                .navigationDestination(for: Task.self)
-                                {
-                                    task in
-                                    
-                                    EditTaskView(task: task, path: $path)
-                                }
                             }
                             .onDelete(perform: deleteTask)
+                        }
+                        .navigationDestination(for: Task.self)
+                        {
+                            task in
+                            
+                            EditTaskView(task: task, path: $path)
                         }
                         .listStyle(.plain)
                         .padding()
