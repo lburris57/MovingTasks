@@ -5,6 +5,7 @@
 //  Created by Larry Burris on 12/13/23.
 //
 import SwiftUI
+import SwiftData
 
 struct TaskItemListView: View 
 {
@@ -110,3 +111,19 @@ struct TaskItemListView: View
         .onAppear(perform: populateGrandTotal)
     }
 }
+
+//#Preview
+//{
+//    do
+//    {
+//        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//
+//        let container = try ModelContainer(for: Task.self, TaskItem.self, configurations: config)
+//
+//        return TaskItemListView().modelContainer(container)
+//    }
+//    catch
+//    {
+//        Text("Failed to create container: \(error.localizedDescription)")
+//    }
+//}
