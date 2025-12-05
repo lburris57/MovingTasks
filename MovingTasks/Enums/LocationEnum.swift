@@ -14,7 +14,7 @@ enum LocationEnum: String, Identifiable, CaseIterable, Hashable
     }
 
     case all = "All"
-    case amandasRoom = "Amanda's Room"
+    case mainBedroom = "Main Bedroom"
     case backBedroom = "Back Bedroom"
     case basement = "Basement"
     case computerRoom = "Computer Room"
@@ -28,6 +28,8 @@ enum LocationEnum: String, Identifiable, CaseIterable, Hashable
     case mainBathroom = "Main Bathroom"
     case pantry = "Pantry"
     case smallBathroom = "Small Bathroom"
+    case firstFloor = "First Floor"
+    case secondFloor = "Second Floor"
     case thirdFloor = "Third Floor"
     case thirdFloorStairwell = "Third Floor Stairwell"
 }
@@ -40,8 +42,8 @@ extension LocationEnum
         {
             case .all:
                 return "All"
-            case .amandasRoom:
-                return "Amanda's Room"
+            case .mainBedroom:
+                return "Main Bedroom"
             case .backBedroom:
                 return "Back Bedroom"
             case .basement:
@@ -68,10 +70,15 @@ extension LocationEnum
                 return "Pantry"
             case .smallBathroom:
                 return "Small Bathroom"
+            case .firstFloor:
+                return "First Floor"
+            case .secondFloor:
+                return "Second Floor"
             case .thirdFloor:
                 return "Third Floor"
             case .thirdFloorStairwell:
                 return "Third Floor Stairwell"
+            
         }
     }
 }
