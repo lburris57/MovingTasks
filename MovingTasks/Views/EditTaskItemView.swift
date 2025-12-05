@@ -8,18 +8,97 @@ import FloatingPromptTextField
 import SwiftData
 import SwiftUI
 
+/// A comprehensive view for creating and editing task items within a task.
+///
+/// `EditTaskItemView` provides a detailed form interface for managing individual task items,
+/// including basic information, purchase details, and pricing calculations. The view automatically
+/// validates required fields and deletes incomplete task items to maintain data integrity.
+///
+/// ## Key Features
+///
+/// - **Basic Information**: Title, description, and comment fields using floating prompt text fields
+/// - **Purchase Tracking**: Toggle to indicate whether an item was purchased
+/// - **Purchase Details**: URL, quantity, and purchase price fields (shown only when purchased)
+/// - **Automatic Calculations**: Total price calculated from quantity × purchase price
+/// - **Purchase Date**: Date picker for tracking when items were purchased
+/// - **Navigation**: Multi-level navigation support to return to task list, task items list, or edit task
+/// - **Data Validation**: Automatic deletion of incomplete task items when the view disappears
+///
+/// ## Data Validation
+///
+/// Three fields must be populated for a task item to be saved:
+/// - `itemTitle`
+/// - `itemDescription`
+/// - `comment`
+///
+/// If any of these fields are empty when the view disappears, the task item is automatically
+/// deleted from the SwiftData model context.
+///
+/// ## Purchase Information
+///
+/// When the "Was this item purchased?" checkbox is toggled:
+/// - **Checked**: Purchase date is set to the current date, and purchase-related fields become visible
+/// - **Unchecked**: Purchase date is set to the distant future, and purchase fields are hidden
+///
+/// ## Navigation Controls
+///
+/// The toolbar provides a menu with three navigation options:
+/// - Return to Task Item List
+/// - Return to Edit Task
+/// - Return to Task List (root)
+///
+/// ## Usage Example
+///
+/// ```swift
+/// @State private var navigationPath = NavigationPath()
+/// let newTaskItem = TaskItem(itemTitle: "", itemDescription: "", comment: "")
+///
+/// NavigationStack(path: $navigationPath) {
+///     EditTaskItemView(taskItem: newTaskItem, path: $navigationPath)
+/// }
+/// ```
+///
+/// - Important: Requires a SwiftData model context in the environment.
+/// - Note: The navigation title changes between "Add Task Item" and "Edit Task Item"
+///   based on whether required fields are populated.
+///
 struct EditTaskItemView: View
 {
+    // MARK: - Properties
+    
+    /// The task item being edited or created.
+    ///
+    /// Marked as `@Bindable` to enable two-way data binding between the view and
+    /// the task item's properties. Changes are immediately reflected in the SwiftData model context.
     @Bindable var taskItem: TaskItem
     
+    /// The navigation path for managing the navigation stack.
+    ///
+    /// Used to programmatically navigate back to various levels in the view hierarchy.
     @Binding var path: NavigationPath
     
+    /// The quantity as an integer (currently unused).
+    ///
+    /// This property appears to be for potential future use with integer-based quantity handling.
     @State private var quantityInt = 0
     
+    /// The SwiftData model context for performing database operations.
+    ///
+    /// Used for deleting invalid task items when required fields are not populated.
     @Environment(\.modelContext) var modelContext
     
+    /// The current color scheme (light or dark mode).
+    ///
+    /// Used to adjust text field prompt colors for optimal visibility in different appearances.
     @Environment(\.colorScheme) var colorScheme
     
+    // MARK: - Helper Methods
+    
+    /// Validates and deletes the task item if required fields are empty.
+    ///
+    /// This method is called automatically when the view disappears. If any of the three
+    /// required fields (title, description, or comment) are empty, the task item is deleted
+    /// from the model context with animation.
     func validateTaskItem()
     {
         if taskItem.itemTitle == Constants.EMPTY_STRING ||
@@ -33,6 +112,11 @@ struct EditTaskItemView: View
         }
     }
     
+    /// Checks whether all required fields are populated.
+    ///
+    /// Used to determine the navigation title and potentially for other validation purposes.
+    ///
+    /// - Returns: `true` if all required fields have values, `false` otherwise
     func validateFields() -> Bool
     {
         if taskItem.itemTitle == Constants.EMPTY_STRING || 
@@ -45,10 +129,17 @@ struct EditTaskItemView: View
         return true
     }
     
+    /// Toggles the purchased status of the task item.
+    ///
+    /// When toggled to purchased, sets the purchase date to the current date.
+    /// When toggled to not purchased, sets the purchase date to the distant future.
+    /// This method is called by the checkbox button in the purchase information section.
     func toggleWasPurchased()
     {
         taskItem.wasPurchased.toggle()
     }
+    
+    // MARK: - Body
     
     var body: some View
     {
