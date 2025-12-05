@@ -11,7 +11,6 @@ import SwiftData
 class TaskItem:  Identifiable, Hashable
 {
     var taskItemId : String = UUID().uuidString
-    
     var itemTitle: String = Constants.EMPTY_STRING
     var itemDescription: String = Constants.EMPTY_STRING
     var comment: String = Constants.EMPTY_STRING
@@ -23,6 +22,27 @@ class TaskItem:  Identifiable, Hashable
     var createdDate: String = Date.now.formatted(date: .abbreviated, time: .shortened)
     
     var task: Task?
+    
+    init(taskItemId: String, itemTitle: String, itemDescription: String, comment: String, wasPurchased: Bool, url: String, quantity: String, purchasedPrice: String, purchaseDate: Date, createdDate: String, task: Task? = nil, wrappedWasPurchased: String, totalPrice: Decimal, totalPriceString: String, formattedTotalPriceString: String)
+    {
+        self.taskItemId = taskItemId
+        self.itemTitle = itemTitle
+        self.itemDescription = itemDescription
+        self.comment = comment
+        self.wasPurchased = wasPurchased
+        self.url = url
+        self.quantity = quantity
+        self.purchasedPrice = purchasedPrice
+        self.purchaseDate = purchaseDate
+        self.createdDate = createdDate
+    }
+    
+    init(itemTitle: String, itemDescription: String, comment: String)
+    {
+        self.itemTitle = itemTitle
+        self.itemDescription = itemDescription
+        self.comment = comment
+    }
     
     var wrappedWasPurchased: String
     {
@@ -58,12 +78,5 @@ class TaskItem:  Identifiable, Hashable
                 else { return Constants.ZERO_CURRENCY }
         
         return (decimalQuantity * decimalPurchasedPrice).formatted(.currency(code: "USD"))
-    }
-    
-    init(itemTitle: String, itemDescription: String, comment: String)
-    {
-        self.itemTitle = itemTitle
-        self.itemDescription = itemDescription
-        self.comment = comment
     }
 }

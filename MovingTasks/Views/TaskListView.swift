@@ -85,7 +85,7 @@ struct TaskListView: View
     }
 
     //  Returns the color based on the priority
-    private func styleForPriority(_ value: String) -> Color
+    func styleForPriority(_ value: String) -> Color
     {
         let priority = PriorityEnum(rawValue: value)
 
