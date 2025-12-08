@@ -32,20 +32,14 @@ import SwiftData
 ///
 /// ## Navigation Controls
 ///
-/// The toolbar provides a menu with a single option to return to the task list by
-/// resetting the navigation path.
+/// The toolbar provides a menu with a single option to return to the task list using
+/// the router to dismiss the screen.
 ///
 /// ## Usage Example
 ///
 /// ```swift
-/// @State private var navigationPath = NavigationPath()
-/// let task = // ... fetch or create a task
-///
-/// NavigationStack(path: $navigationPath) {
-///     TaskItemListView(
-///         taskItems: task.taskItemsArray,
-///         path: $navigationPath
-///     )
+/// router.showScreen(.push) { _ in
+///     TaskItemListView(taskItems: task.taskItemsArray)
 /// }
 /// ```
 ///

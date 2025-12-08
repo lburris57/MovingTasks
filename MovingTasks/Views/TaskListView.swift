@@ -346,8 +346,13 @@ struct TaskListView: View
                                         }
                                     }
                                 }
+                                .transition(.asymmetric(
+                                    insertion: .scale.combined(with: .opacity),
+                                    removal: .opacity
+                                ))
                             }
                             .onDelete(perform: deleteTask)
+                            .animation(.spring(response: 0.4, dampingFraction: 0.7), value: filteredTasks)
                         }
                         .navigationDestination(for: Task.self)
                         {
@@ -551,16 +556,9 @@ struct FilterView: View
 
 #Preview
 {
-    do
-    {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-
-        let container = try ModelContainer(for: Task.self, TaskItem.self, configurations: config)
-
-        return TaskListView().modelContainer(container)
-    }
-    catch
-    {
-        return Text("Failed to create container: \(error.localizedDescription)")
-    }
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Task.self, TaskItem.self, configurations: config)
+    
+    TaskListView()
+        .modelContainer(container)
 }

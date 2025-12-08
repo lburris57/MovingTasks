@@ -1,4 +1,5 @@
 {
+  "originHash" : "aa56456b97654a62155d29cff485046eabdf40ae4ed91681c22625d6a1538e82",
   "pins" : [
     {
       "identity" : "floatinglabeltextfieldstyle?tab=readme-ov-file",
@@ -28,6 +29,24 @@
       }
     },
     {
+      "identity" : "swiftfulrecursiveui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftfulThinking/SwiftfulRecursiveUI.git",
+      "state" : {
+        "revision" : "3d2d5ac6efe70874fb5ffb2f8e1d5ccd457f4366",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swiftfulrouting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftfulThinking/SwiftfulRouting.git",
+      "state" : {
+        "revision" : "f169d9a96741a3ec520d21d7da3cae06d7590700",
+        "version" : "6.1.8"
+      }
+    },
+    {
       "identity" : "swiftui-image-viewer",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/fuzzzlove/swiftui-image-viewer",
@@ -37,5 +56,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

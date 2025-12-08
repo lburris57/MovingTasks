@@ -34,6 +34,8 @@
 		911A856C2EE2931000A2F2E5 /* EditTaskView_Documentation.md in Resources */ = {isa = PBXBuildFile; fileRef = 911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */; };
 		91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */; };
 		91C25D412B474AE700A9FE50 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D402B474AE700A9FE50 /* ImagePicker.swift */; };
+		91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */ = {isa = PBXBuildFile; fileRef = 91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */; };
+		91E5AE382EE3E2D800A7FD4F /* SwiftfulRouting in Frameworks */ = {isa = PBXBuildFile; productRef = 91E5AE372EE3E2D800A7FD4F /* SwiftfulRouting */; };
 		91FCE8672B436995002A6CF0 /* Routing in Frameworks */ = {isa = PBXBuildFile; productRef = 91FCE8662B436995002A6CF0 /* Routing */; };
 		91FCE8862B4736B1002A6CF0 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 91FCE8852B4736B1002A6CF0 /* SwiftUIImageViewer */; };
 /* End PBXBuildFile section */
@@ -78,6 +80,7 @@
 		916066AD2ED6AA3800FD58DA /* MovingTasksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovingTasksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		91C25D402B474AE700A9FE50 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SwiftRouting_Migration_Summary.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -93,6 +96,7 @@
 				9118BC642B26BD8700790686 /* FloatingPromptTextField in Frameworks */,
 				91FCE8862B4736B1002A6CF0 /* SwiftUIImageViewer in Frameworks */,
 				9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */,
+				91E5AE382EE3E2D800A7FD4F /* SwiftfulRouting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +131,7 @@
 		9118BC382B2659AF00790686 /* MovingTasks */ = {
 			isa = PBXGroup;
 			children = (
+				9118BC392B2659AF00790686 /* MovingTasksApp.swift */,
 				9118BC6F2B27ABF000790686 /* Info.plist */,
 				9118BC6E2B27AB0E00790686 /* MovingTasks.entitlements */,
 				9118BC672B26CD9500790686 /* Enums */,
@@ -135,7 +140,6 @@
 				9118BC492B265A9F00790686 /* Extensions */,
 				9118BC472B265A7A00790686 /* Constants.swift */,
 				91C25D402B474AE700A9FE50 /* ImagePicker.swift */,
-				9118BC392B2659AF00790686 /* MovingTasksApp.swift */,
 				9118BC582B265FB400790686 /* Views */,
 				9118BC3D2B2659B100790686 /* Assets.xcassets */,
 				9118BC3F2B2659B100790686 /* Preview Content */,
@@ -190,6 +194,7 @@
 				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
 				911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */,
+				91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 				9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */,
 				91FCE8662B436995002A6CF0 /* Routing */,
 				91FCE8852B4736B1002A6CF0 /* SwiftUIImageViewer */,
+				91E5AE372EE3E2D800A7FD4F /* SwiftfulRouting */,
 			);
 			productName = MovingTasks;
 			productReference = 9118BC362B2659AF00790686 /* MovingTasks.app */;
@@ -288,6 +294,7 @@
 				9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */,
 				91FCE8652B436995002A6CF0 /* XCRemoteSwiftPackageReference "Routing" */,
 				91FCE8842B4736B1002A6CF0 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
+				91E5AE362EE3E2D800A7FD4F /* XCRemoteSwiftPackageReference "SwiftfulRouting" */,
 			);
 			productRefGroup = 9118BC372B2659AF00790686 /* Products */;
 			projectDirPath = "";
@@ -305,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9118BC412B2659B100790686 /* Preview Assets.xcassets in Resources */,
+				91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */,
 				9118BC3E2B2659B100790686 /* Assets.xcassets in Resources */,
 				911A856C2EE2931000A2F2E5 /* EditTaskView_Documentation.md in Resources */,
 			);
@@ -641,6 +649,15 @@
 				kind = branch;
 			};
 		};
+		91E5AE362EE3E2D800A7FD4F /* XCRemoteSwiftPackageReference "SwiftfulRouting" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulRouting";
+			requirement = {
+				kind = versionRange;
+				maximumVersion = 7.0.0;
+				minimumVersion = 6.1.8;
+			};
+		};
 		91FCE8652B436995002A6CF0 /* XCRemoteSwiftPackageReference "Routing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/obvios/Routing.git";
@@ -669,6 +686,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9118BC832B30034300790686 /* XCRemoteSwiftPackageReference "FloatingLabelTextFieldStyle" */;
 			productName = FloatingLabelTextFieldStyle;
+		};
+		91E5AE372EE3E2D800A7FD4F /* SwiftfulRouting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91E5AE362EE3E2D800A7FD4F /* XCRemoteSwiftPackageReference "SwiftfulRouting" */;
+			productName = SwiftfulRouting;
 		};
 		91FCE8662B436995002A6CF0 /* Routing */ = {
 			isa = XCSwiftPackageProductDependency;

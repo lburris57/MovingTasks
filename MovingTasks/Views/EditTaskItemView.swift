@@ -42,19 +42,17 @@ import SwiftUI
 ///
 /// ## Navigation Controls
 ///
-/// The toolbar provides a menu with three navigation options:
-/// - Return to Task Item List
-/// - Return to Edit Task
-/// - Return to Task List (root)
+/// The toolbar provides a menu with three navigation options using SwiftfulRouting:
+/// - Return to Task Item List (dismiss one screen)
+/// - Return to Edit Task (dismiss to a specific screen)
+/// - Return to Task List (dismiss entire stack)
 ///
 /// ## Usage Example
 ///
 /// ```swift
-/// @State private var navigationPath = NavigationPath()
-/// let newTaskItem = TaskItem(itemTitle: "", itemDescription: "", comment: "")
-///
-/// NavigationStack(path: $navigationPath) {
-///     EditTaskItemView(taskItem: newTaskItem, path: $navigationPath)
+/// router.showScreen(.push) { _ in
+///     let newTaskItem = TaskItem(itemTitle: "", itemDescription: "", comment: "")
+///     EditTaskItemView(taskItem: newTaskItem)
 /// }
 /// ```
 ///
@@ -92,6 +90,9 @@ struct EditTaskItemView: View
     /// Used to adjust text field prompt colors for optimal visibility in different appearances.
     @Environment(\.colorScheme) var colorScheme
     
+    /// All task items in the database.
+    @Query var taskItems: [TaskItem]
+    
     // MARK: - Helper Methods
     
     /// Validates and deletes the task item if required fields are empty.
@@ -105,10 +106,8 @@ struct EditTaskItemView: View
              taskItem.itemDescription == Constants.EMPTY_STRING ||
              taskItem.comment == Constants.EMPTY_STRING
         {
-            withAnimation
-            {
-                modelContext.delete(taskItem)
-            }
+            modelContext.delete(taskItem)
+            try? modelContext.save()
         }
     }
     
@@ -120,8 +119,8 @@ struct EditTaskItemView: View
     func validateFields() -> Bool
     {
         if taskItem.itemTitle == Constants.EMPTY_STRING || 
-             taskItem.itemDescription == Constants.EMPTY_STRING ||
-             taskItem.comment == Constants.EMPTY_STRING
+            taskItem.itemDescription == Constants.EMPTY_STRING ||
+            taskItem.comment == Constants.EMPTY_STRING
         {
             return false
         }
@@ -223,6 +222,22 @@ struct EditTaskItemView: View
                     }
                 }
             }
+            
+            HStack
+            {
+                Button("Cancel")
+                {
+                    path.removeLast(1)
+                }
+                
+                Button("Save")
+                {
+                    path.removeLast(1)
+                }
+                .disabled(!validateFields())
+            }
+            
+            Spacer()
         }
         .padding()
         .toolbar
@@ -231,12 +246,12 @@ struct EditTaskItemView: View
             {
                 Button("Go to Task Item List")
                 {
-                    path.removeLast(taskItem.task!.taskItems!.count)
+                    path.removeLast()
                 }
             
                 Button("Go to Edit Task")
                 {
-                    path.removeLast(2)
+                    path.removeLast(1)
                 }
             
                 Button("Go to Task List")
