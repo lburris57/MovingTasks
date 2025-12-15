@@ -119,6 +119,29 @@ struct EditTaskView: View
     /// - Pushing to task item edit view
     @Binding var path: NavigationPath
 
+    // New properties for draft editing and creation mode
+    let isNew: Bool
+    @State private var draftTitle: String = ""
+    @State private var draftDescription: String = ""
+    @State private var draftComment: String = ""
+    @State private var draftLocation: String = LocationEnum.allCases.first?.title ?? ""
+    @State private var draftCategory: String = CategoryEnum.allCases.first?.title ?? ""
+    @State private var draftPriority: String = PriorityEnum.allCases.first?.title ?? ""
+    
+    // Explicit initializer to support isNew and initialize drafts
+    init(task: Task, path: Binding<NavigationPath>, isNew: Bool = false) {
+        self._task = Bindable(wrappedValue: task)
+        self._path = path
+        self.isNew = isNew
+        // Initialize drafts from existing task when editing
+        _draftTitle = State(initialValue: task.taskTitle)
+        _draftDescription = State(initialValue: task.taskDescription)
+        _draftComment = State(initialValue: task.comment)
+        _draftLocation = State(initialValue: task.location)
+        _draftCategory = State(initialValue: task.category)
+        _draftPriority = State(initialValue: task.priority)
+    }
+
     // MARK: - Methods
 
     /// Toggles the completion status of the task.
@@ -155,8 +178,7 @@ struct EditTaskView: View
             backgroundGradient
 
             formContent
-                .toolbar { toolbarContent }
-                .navigationTitle(validateFields() ? "Edit Task" : "Add Task")
+                .navigationTitle(isNew ? "Create Task" : (validateFields() ? "Edit Task" : "Add Task"))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .onAppear(perform: handleViewAppear)
@@ -176,6 +198,39 @@ struct EditTaskView: View
                 { oldValue, newValue in
                     handleAfterImageDataChange(oldValue: oldValue, newValue: newValue)
                 }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            // In creation mode, just go back without inserting a task
+                            // In edit mode, simply navigate back
+                            path = NavigationPath()
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(isNew ? "Create" : "Save") {
+                            if isNew {
+                                let newTask = Task(taskTitle: draftTitle, taskDescription: draftDescription, comment: draftComment)
+                                newTask.location = draftLocation
+                                newTask.category = draftCategory
+                                newTask.priority = draftPriority
+                                newTask.beforeImage = beforeImageData
+                                newTask.afterImage = afterImageData
+                                modelContext.insert(newTask)
+                                do {
+                                    try modelContext.save()
+                                } catch {
+                                    print("❌ Error creating task: \(error)")
+                                }
+                                path = NavigationPath()
+                            } else {
+                                applyImagesFromCacheToTask()
+                                path = NavigationPath()
+                            }
+                        }
+                        .disabled(isNew ? !validateDraftFields() : !validateFields())
+                    }
+                }
         }
     }
 
@@ -193,45 +248,11 @@ struct EditTaskView: View
         Form
         {
             taskInformationSection
-            beforeAfterImagesSection
             taskItemsSection
+            beforeAfterImagesSection
             statusInformationSection
         }
-    }
-
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent
-    {
-        ToolbarItem(placement: .topBarLeading)
-        {
-            Button(validateFields() ? "Save" : "Cancel")
-            {
-                if validateFields()
-                {
-                    // Save images before leaving
-                    applyImagesFromCacheToTask()
-                }
-                else
-                {
-                    modelContext.delete(task)
-                    try? modelContext.save()
-                }
-                path = NavigationPath()
-            }
-            .padding(.horizontal)
-        }
-
-        ToolbarItem
-        {
-            Button(action: addNewTaskItem)
-            {
-                HStack
-                {
-                    Text("Add Task Item").font(.callout)
-                    Image(systemName: "plus")
-                }
-            }
-        }
+        .scrollContentBackground(.hidden)
     }
 
     private var taskInformationSection: some View
@@ -248,21 +269,21 @@ struct EditTaskView: View
         Group
         {
             FloatingPromptTextField(
-                text: $task.taskTitle,
+                text: isNew ? $draftTitle : $task.taskTitle,
                 prompt: Text("Title:")
                     .foregroundStyle(colorScheme == .dark ? .gray : .blue)
             )
             .floatingPromptScale(1.0)
 
             FloatingPromptTextField(
-                text: $task.taskDescription,
+                text: isNew ? $draftDescription : $task.taskDescription,
                 prompt: Text("Description:")
                     .foregroundStyle(colorScheme == .dark ? .gray : .blue)
             )
             .floatingPromptScale(1.0)
 
             FloatingPromptTextField(
-                text: $task.comment,
+                text: isNew ? $draftComment : $task.comment,
                 prompt: Text("Comment:")
                     .foregroundStyle(colorScheme == .dark ? .gray : .blue)
             )
@@ -289,7 +310,7 @@ struct EditTaskView: View
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
 
-            Picker(Constants.EMPTY_STRING, selection: $task.location)
+            Picker(Constants.EMPTY_STRING, selection: isNew ? $draftLocation : $task.location)
             {
                 ForEach(LocationEnum.allCases)
                 { location in
@@ -309,7 +330,7 @@ struct EditTaskView: View
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
 
-            Picker(Constants.EMPTY_STRING, selection: $task.category)
+            Picker(Constants.EMPTY_STRING, selection: isNew ? $draftCategory : $task.category)
             {
                 ForEach(CategoryEnum.allCases)
                 { category in
@@ -329,7 +350,7 @@ struct EditTaskView: View
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
 
-            Picker(Constants.EMPTY_STRING, selection: $task.priority)
+            Picker(Constants.EMPTY_STRING, selection: isNew ? $draftPriority : $task.priority)
             {
                 ForEach(PriorityEnum.allCases)
                 { priority in
@@ -351,7 +372,7 @@ struct EditTaskView: View
             Text("Date Created:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
-            Text("\(task.createdDate)")
+            Text(isNew ? "" : "\(task.createdDate)")
         }
     }
 
@@ -424,9 +445,6 @@ struct EditTaskView: View
                     print("🗑️ User explicitly removing before image")
                     selectedBeforePhoto = nil
                     beforeImageData = nil
-                    
-                    // Apply both images synchronously to prevent SwiftData inconsistencies
-                    applyImagesFromCacheToTask()
                 }
                 label:
                 {
@@ -490,9 +508,6 @@ struct EditTaskView: View
                     print("🗑️ User explicitly removing after image")
                     selectedAfterPhoto = nil
                     afterImageData = nil
-                    
-                    // Apply both images synchronously to prevent SwiftData inconsistencies
-                    applyImagesFromCacheToTask()
                 }
                 label:
                 {
@@ -525,6 +540,20 @@ struct EditTaskView: View
         {
             Section("Task Items (\(task.taskItemsArray.count))")
             {
+                // Link to view all task items
+                Button(action: {
+                    path.append(task.taskItemsArray)
+                }) {
+                    HStack {
+                        Label("View All Task Items", systemImage: "list.bullet")
+                            .foregroundStyle(.blue)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                
                 ForEach(task.taskItemsArray)
                 { taskItem in
                     NavigationLink(value: taskItem)
@@ -632,6 +661,12 @@ struct EditTaskView: View
         print("   Cache has after image: \(afterImageData != nil) (\(afterImageData?.count ?? 0) bytes)")
         print("   Has initialized caches: \(hasInitializedImageCaches)")
 
+        // If we're creating a new task, do not initialize caches from task
+        if isNew {
+            hasInitializedImageCaches = true
+            return
+        }
+
         // Only initialize cache ONCE when the view first appears
         // After that, the cache is the source of truth and should never be overwritten
         guard !hasInitializedImageCaches else {
@@ -661,7 +696,7 @@ struct EditTaskView: View
     private func handleViewDisappear()
     {
         print("🔴 EditTaskView disappeared")
-        validateTask()
+        if !isNew { validateTask() }
     }
 
     private func handleBeforeImageDataChange(oldValue: Data?, newValue: Data?)
@@ -801,15 +836,15 @@ struct EditTaskView: View
     ///
     /// This ensures that both images are always set together, preventing SwiftData
     /// from clearing one while saving the other (which can happen with external storage).
-    private func applyImagesFromCacheToTask()
+    private func applyImagesFromCacheToTask(writeBefore: Bool = true, writeAfter: Bool = true)
     {
         print("📸 Applying images from cache:")
         print("   Before image size: \(beforeImageData?.count ?? 0) bytes")
         print("   After image size: \(afterImageData?.count ?? 0) bytes")
 
         // Set both images from cache
-        task.beforeImage = beforeImageData
-        task.afterImage = afterImageData
+        if writeBefore { task.beforeImage = beforeImageData }
+        if writeAfter { task.afterImage = afterImageData }
 
         do
         {
@@ -872,6 +907,22 @@ struct EditTaskView: View
             return false
         }
 
+        return true
+    }
+    
+    /// Determines whether all required draft fields contain values.
+    ///
+    /// Used for creation mode validation.
+    ///
+    /// - Returns: `true` if draft title, description, and comment are all non-empty; `false` otherwise.
+    func validateDraftFields() -> Bool
+    {
+        if draftTitle == Constants.EMPTY_STRING ||
+            draftDescription == Constants.EMPTY_STRING ||
+            draftComment == Constants.EMPTY_STRING
+        {
+            return false
+        }
         return true
     }
 }

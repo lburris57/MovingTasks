@@ -7,6 +7,8 @@
 import SwiftData
 import SwiftUI
 
+private struct NewTaskRoute: Hashable {}
+
 /// The main view that displays a list of tasks with filtering, sorting, and navigation capabilities.
 ///
 /// `TaskListView` serves as the primary interface for managing tasks in the MovingTasks application.
@@ -360,6 +362,11 @@ struct TaskListView: View
                             
                             EditTaskView(task: task, path: $path)
                         }
+                        .navigationDestination(for: NewTaskRoute.self) { _ in
+                            // Present EditTaskView in creation mode without inserting a Task upfront
+                            let placeholder = Task(taskTitle: Constants.EMPTY_STRING, taskDescription: Constants.EMPTY_STRING, comment: Constants.EMPTY_STRING)
+                            EditTaskView(task: placeholder, path: $path, isNew: true)
+                        }
                         .listStyle(.plain)
                         .padding()
                     }
@@ -370,13 +377,7 @@ struct TaskListView: View
                     {
                         Button(action:
                         {
-                            let task = Task(taskTitle: Constants.EMPTY_STRING,
-                                            taskDescription: Constants.EMPTY_STRING,
-                                            comment: Constants.EMPTY_STRING)
-
-                            modelContext.insert(task)
-
-                            path.append(task)
+                            path.append(NewTaskRoute())
                         },
                         label:
                         {
@@ -562,3 +563,4 @@ struct FilterView: View
     TaskListView()
         .modelContainer(container)
 }
+

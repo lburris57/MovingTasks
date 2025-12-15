@@ -222,6 +222,7 @@ struct EditTaskItemView: View
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
             
             HStack
             {
