@@ -438,9 +438,81 @@ struct TaskListView: View
                 }
                 else
                 {
-                    ScrollView
+                    ZStack
                     {
-                        VStack(spacing: 20)
+                        // Super vibrant multi-layer gradient background
+                        LinearGradient(
+                            colors: [
+                                Color.cyan.opacity(0.25),
+                                Color.blue.opacity(0.20),
+                                Color.purple.opacity(0.22),
+                                Color.pink.opacity(0.18),
+                                Color.orange.opacity(0.15)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                        .ignoresSafeArea()
+                        
+                        // Constrained decorative gradient orbs
+                        GeometryReader { geometry in
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [Color.green.opacity(0.4), Color.mint.opacity(0.2), Color.clear],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 150
+                                    )
+                                )
+                                .frame(width: 300, height: 300)
+                                .position(x: geometry.size.width * 0.2, y: 100)
+                                .blur(radius: 50)
+                            
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [Color.purple.opacity(0.45), Color.indigo.opacity(0.25), Color.clear],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 140
+                                    )
+                                )
+                                .frame(width: 280, height: 280)
+                                .position(x: geometry.size.width * 0.8, y: 250)
+                                .blur(radius: 45)
+                            
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [Color.orange.opacity(0.35), Color.yellow.opacity(0.20), Color.clear],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 130
+                                    )
+                                )
+                                .frame(width: 260, height: 260)
+                                .position(x: geometry.size.width * 0.3, y: 500)
+                                .blur(radius: 40)
+                            
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [Color.pink.opacity(0.38), Color.red.opacity(0.15), Color.clear],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 120
+                                    )
+                                )
+                                .frame(width: 240, height: 240)
+                                .position(x: geometry.size.width * 0.7, y: 700)
+                                .blur(radius: 35)
+                        }
+                        .allowsHitTesting(false)
+                        
+                        ScrollView
+                        {
+                            VStack(spacing: 20)
                         {
                             // Enhanced stats cards
                             HStack(spacing: 12)
@@ -692,7 +764,9 @@ struct TaskListView: View
                         }
                         .padding(.vertical)
                     }
+                    .scrollIndicators(.hidden)
                     .animation(.spring(response: 0.4, dampingFraction: 0.7), value: filteredTasks)
+                    }
                 }
             }
             .navigationDestination(for: Task.self) { task in
@@ -850,6 +924,8 @@ struct TaskListView: View
             }
             .navigationTitle("Tasks")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(.regularMaterial, for: .navigationBar)
             .onAppear(perform: populateGrandTotal)
         }
     }
