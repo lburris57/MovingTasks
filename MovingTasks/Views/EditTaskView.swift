@@ -536,29 +536,51 @@ struct EditTaskView: View
     @ViewBuilder
     private var taskItemsSection: some View
     {
-        if task.taskItemsArray.count > 0
+        // Don't show task items section when creating a new task
+        if !isNew
         {
             Section("Task Items (\(task.taskItemsArray.count))")
             {
-                // Link to view all task items
+                // Add new task item button - always visible
                 Button(action: {
-                    path.append(task.taskItemsArray)
+                    let newTaskItem = TaskItem(
+                        itemTitle: Constants.EMPTY_STRING,
+                        itemDescription: Constants.EMPTY_STRING,
+                        comment: Constants.EMPTY_STRING
+                    )
+                    newTaskItem.task = task
+                    task.taskItems?.append(newTaskItem)
+                    path.append(newTaskItem)
                 }) {
                     HStack {
-                        Label("View All Task Items", systemImage: "list.bullet")
-                            .foregroundStyle(.blue)
+                        Label("Add Task Item", systemImage: "plus.circle.fill")
+                            .foregroundStyle(.green)
                         Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
                     }
                 }
                 
-                ForEach(task.taskItemsArray)
-                { taskItem in
-                    NavigationLink(value: taskItem)
-                    {
-                        taskItemRow(for: taskItem)
+                // Show "View All" button only when there are items
+                if task.taskItemsArray.count > 0
+                {
+                    Button(action: {
+                        path.append(task.taskItemsArray)
+                    }) {
+                        HStack {
+                            Label("View All Task Items", systemImage: "list.bullet")
+                                .foregroundStyle(.blue)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    
+                    ForEach(task.taskItemsArray)
+                    { taskItem in
+                        NavigationLink(value: taskItem)
+                        {
+                            taskItemRow(for: taskItem)
+                        }
                     }
                 }
             }

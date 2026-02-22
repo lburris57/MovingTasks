@@ -14,6 +14,7 @@ enum LocationEnum: String, Identifiable, CaseIterable, Hashable
     }
 
     case all = "All"
+    case allBedrooms = "All Bedrooms"
     case mainBedroom = "Main Bedroom"
     case backBedroom = "Back Bedroom"
     case basement = "Basement"
@@ -23,6 +24,8 @@ enum LocationEnum: String, Identifiable, CaseIterable, Hashable
     case foyer = "Foyer"
     case frontBedroom = "Front Bedroom"
     case frontPorch = "Front Porch"
+    case garage = "Garage"
+    case homeOffice = "Home Office"
     case kitchen = "Kitchen"
     case livingRoom = "Living Room"
     case mainBathroom = "Main Bathroom"
@@ -42,6 +45,8 @@ extension LocationEnum
         {
             case .all:
                 return "All"
+            case .allBedrooms:
+                return "All Bedrooms"
             case .mainBedroom:
                 return "Main Bedroom"
             case .backBedroom:
@@ -60,6 +65,10 @@ extension LocationEnum
                 return "Front Bedroom"
             case .frontPorch:
                 return "Front Porch"
+            case .garage:
+                return "Garage"
+            case .homeOffice:
+                return "Home Office"
             case .kitchen:
                 return "Kitchen"
             case .livingRoom:

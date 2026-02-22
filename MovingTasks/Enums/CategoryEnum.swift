@@ -17,6 +17,7 @@ enum CategoryEnum: String, Identifiable, CaseIterable, Hashable
     case cleaning = "Cleaning"
     case carpeting = "Carpeting"
     case miscellaneous = "Miscellaneous"
+    case organizing = "Organizing"
     case packing = "Packing"
     case painting = "Painting"
     case removal = "Removal"
@@ -39,6 +40,8 @@ extension CategoryEnum
                 return "Carpeting"
             case .miscellaneous:
                 return "Miscellaneous"
+            case .organizing:
+                return "Organizing"
             case .packing:
                 return "Packing"
             case .painting:
