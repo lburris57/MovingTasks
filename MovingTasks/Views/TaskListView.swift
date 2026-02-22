@@ -778,7 +778,7 @@ struct TaskListView: View
             }
             .toolbar
             {
-                ToolbarItemGroup(placement: .topBarTrailing)
+                ToolbarItemGroup(placement: .topBarLeading)
                 {
                     if tasks.count > 0
                     {
@@ -796,12 +796,12 @@ struct TaskListView: View
                                     } label: {
                                         HStack
                                         {
-                                            Text(location.title)
-                                            Spacer()
                                             if selectedSearchType == .location && filterValue == location.title
                                             {
                                                 Image(systemName: "checkmark")
                                             }
+                                            Text(location.title)
+                                            Spacer()
                                         }
                                     }
                                 }
@@ -821,12 +821,12 @@ struct TaskListView: View
                                     } label: {
                                         HStack
                                         {
-                                            Text(category.title)
-                                            Spacer()
                                             if selectedSearchType == .category && filterValue == category.title
                                             {
                                                 Image(systemName: "checkmark")
                                             }
+                                            Text(category.title)
+                                            Spacer()
                                         }
                                     }
                                 }
@@ -846,12 +846,12 @@ struct TaskListView: View
                                     } label: {
                                         HStack
                                         {
-                                            Text(priority.title)
-                                            Spacer()
                                             if selectedSearchType == .priority && filterValue == priority.title
                                             {
                                                 Image(systemName: "checkmark")
                                             }
+                                            Text(priority.title)
+                                            Spacer()
                                         }
                                     }
                                 }
@@ -871,12 +871,12 @@ struct TaskListView: View
                                     } label: {
                                         HStack
                                         {
-                                            Text(status.title)
-                                            Spacer()
                                             if selectedSearchType == .status && filterValue == status.rawValue
                                             {
                                                 Image(systemName: "checkmark")
                                             }
+                                            Text(status.title)
+                                            Spacer()
                                         }
                                     }
                                 }
@@ -900,17 +900,7 @@ struct TaskListView: View
                             Label("Filter", systemImage: selectedSearchType == .none ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
                                 .symbolRenderingMode(.hierarchical)
                         }
-                    }
-                    
-                    Button { path.append(NewTaskRoute()) } label: {
-                        Label("Add Task", systemImage: "plus")
-                    }
-                }
-
-                if tasks.count > 0
-                {
-                    ToolbarItem(placement: .topBarLeading)
-                    {
+                        
                         Menu
                         {
                             Button { createSampleData() } label: {
@@ -919,6 +909,13 @@ struct TaskListView: View
                         } label: {
                             Label("More", systemImage: "ellipsis.circle")
                         }
+                    }
+                }
+
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Button { path.append(NewTaskRoute()) } label: {
+                        Label("Add Task", systemImage: "plus")
                     }
                 }
             }
