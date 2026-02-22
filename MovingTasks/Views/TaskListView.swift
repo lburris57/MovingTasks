@@ -280,72 +280,388 @@ struct TaskListView: View
             {
                 if tasks.count == 0
                 {
-                    ContentUnavailableView
+                    VStack(spacing: 24)
                     {
-                        Label("No Tasks Yet", systemImage: "checklist")
-                    }
-                    description:
-                    {
-                        Text("Tap the plus button to create your first task, or use Sample Data to explore.")
-                    }
-                    actions:
-                    {
+                        Spacer()
+                        
+                        ZStack
+                        {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [.blue.opacity(0.1), .purple.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 120, height: 120)
+                            
+                            Image(systemName: "checklist")
+                                .font(.system(size: 50))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.blue, .purple],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+                        
+                        VStack(spacing: 8)
+                        {
+                            Text("No Tasks Yet")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text("Tap the plus button to create your first task, or use Sample Data to explore.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
+                        
                         HStack(spacing: 12)
                         {
-                            Button { createSampleData() } label: {
-                                Label("Sample Data", systemImage: "doc.on.doc.fill")
+                            Button
+                            {
+                                createSampleData()
+                            } label: {
+                                HStack
+                                {
+                                    Image(systemName: "doc.on.doc.fill")
+                                    Text("Sample Data")
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
+                                .background(Color.secondary.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
                             }
-                            .buttonStyle(.bordered)
+                            .buttonStyle(.plain)
                             
-                            Button { path.append(NewTaskRoute()) } label: {
-                                Label("New Task", systemImage: "plus.circle.fill")
+                            Button
+                            {
+                                path.append(NewTaskRoute())
+                            } label: {
+                                HStack
+                                {
+                                    Image(systemName: "plus.circle.fill")
+                                    Text("New Task")
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.blue, .purple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ),
+                                    in: RoundedRectangle(cornerRadius: 12)
+                                )
+                                .foregroundStyle(.white)
                             }
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(.plain)
                         }
+                        
+                        Spacer()
                     }
                 }
                 else if filteredTasks.count == 0
                 {
-                    ContentUnavailableView
+                    VStack(spacing: 24)
                     {
-                        Label("No Matching Tasks", systemImage: "line.3.horizontal.decrease.circle")
-                    }
-                    description:
-                    {
-                        Text("Try adjusting your filter to see more results.")
+                        Spacer()
+                        
+                        ZStack
+                        {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [.orange.opacity(0.1), .yellow.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 120, height: 120)
+                            
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                                .font(.system(size: 50))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.orange, .yellow],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+                        
+                        VStack(spacing: 8)
+                        {
+                            Text("No Matching Tasks")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text("Try adjusting your filter to see more results.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
+                        
+                        Button
+                        {
+                            withAnimation
+                            {
+                                selectedSearchType = .none
+                                filterValue = "All"
+                            }
+                        } label: {
+                            HStack
+                            {
+                                Image(systemName: "xmark.circle.fill")
+                                Text("Clear Filter")
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 12)
+                            .background(
+                                LinearGradient(
+                                    colors: [.orange, .yellow],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                ),
+                                in: RoundedRectangle(cornerRadius: 12)
+                            )
+                            .foregroundStyle(.white)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Spacer()
                     }
                 }
                 else
                 {
                     ScrollView
                     {
-                        VStack(spacing: 16)
+                        VStack(spacing: 20)
                         {
-                            HStack
+                            // Enhanced stats cards
+                            HStack(spacing: 12)
                             {
-                                Image(systemName: "dollarsign.circle.fill")
-                                    .font(.title2)
-                                    .foregroundStyle(.green)
-                                
-                                VStack(alignment: .leading, spacing: 2)
+                                // Grand Total Card
+                                VStack(alignment: .leading, spacing: 8)
                                 {
+                                    HStack
+                                    {
+                                        Image(systemName: "dollarsign.circle.fill")
+                                            .font(.title2)
+                                            .foregroundStyle(
+                                                LinearGradient(
+                                                    colors: [.green, .mint],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                        
+                                        Spacer()
+                                    }
+                                    
                                     Text("Grand Total")
                                         .font(.caption)
+                                        .fontWeight(.medium)
                                         .foregroundStyle(.secondary)
+                                    
                                     Text(grandTotal)
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.primary)
                                 }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.green.opacity(0.1), .mint.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    in: RoundedRectangle(cornerRadius: 16)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(
+                                            LinearGradient(
+                                                colors: [.green.opacity(0.3), .mint.opacity(0.2)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            ),
+                                            lineWidth: 1
+                                        )
+                                )
                                 
-                                Spacer()
-                                
-                                Text("\(filteredTasks.count)").font(.title2).fontWeight(.bold).foregroundStyle(.blue)
-                                +
-                                Text(" tasks").font(.caption).foregroundStyle(.secondary)
+                                // Task Count Card
+                                VStack(alignment: .leading, spacing: 8)
+                                {
+                                    HStack
+                                    {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.title2)
+                                            .foregroundStyle(
+                                                LinearGradient(
+                                                    colors: [.blue, .cyan],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                        
+                                        Spacer()
+                                    }
+                                    
+                                    Text("Total Tasks")
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                        .foregroundStyle(.secondary)
+                                    
+                                    Text("\(filteredTasks.count)")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.primary)
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.blue.opacity(0.1), .cyan.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    in: RoundedRectangle(cornerRadius: 16)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(
+                                            LinearGradient(
+                                                colors: [.blue.opacity(0.3), .cyan.opacity(0.2)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            ),
+                                            lineWidth: 1
+                                        )
+                                )
                             }
-                            .padding()
-                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
                             .padding(.horizontal)
+                            
+                            // Completion stats
+                            if !filteredTasks.isEmpty
+                            {
+                                let completedCount = filteredTasks.filter { $0.isCompleted }.count
+                                let completionPercentage = Double(completedCount) / Double(filteredTasks.count)
+                                
+                                VStack(alignment: .leading, spacing: 12)
+                                {
+                                    HStack
+                                    {
+                                        HStack(spacing: 6)
+                                        {
+                                            Image(systemName: "chart.bar.fill")
+                                                .foregroundStyle(.purple)
+                                            Text("Progress")
+                                                .font(.subheadline)
+                                                .fontWeight(.semibold)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        Text("\(completedCount) of \(filteredTasks.count) completed")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    GeometryReader { geometry in
+                                        ZStack(alignment: .leading)
+                                        {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(Color.gray.opacity(0.15))
+                                                .frame(height: 12)
+                                            
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(
+                                                    LinearGradient(
+                                                        colors: [.purple, .pink],
+                                                        startPoint: .leading,
+                                                        endPoint: .trailing
+                                                    )
+                                                )
+                                                .frame(width: geometry.size.width * completionPercentage, height: 12)
+                                                .animation(.spring(response: 0.6, dampingFraction: 0.8), value: completionPercentage)
+                                        }
+                                    }
+                                    .frame(height: 12)
+                                    
+                                    HStack(spacing: 20)
+                                    {
+                                        HStack(spacing: 4)
+                                        {
+                                            Circle()
+                                                .fill(.green)
+                                                .frame(width: 8, height: 8)
+                                            Text("Completed: \(completedCount)")
+                                                .font(.caption2)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        
+                                        HStack(spacing: 4)
+                                        {
+                                            Circle()
+                                                .fill(.orange)
+                                                .frame(width: 8, height: 8)
+                                            Text("Pending: \(filteredTasks.count - completedCount)")
+                                                .font(.caption2)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                                .padding(.horizontal)
+                            }
+                            
+                            // Active filter indicator
+                            if selectedSearchType != .none
+                            {
+                                HStack
+                                {
+                                    Image(systemName: filterIconFor(selectedSearchType))
+                                        .foregroundStyle(.white)
+                                        .font(.caption)
+                                    
+                                    Text("Filtered by: \(filterValue)")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                        .foregroundStyle(.white)
+                                    
+                                    Spacer()
+                                    
+                                    Button
+                                    {
+                                        withAnimation
+                                        {
+                                            selectedSearchType = .none
+                                            filterValue = "All"
+                                        }
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundStyle(.white.opacity(0.8))
+                                    }
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.indigo, .purple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ),
+                                    in: RoundedRectangle(cornerRadius: 12)
+                                )
+                                .padding(.horizontal)
+                            }
                             
                             LazyVStack(spacing: 12)
                             {
@@ -404,7 +720,15 @@ struct TaskListView: View
                                         selectedSearchType = .location
                                         filterValue = location.title
                                     } label: {
-                                        Label(location.title, systemImage: selectedSearchType == .location && filterValue == location.title ? "checkmark" : "")
+                                        HStack
+                                        {
+                                            Text(location.title)
+                                            Spacer()
+                                            if selectedSearchType == .location && filterValue == location.title
+                                            {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
                             } label: {
@@ -421,7 +745,15 @@ struct TaskListView: View
                                         selectedSearchType = .category
                                         filterValue = category.title
                                     } label: {
-                                        Label(category.title, systemImage: selectedSearchType == .category && filterValue == category.title ? "checkmark" : "")
+                                        HStack
+                                        {
+                                            Text(category.title)
+                                            Spacer()
+                                            if selectedSearchType == .category && filterValue == category.title
+                                            {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
                             } label: {
@@ -438,7 +770,15 @@ struct TaskListView: View
                                         selectedSearchType = .priority
                                         filterValue = priority.title
                                     } label: {
-                                        Label(priority.title, systemImage: selectedSearchType == .priority && filterValue == priority.title ? "checkmark" : "")
+                                        HStack
+                                        {
+                                            Text(priority.title)
+                                            Spacer()
+                                            if selectedSearchType == .priority && filterValue == priority.title
+                                            {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
                             } label: {
@@ -455,7 +795,15 @@ struct TaskListView: View
                                         selectedSearchType = .status
                                         filterValue = status.rawValue
                                     } label: {
-                                        Label(status.title, systemImage: selectedSearchType == .status && filterValue == status.rawValue ? "checkmark" : "")
+                                        HStack
+                                        {
+                                            Text(status.title)
+                                            Spacer()
+                                            if selectedSearchType == .status && filterValue == status.rawValue
+                                            {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
                                     }
                                 }
                             } label: {

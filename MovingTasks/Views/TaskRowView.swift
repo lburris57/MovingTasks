@@ -21,6 +21,58 @@ struct TaskRowView: View
     let task: Task
     let styleForPriority: (String) -> Color
     
+    private func colorForCategory(_ category: String) -> Color
+    {
+        switch category.lowercased()
+        {
+        case "cleaning":
+            return .cyan
+        case "painting":
+            return .purple
+        case "organizing":
+            return .orange
+        case "repair":
+            return .red
+        case "packing":
+            return .brown
+        case "removal":
+            return .gray
+        case "replacement":
+            return .indigo
+        case "carpeting":
+            return .teal
+        case "storage":
+            return .mint
+        default:
+            return .blue
+        }
+    }
+    
+    private func colorForLocation(_ location: String) -> Color
+    {
+        switch location.lowercased()
+        {
+        case "kitchen":
+            return .green
+        case "bedroom":
+            return .blue
+        case "bathroom":
+            return .cyan
+        case "living room":
+            return .orange
+        case "garage":
+            return .gray
+        case "home office":
+            return .purple
+        case "basement":
+            return .brown
+        case "attic":
+            return .indigo
+        default:
+            return .teal
+        }
+    }
+    
     var body: some View
     {
         VStack(alignment: .leading, spacing: 12)
@@ -28,26 +80,47 @@ struct TaskRowView: View
             // Header with priority and title
             HStack(alignment: .top, spacing: 12)
             {
-                // Priority indicator
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(styleForPriority(task.priority))
-                    .frame(width: 4)
+                // Priority indicator with gradient
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(
+                        LinearGradient(
+                            colors: [styleForPriority(task.priority), styleForPriority(task.priority).opacity(0.6)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: 5)
+                    .shadow(color: styleForPriority(task.priority).opacity(0.3), radius: 2, x: 0, y: 1)
                 
-                VStack(alignment: .leading, spacing: 4)
+                VStack(alignment: .leading, spacing: 6)
                 {
                     HStack
                     {
                         Text(task.taskTitle)
                             .font(.headline)
+                            .fontWeight(.semibold)
                             .foregroundStyle(.primary)
                         
                         Spacer()
                         
                         if task.isCompleted
                         {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
-                                .font(.title3)
+                            ZStack
+                            {
+                                Circle()
+                                    .fill(.green.opacity(0.15))
+                                    .frame(width: 32, height: 32)
+                                
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            colors: [.green, .mint],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .font(.title3)
+                            }
                         }
                     }
                     
@@ -58,64 +131,112 @@ struct TaskRowView: View
                 }
             }
             
-            // Chips for location, category, and task items
+            // Chips for location, category, and priority
             HStack(spacing: 8)
             {
-                ChipView(icon: "location.fill", text: task.location, color: .blue)
-                ChipView(icon: "tag.fill", text: task.category, color: .orange)
+                ChipView(icon: "location.fill", text: task.location, color: colorForLocation(task.location))
+                ChipView(icon: "tag.fill", text: task.category, color: colorForCategory(task.category))
+                
+                Spacer()
+                
+                // Priority badge
+                HStack(spacing: 4)
+                {
+                    Image(systemName: "flag.fill")
+                        .font(.caption2)
+                    Text(task.priority)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(
+                    styleForPriority(task.priority).opacity(0.15),
+                    in: Capsule()
+                )
+                .foregroundStyle(styleForPriority(task.priority))
+                .overlay(
+                    Capsule()
+                        .stroke(styleForPriority(task.priority).opacity(0.3), lineWidth: 1)
+                )
+            }
+            
+            // Footer with date and task items count
+            HStack
+            {
+                HStack(spacing: 4)
+                {
+                    Image(systemName: "calendar")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(task.createdDate)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 
                 Spacer()
                 
                 // Task items badge
                 HStack(spacing: 4)
                 {
-                    Image(systemName: "list.bullet")
+                    Image(systemName: "list.bullet.circle.fill")
                         .font(.caption)
-                    Text("\(task.taskItemsArray.count)")
+                    Text("\(task.taskItemsArray.count) items")
                         .font(.caption)
-                        .fontWeight(.semibold)
+                        .fontWeight(.medium)
                 }
                 .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(.blue.opacity(0.1), in: Capsule())
+                .padding(.vertical, 5)
+                .background(
+                    LinearGradient(
+                        colors: [.blue.opacity(0.1), .purple.opacity(0.1)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    in: Capsule()
+                )
                 .foregroundStyle(.blue)
-            }
-            
-            // Footer with date
-            HStack
-            {
-                Image(systemName: "calendar")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                
-                Text(task.createdDate)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
                 
                 if task.isCompleted
                 {
-                    Spacer()
-                    
-                    Image(systemName: "checkmark.circle")
-                        .font(.caption2)
-                        .foregroundStyle(.green)
-                    
-                    Text(task.completedDate)
-                        .font(.caption)
-                        .foregroundStyle(.green)
+                    HStack(spacing: 4)
+                    {
+                        Image(systemName: "checkmark.circle")
+                            .font(.caption2)
+                            .foregroundStyle(.green)
+                        
+                        Text(task.completedDate)
+                            .font(.caption)
+                            .foregroundStyle(.green)
+                    }
                 }
             }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.regularMaterial)
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(styleForPriority(task.priority).opacity(0.2), lineWidth: 1)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            styleForPriority(task.priority).opacity(0.3),
+                            styleForPriority(task.priority).opacity(0.1)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1.5
+                )
         )
     }
 }
 
-/// A compact chip view for displaying categorized information.
+/// A compact chip view for displaying categorized information with gradient styling.
 struct ChipView: View
 {
     let icon: String
@@ -130,11 +251,22 @@ struct ChipView: View
                 .font(.caption2)
             Text(text)
                 .font(.caption)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background(color.opacity(0.1), in: Capsule())
+        .background(
+            LinearGradient(
+                colors: [color.opacity(0.15), color.opacity(0.05)],
+                startPoint: .leading,
+                endPoint: .trailing
+            ),
+            in: Capsule()
+        )
         .foregroundStyle(color)
+        .overlay(
+            Capsule()
+                .stroke(color.opacity(0.25), lineWidth: 0.5)
+        )
     }
 }

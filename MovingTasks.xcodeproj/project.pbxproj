@@ -124,6 +124,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		910CA1392F4AA01E00AC88E6 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */,
+				91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */,
+				910CA1292F4A94A200AC88E6 /* MODERN_UI_UPDATES.md */,
+				910CA1352F4A9C1500AC88E6 /* MANUAL_UPDATE_REQUIRED.md */,
+				910CA12B2F4A975C00AC88E6 /* TASK_ITEMS_FEATURE.md */,
+				910CA12D2F4A984C00AC88E6 /* FILTER_VIEW_FIX.md */,
+				910CA12F2F4A99FA00AC88E6 /* MODERN_UI_FINAL.md */,
+				910CA1312F4A9B5500AC88E6 /* FILTER_TOOLBAR_IMPLEMENTATION.md */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
 		9118BC2D2B2659AF00790686 = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +160,7 @@
 		9118BC382B2659AF00790686 /* MovingTasks */ = {
 			isa = PBXGroup;
 			children = (
+				910CA1392F4AA01E00AC88E6 /* Documentation */,
 				9118BC392B2659AF00790686 /* MovingTasksApp.swift */,
 				9118BC6F2B27ABF000790686 /* Info.plist */,
 				9118BC6E2B27AB0E00790686 /* MovingTasks.entitlements */,
@@ -207,15 +223,7 @@
 				9118BC7E2B2A392B00790686 /* TaskItemListView.swift */,
 				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
-				911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */,
-				91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */,
-				910CA1292F4A94A200AC88E6 /* MODERN_UI_UPDATES.md */,
-				910CA12B2F4A975C00AC88E6 /* TASK_ITEMS_FEATURE.md */,
-				910CA12D2F4A984C00AC88E6 /* FILTER_VIEW_FIX.md */,
-				910CA12F2F4A99FA00AC88E6 /* MODERN_UI_FINAL.md */,
-				910CA1312F4A9B5500AC88E6 /* FILTER_TOOLBAR_IMPLEMENTATION.md */,
 				910CA1332F4A9BBB00AC88E6 /* TaskRowView.swift */,
-				910CA1352F4A9C1500AC88E6 /* MANUAL_UPDATE_REQUIRED.md */,
 			);
 			path = Views;
 			sourceTree = "<group>";
