@@ -94,14 +94,36 @@ struct TaskRowView: View
                 
                 VStack(alignment: .leading, spacing: 6)
                 {
-                    HStack
+                    HStack(alignment: .center, spacing: 8)
                     {
                         Text(task.taskTitle)
                             .font(.headline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.primary)
+                            .lineLimit(1)
                         
                         Spacer()
+                        
+                        // Priority badge
+                        HStack(spacing: 4)
+                        {
+                            Image(systemName: "flag.fill")
+                                .font(.caption2)
+                            Text(task.priority)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            styleForPriority(task.priority).opacity(0.15),
+                            in: Capsule()
+                        )
+                        .foregroundStyle(styleForPriority(task.priority))
+                        .overlay(
+                            Capsule()
+                                .stroke(styleForPriority(task.priority).opacity(0.3), lineWidth: 1)
+                        )
                         
                         if task.isCompleted
                         {
@@ -131,34 +153,14 @@ struct TaskRowView: View
                 }
             }
             
-            // Chips for location, category, and priority
+            // Chips for location and category
             HStack(spacing: 8)
             {
                 ChipView(icon: "location.fill", text: task.location, color: colorForLocation(task.location))
-                ChipView(icon: "tag.fill", text: task.category, color: colorForCategory(task.category))
                 
                 Spacer()
                 
-                // Priority badge
-                HStack(spacing: 4)
-                {
-                    Image(systemName: "flag.fill")
-                        .font(.caption2)
-                    Text(task.priority)
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(
-                    styleForPriority(task.priority).opacity(0.15),
-                    in: Capsule()
-                )
-                .foregroundStyle(styleForPriority(task.priority))
-                .overlay(
-                    Capsule()
-                        .stroke(styleForPriority(task.priority).opacity(0.3), lineWidth: 1)
-                )
+                ChipView(icon: "tag.fill", text: task.category, color: colorForCategory(task.category))
             }
             
             // Footer with date and task items count
