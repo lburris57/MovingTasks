@@ -778,12 +778,23 @@ struct EditTaskView: View
                         Divider()
                             .padding(.vertical, 4)
                         
-                        ForEach(task.taskItemsArray)
+                        ForEach(task.taskItemsArray, id: \.taskItemId)
                         { taskItem in
-                            NavigationLink(value: taskItem)
-                            {
-                                taskItemRow(for: taskItem)
+                            Button(action: {
+                                path.append(taskItem)
+                            }) {
+                                HStack {
+                                    taskItemRow(for: taskItem)
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .padding(.trailing, 8)
+                                }
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                 }

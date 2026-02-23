@@ -147,12 +147,13 @@ struct TaskItemListView: View
             
             List
             {
-                ForEach(taskItems)
+                ForEach(taskItems, id: \.taskItemId)
                 {
                     taskItem in
 
-                    NavigationLink(value: taskItem)
-                    {
+                    Button(action: {
+                        path.append(taskItem)
+                    }) {
                         VStack(alignment: .leading, spacing: 5)
                         {
                             Text("\(taskItem.itemTitle)").font(.body).foregroundStyle(.primary).bold()
@@ -164,6 +165,7 @@ struct TaskItemListView: View
                             }
                         }
                     }
+                    .buttonStyle(.plain)
                 }
                 .onDelete(perform: deleteTaskItem)
                 .listStyle(.plain)
@@ -182,12 +184,6 @@ struct TaskItemListView: View
                 }
                 .padding(.horizontal)
             }
-        }
-        .navigationDestination(for: TaskItem.self)
-        {
-            taskItem in
-
-            EditTaskItemView(taskItem: taskItem, path: $path)
         }
         .onAppear(perform: populateGrandTotal)
     }
