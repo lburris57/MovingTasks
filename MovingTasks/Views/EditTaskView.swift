@@ -101,13 +101,13 @@ struct EditTaskView: View
 
     /// Local cache of the after image data to prevent loss during SwiftData refaulting.
     @State private var afterImageData: Data?
-    
+
     /// Flag to track if we've initialized the image caches from the task.
     @State private var hasInitializedImageCaches = false
-    
+
     /// Track if we're currently loading a before image to prevent duplicate loads
     @State private var isLoadingBeforeImage = false
-    
+
     /// Track if we're currently loading an after image to prevent duplicate loads
     @State private var isLoadingAfterImage = false
 
@@ -127,11 +127,12 @@ struct EditTaskView: View
     @State private var draftLocation: String = LocationEnum.allCases.first?.title ?? ""
     @State private var draftCategory: String = CategoryEnum.allCases.first?.title ?? ""
     @State private var draftPriority: String = PriorityEnum.allCases.first?.title ?? ""
-    
+
     // Explicit initializer to support isNew and initialize drafts
-    init(task: Task, path: Binding<NavigationPath>, isNew: Bool = false) {
-        self._task = Bindable(wrappedValue: task)
-        self._path = path
+    init(task: Task, path: Binding<NavigationPath>, isNew: Bool = false)
+    {
+        _task = Bindable(wrappedValue: task)
+        _path = path
         self.isNew = isNew
         // Initialize drafts from existing task when editing
         _draftTitle = State(initialValue: task.taskTitle)
@@ -200,18 +201,24 @@ struct EditTaskView: View
                 { oldValue, newValue in
                     handleAfterImageDataChange(oldValue: oldValue, newValue: newValue)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") {
+                .toolbar
+                {
+                    ToolbarItem(placement: .cancellationAction)
+                    {
+                        Button("Cancel")
+                        {
                             // In creation mode, just go back without inserting a task
                             // In edit mode, simply navigate back
                             path = NavigationPath()
                         }
                     }
-                    
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(isNew ? "Create" : "Save") {
-                            if isNew {
+
+                    ToolbarItem(placement: .confirmationAction)
+                    {
+                        Button(isNew ? "Create" : "Save")
+                        {
+                            if isNew
+                            {
                                 let newTask = Task(taskTitle: draftTitle, taskDescription: draftDescription, comment: draftComment)
                                 newTask.location = draftLocation
                                 newTask.category = draftCategory
@@ -219,13 +226,18 @@ struct EditTaskView: View
                                 newTask.beforeImage = beforeImageData
                                 newTask.afterImage = afterImageData
                                 modelContext.insert(newTask)
-                                do {
+                                do
+                                {
                                     try modelContext.save()
-                                } catch {
+                                }
+                                catch
+                                {
                                     print("❌ Error creating task: \(error)")
                                 }
                                 path = NavigationPath()
-                            } else {
+                            }
+                            else
+                            {
                                 applyImagesFromCacheToTask()
                                 path = NavigationPath()
                             }
@@ -249,21 +261,22 @@ struct EditTaskView: View
                     Color.blue.opacity(0.20),
                     Color.purple.opacity(0.22),
                     Color.pink.opacity(0.18),
-                    Color.orange.opacity(0.15)
+                    Color.orange.opacity(0.15),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            
+
             // Decorative orbs
             decorativeOrbsView
         }
     }
-    
+
     private var decorativeOrbsView: some View
     {
-        GeometryReader { geometry in
+        GeometryReader
+        { geometry in
             Circle()
                 .fill(
                     RadialGradient(
@@ -276,7 +289,7 @@ struct EditTaskView: View
                 .frame(width: 300, height: 300)
                 .position(x: geometry.size.width * 0.2, y: 100)
                 .blur(radius: 50)
-            
+
             Circle()
                 .fill(
                     RadialGradient(
@@ -289,7 +302,7 @@ struct EditTaskView: View
                 .frame(width: 280, height: 280)
                 .position(x: geometry.size.width * 0.8, y: 250)
                 .blur(radius: 45)
-            
+
             Circle()
                 .fill(
                     RadialGradient(
@@ -302,7 +315,7 @@ struct EditTaskView: View
                 .frame(width: 260, height: 260)
                 .position(x: geometry.size.width * 0.3, y: 500)
                 .blur(radius: 40)
-            
+
             Circle()
                 .fill(
                     RadialGradient(
@@ -354,7 +367,7 @@ struct EditTaskView: View
                     Spacer()
                 }
                 .padding(.bottom, 8)
-                
+
                 textFieldsGroup
                 pickersGroup
             }
@@ -471,7 +484,7 @@ struct EditTaskView: View
                 Text("Priority:")
                     .font(.body)
                     .foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                
+
                 Spacer()
             }
 
@@ -497,9 +510,9 @@ struct EditTaskView: View
             Text("Date Created:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
-            
+
             Spacer()
-            
+
             Text(isNew ? "" : "\(task.createdDate)")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -529,7 +542,7 @@ struct EditTaskView: View
                     Spacer()
                 }
                 .padding(.bottom, 8)
-                
+
                 HStack
                 {
                     Text("Before Image")
@@ -723,11 +736,11 @@ struct EditTaskView: View
                                     endPoint: .bottomTrailing
                                 )
                             )
-                        
+
                         Text("Task Items")
                             .font(.headline)
                             .fontWeight(.semibold)
-                        
+
                         ZStack
                         {
                             Circle()
@@ -739,15 +752,15 @@ struct EditTaskView: View
                                     )
                                 )
                                 .frame(width: 24, height: 24)
-                            
+
                             Text("\(task.taskItemsArray.count)")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
                         }
-                        
+
                         Spacer()
-                        
+
                         Button(action: {
                             let newTaskItem = TaskItem(
                                 itemTitle: Constants.EMPTY_STRING,
@@ -757,7 +770,8 @@ struct EditTaskView: View
                             newTaskItem.task = task
                             task.taskItems?.append(newTaskItem)
                             path.append(newTaskItem)
-                        }) {
+                        })
+                        {
                             Label("Add Task Item", systemImage: "plus.circle.fill")
                                 .labelStyle(.iconOnly)
                                 .foregroundStyle(
@@ -771,23 +785,25 @@ struct EditTaskView: View
                         }
                     }
                     .padding(.bottom, 8)
-                    
+
                     // Show task items if there are any
                     if task.taskItemsArray.count > 0
                     {
                         Divider()
                             .padding(.vertical, 4)
-                        
+
                         ForEach(task.taskItemsArray, id: \.taskItemId)
                         { taskItem in
                             Button(action: {
                                 path.append(taskItem)
-                            }) {
-                                HStack {
+                            })
+                            {
+                                HStack
+                                {
                                     taskItemRow(for: taskItem)
-                                    
+
                                     Spacer()
-                                    
+
                                     Image(systemName: "chevron.right")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -881,7 +897,7 @@ struct EditTaskView: View
                     Spacer()
                 }
                 .padding(.bottom, 8)
-                
+
                 statusToggleView
 
                 if task.isCompleted
@@ -935,12 +951,17 @@ struct EditTaskView: View
 
     private var completedDateView: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        HStack
         {
             Text("Date Completed:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+            
+            Spacer()
+            
             Text("\(task.completedDate)")
+                .font(.body)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -956,32 +977,37 @@ struct EditTaskView: View
         print("   Has initialized caches: \(hasInitializedImageCaches)")
 
         // If we're creating a new task, do not initialize caches from task
-        if isNew {
+        if isNew
+        {
             hasInitializedImageCaches = true
             return
         }
 
         // Only initialize cache ONCE when the view first appears
         // After that, the cache is the source of truth and should never be overwritten
-        guard !hasInitializedImageCaches else {
+        guard !hasInitializedImageCaches
+        else
+        {
             print("   ⏭️ Skipping cache initialization - already initialized")
             return
         }
-        
+
         print("   🎬 Performing one-time cache initialization...")
         hasInitializedImageCaches = true
-        
+
         // Initialize cache from task data if available
         // This should only happen ONCE per view lifecycle
-        if let beforeImage = task.beforeImage {
+        if let beforeImage = task.beforeImage
+        {
             print("   ✅ Initializing before image cache from task (\(beforeImage.count) bytes)")
             beforeImageData = beforeImage
         }
-        if let afterImage = task.afterImage {
+        if let afterImage = task.afterImage
+        {
             print("   ✅ Initializing after image cache from task (\(afterImage.count) bytes)")
             afterImageData = afterImage
         }
-        
+
         print("   Cache initialization complete:")
         print("     - Before: \(beforeImageData?.count ?? 0) bytes")
         print("     - After: \(afterImageData?.count ?? 0) bytes")
@@ -990,18 +1016,36 @@ struct EditTaskView: View
     private func handleViewDisappear()
     {
         print("🔴 EditTaskView disappeared")
-        if !isNew { validateTask() }
+        
+        if isNew
+        {
+            // In creation mode, don't save anything - user must explicitly create
+            return
+        }
+        
+        // In edit mode, save images from cache if the task is valid
+        if validateFields()
+        {
+            // Save any pending image changes
+            applyImagesFromCacheToTask()
+        }
+        else
+        {
+            // Only delete if fields are invalid
+            validateTask()
+        }
     }
 
     private func handleBeforeImageDataChange(oldValue: Data?, newValue: Data?)
     {
         let oldSize = oldValue?.count ?? 0
         let newSize = newValue?.count ?? 0
-        
+
         print("💾 beforeImageData changed from \(oldSize) bytes to \(newSize) bytes")
-        
+
         // CRITICAL: If data is being unexpectedly cleared, restore it!
-        if oldSize > 0 && newSize == 0 && !hasInitializedImageCaches {
+        if oldSize > 0 && newSize == 0 && !hasInitializedImageCaches
+        {
             print("⚠️ WARNING: Before image data was cleared unexpectedly! This shouldn't happen.")
             print("   Stack trace would show what caused this...")
         }
@@ -1047,9 +1091,10 @@ struct EditTaskView: View
             print("🔴 loadBeforeImage called with nil item - this shouldn't happen!")
             return
         }
-        
+
         // Prevent loading the same photo twice using a flag
-        guard !isLoadingBeforeImage else
+        guard !isLoadingBeforeImage
+        else
         {
             print("⏭️ Skipping duplicate before image load - already loading")
             return
@@ -1070,7 +1115,7 @@ struct EditTaskView: View
                     // Update cache - this will be saved when the user leaves the view
                     // or manually saves via the toolbar button
                     beforeImageData = data
-                    
+
                     // CRITICAL: Clear the picker selection to prevent it from triggering again
                     selectedBeforePhoto = nil
                 }
@@ -1094,9 +1139,10 @@ struct EditTaskView: View
             print("🔴 loadAfterImage called with nil item - this shouldn't happen!")
             return
         }
-        
+
         // Prevent loading the same photo twice using a flag
-        guard !isLoadingAfterImage else
+        guard !isLoadingAfterImage
+        else
         {
             print("⏭️ Skipping duplicate after image load - already loading")
             return
@@ -1130,13 +1176,15 @@ struct EditTaskView: View
     ///
     /// This ensures that both images are always set together, preventing SwiftData
     /// from clearing one while saving the other (which can happen with external storage).
+    /// This is especially important for iCloud sync.
     private func applyImagesFromCacheToTask(writeBefore: Bool = true, writeAfter: Bool = true)
     {
         print("📸 Applying images from cache:")
         print("   Before image size: \(beforeImageData?.count ?? 0) bytes")
         print("   After image size: \(afterImageData?.count ?? 0) bytes")
 
-        // Set both images from cache
+        // IMPORTANT: Set both images in a single transaction for iCloud sync reliability
+        // This prevents SwiftData from refaulting and losing one image while saving the other
         if writeBefore { task.beforeImage = beforeImageData }
         if writeAfter { task.afterImage = afterImageData }
 
@@ -1153,10 +1201,16 @@ struct EditTaskView: View
             // DO NOT update cache from task - cache is the source of truth!
             // The task object may be refaulted by SwiftData at any time,
             // but our @State cache persists across refaults.
+            
+            // IMPORTANT: With iCloud sync, external storage files are managed separately
+            // The Data? properties are just references to external files
+            // Our cache ensures we don't lose data during refaulting
         }
         catch
         {
             print("❌ Error saving images: \(error)")
+            // Note: Even if save fails, the cache still has the data
+            // User can try saving again or the data will be saved on view disappear
         }
     }
 
@@ -1203,7 +1257,7 @@ struct EditTaskView: View
 
         return true
     }
-    
+
     /// Determines whether all required draft fields contain values.
     ///
     /// Used for creation mode validation.
@@ -1227,7 +1281,7 @@ struct EditTaskView: View
 private struct NavigationModifier: ViewModifier
 {
     @Binding var path: NavigationPath
-    
+
     func body(content: Content) -> some View
     {
         content
@@ -1249,36 +1303,46 @@ private struct PhotoLoadingModifier: ViewModifier
     @Binding var selectedAfterPhoto: PhotosPickerItem?
     let loadBeforeImage: (PhotosPickerItem?) async -> Void
     let loadAfterImage: (PhotosPickerItem?) async -> Void
-    
+
     func body(content: Content) -> some View
     {
         content
-            .onChange(of: selectedBeforePhoto) { oldValue, newValue in
+            .onChange(of: selectedBeforePhoto)
+            { oldValue, newValue in
                 handleBeforePhotoChange(oldValue: oldValue, newValue: newValue)
             }
-            .onChange(of: selectedAfterPhoto) { oldValue, newValue in
+            .onChange(of: selectedAfterPhoto)
+            { oldValue, newValue in
                 handleAfterPhotoChange(oldValue: oldValue, newValue: newValue)
             }
     }
-    
-    private func handleBeforePhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?) {
+
+    private func handleBeforePhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?)
+    {
         // Only load if the value actually changed and is not nil
-        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier else { 
-            return 
+        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier
+        else
+        {
+            return
         }
-        
-        _Concurrency.Task {
+
+        _Concurrency.Task
+        {
             await self.loadBeforeImage(newValue)
         }
     }
-    
-    private func handleAfterPhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?) {
+
+    private func handleAfterPhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?)
+    {
         // Only load if the value actually changed and is not nil
-        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier else { 
-            return 
+        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier
+        else
+        {
+            return
         }
-        
-        _Concurrency.Task {
+
+        _Concurrency.Task
+        {
             await self.loadAfterImage(newValue)
         }
     }
@@ -1302,4 +1366,3 @@ private struct PhotoLoadingModifier: ViewModifier
     EditTaskView(task: Task.sampleData()[0], path: $path)
         .modelContainer(container)
 }
-
