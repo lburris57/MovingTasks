@@ -181,6 +181,8 @@ struct EditTaskView: View
                 .navigationTitle(isNew ? "Create Task" : (validateFields() ? "Edit Task" : "Add Task"))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarBackground(.regularMaterial, for: .navigationBar)
                 .onAppear(perform: handleViewAppear)
                 .onDisappear(perform: handleViewDisappear)
                 .modifier(NavigationModifier(path: $path))
@@ -238,9 +240,83 @@ struct EditTaskView: View
 
     private var backgroundGradient: some View
     {
-        LinearGradient(colors: [.blue, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing)
-            .opacity(0.25)
+        ZStack
+        {
+            // Main gradient background
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.25),
+                    Color.blue.opacity(0.20),
+                    Color.purple.opacity(0.22),
+                    Color.pink.opacity(0.18),
+                    Color.orange.opacity(0.15)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
             .ignoresSafeArea()
+            
+            // Decorative orbs
+            decorativeOrbsView
+        }
+    }
+    
+    private var decorativeOrbsView: some View
+    {
+        GeometryReader { geometry in
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.green.opacity(0.4), Color.mint.opacity(0.2), Color.clear],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 150
+                    )
+                )
+                .frame(width: 300, height: 300)
+                .position(x: geometry.size.width * 0.2, y: 100)
+                .blur(radius: 50)
+            
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.purple.opacity(0.45), Color.indigo.opacity(0.25), Color.clear],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 140
+                    )
+                )
+                .frame(width: 280, height: 280)
+                .position(x: geometry.size.width * 0.8, y: 250)
+                .blur(radius: 45)
+            
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.orange.opacity(0.35), Color.yellow.opacity(0.20), Color.clear],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 130
+                    )
+                )
+                .frame(width: 260, height: 260)
+                .position(x: geometry.size.width * 0.3, y: 500)
+                .blur(radius: 40)
+            
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.pink.opacity(0.38), Color.red.opacity(0.15), Color.clear],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 120
+                    )
+                )
+                .frame(width: 240, height: 240)
+                .position(x: geometry.size.width * 0.7, y: 700)
+                .blur(radius: 35)
+        }
+        .allowsHitTesting(false)
     }
 
     private var formContent: some View
@@ -257,11 +333,50 @@ struct EditTaskView: View
 
     private var taskInformationSection: some View
     {
-        Section("Task Information")
+        Section
         {
-            textFieldsGroup
-            pickersGroup
+            VStack(spacing: 16)
+            {
+                // Section header
+                HStack
+                {
+                    Image(systemName: "doc.text.fill")
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.blue, .cyan],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    Text("Task Information")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.bottom, 8)
+                
+                textFieldsGroup
+                pickersGroup
+            }
+            .padding()
         }
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.blue.opacity(0.3), .cyan.opacity(0.2)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
+        )
+        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        .listRowSeparator(.hidden)
     }
 
     private var textFieldsGroup: some View
@@ -299,16 +414,19 @@ struct EditTaskView: View
             categoryPicker
             priorityPicker
             dateCreatedView
+                .padding(.top, 8)
         }
     }
 
     private var locationPicker: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        HStack
         {
             Text("Location:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+
+            Spacer()
 
             Picker(Constants.EMPTY_STRING, selection: isNew ? $draftLocation : $task.location)
             {
@@ -324,11 +442,13 @@ struct EditTaskView: View
 
     private var categoryPicker: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        HStack
         {
             Text("Category:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+
+            Spacer()
 
             Picker(Constants.EMPTY_STRING, selection: isNew ? $draftCategory : $task.category)
             {
@@ -344,11 +464,16 @@ struct EditTaskView: View
 
     private var priorityPicker: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        VStack(alignment: .leading, spacing: 8)
         {
-            Text("Priority:")
-                .font(.body)
-                .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+            HStack
+            {
+                Text("Priority:")
+                    .font(.body)
+                    .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                
+                Spacer()
+            }
 
             Picker(Constants.EMPTY_STRING, selection: isNew ? $draftPriority : $task.priority)
             {
@@ -367,44 +492,88 @@ struct EditTaskView: View
 
     private var dateCreatedView: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        HStack
         {
             Text("Date Created:")
                 .font(.body)
                 .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+            
+            Spacer()
+            
             Text(isNew ? "" : "\(task.createdDate)")
+                .font(.body)
+                .foregroundStyle(.secondary)
         }
     }
 
     private var beforeAfterImagesSection: some View
     {
-        Section("Before & After Images")
+        Section
         {
             VStack(spacing: 20)
             {
+                // Section header
+                HStack
+                {
+                    Image(systemName: "photo.on.rectangle.angled")
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.purple, .pink],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    Text("Before & After Images")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.bottom, 8)
+                
                 HStack
                 {
                     Text("Before Image")
-                        .font(.headline)
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
                     Spacer()
                 }
 
                 beforeImageColumn
 
                 Divider()
+                    .padding(.vertical, 8)
 
                 HStack
                 {
                     Text("After Image")
-                        .font(.headline)
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
                     Spacer()
                 }
 
                 afterImageColumn
             }
+            .padding()
         }
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.purple.opacity(0.3), .pink.opacity(0.2)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
+        )
+        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        .listRowSeparator(.hidden)
     }
 
     private var beforeImageColumn: some View
@@ -539,51 +708,104 @@ struct EditTaskView: View
         // Don't show task items section when creating a new task
         if !isNew
         {
-            Section("Task Items (\(task.taskItemsArray.count))")
+            Section
             {
-                // Add new task item button - always visible
-                Button(action: {
-                    let newTaskItem = TaskItem(
-                        itemTitle: Constants.EMPTY_STRING,
-                        itemDescription: Constants.EMPTY_STRING,
-                        comment: Constants.EMPTY_STRING
-                    )
-                    newTaskItem.task = task
-                    task.taskItems?.append(newTaskItem)
-                    path.append(newTaskItem)
-                }) {
-                    HStack {
-                        Label("Add Task Item", systemImage: "plus.circle.fill")
-                            .foregroundStyle(.green)
-                        Spacer()
-                    }
-                }
-                
-                // Show "View All" button only when there are items
-                if task.taskItemsArray.count > 0
+                VStack(spacing: 16)
                 {
-                    Button(action: {
-                        path.append(task.taskItemsArray)
-                    }) {
-                        HStack {
-                            Label("View All Task Items", systemImage: "list.bullet")
-                                .foregroundStyle(.blue)
-                            Spacer()
-                            Image(systemName: "chevron.right")
+                    // Section header with count and add button
+                    HStack
+                    {
+                        Image(systemName: "list.bullet.rectangle.fill")
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.green, .mint],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                        
+                        Text("Task Items")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        
+                        ZStack
+                        {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [.blue, .cyan],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 24, height: 24)
+                            
+                            Text("\(task.taskItemsArray.count)")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            let newTaskItem = TaskItem(
+                                itemTitle: Constants.EMPTY_STRING,
+                                itemDescription: Constants.EMPTY_STRING,
+                                comment: Constants.EMPTY_STRING
+                            )
+                            newTaskItem.task = task
+                            task.taskItems?.append(newTaskItem)
+                            path.append(newTaskItem)
+                        }) {
+                            Label("Add Task Item", systemImage: "plus.circle.fill")
+                                .labelStyle(.iconOnly)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.green, .mint],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .font(.title3)
                         }
                     }
+                    .padding(.bottom, 8)
                     
-                    ForEach(task.taskItemsArray)
-                    { taskItem in
-                        NavigationLink(value: taskItem)
-                        {
-                            taskItemRow(for: taskItem)
+                    // Show task items if there are any
+                    if task.taskItemsArray.count > 0
+                    {
+                        Divider()
+                            .padding(.vertical, 4)
+                        
+                        ForEach(task.taskItemsArray)
+                        { taskItem in
+                            NavigationLink(value: taskItem)
+                            {
+                                taskItemRow(for: taskItem)
+                            }
                         }
                     }
                 }
+                .padding()
             }
+            .listRowBackground(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [.green.opacity(0.3), .mint.opacity(0.2)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1
+                            )
+                    )
+            )
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowSeparator(.hidden)
         }
     }
 
@@ -627,15 +849,54 @@ struct EditTaskView: View
 
     private var statusInformationSection: some View
     {
-        Section("Status Information")
+        Section
         {
-            statusToggleView
-
-            if task.isCompleted
+            VStack(spacing: 16)
             {
-                completedDateView
+                // Section header
+                HStack
+                {
+                    Image(systemName: "checkmark.seal.fill")
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.orange, .yellow],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    Text("Status Information")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.bottom, 8)
+                
+                statusToggleView
+
+                if task.isCompleted
+                {
+                    completedDateView
+                }
             }
+            .padding()
         }
+        .listRowBackground(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.orange.opacity(0.3), .yellow.opacity(0.2)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
+        )
+        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        .listRowSeparator(.hidden)
     }
 
     private var statusToggleView: some View
