@@ -39,6 +39,10 @@
 		9118BC852B30034300790686 /* FloatingLabelTextFieldStyle in Frameworks */ = {isa = PBXBuildFile; productRef = 9118BC842B30034300790686 /* FloatingLabelTextFieldStyle */; };
 		9118BC872B30058F00790686 /* TextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118BC862B30058F00790686 /* TextInputView.swift */; };
 		911A856C2EE2931000A2F2E5 /* EditTaskView_Documentation.md in Resources */ = {isa = PBXBuildFile; fileRef = 911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */; };
+		912843652F4EAD80004D8277 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912843642F4EAD80004D8277 /* DashboardView.swift */; };
+		912843672F4EAE2B004D8277 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912843662F4EAE2B004D8277 /* MainTabView.swift */; };
+		912843692F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md in Resources */ = {isa = PBXBuildFile; fileRef = 912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */; };
+		9128436B2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md in Resources */ = {isa = PBXBuildFile; fileRef = 9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */; };
 		91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */; };
 		91C25D412B474AE700A9FE50 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D402B474AE700A9FE50 /* ImagePicker.swift */; };
 		91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */ = {isa = PBXBuildFile; fileRef = 91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */; };
@@ -91,6 +95,10 @@
 		9118BC7E2B2A392B00790686 /* TaskItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemListView.swift; sourceTree = "<group>"; };
 		9118BC862B30058F00790686 /* TextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputView.swift; sourceTree = "<group>"; };
 		911A856B2EE2930F00A2F2E5 /* EditTaskView_Documentation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EditTaskView_Documentation.md; sourceTree = "<group>"; };
+		912843642F4EAD80004D8277 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		912843662F4EAE2B004D8277 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DASHBOARD_INTEGRATION.md; sourceTree = "<group>"; };
+		9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DASHBOARD_QUICK_START.md; sourceTree = "<group>"; };
 		916066AD2ED6AA3800FD58DA /* MovingTasksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovingTasksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		91C25D402B474AE700A9FE50 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -224,6 +232,10 @@
 				9118BC7C2B294F8E00790686 /* EditTaskItemView.swift */,
 				9118BC592B2683EA00790686 /* EditTaskView.swift */,
 				910CA1332F4A9BBB00AC88E6 /* TaskRowView.swift */,
+				912843642F4EAD80004D8277 /* DashboardView.swift */,
+				912843662F4EAE2B004D8277 /* MainTabView.swift */,
+				912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */,
+				9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -340,7 +352,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9128436B2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md in Resources */,
 				9118BC412B2659B100790686 /* Preview Assets.xcassets in Resources */,
+				912843692F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md in Resources */,
 				91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */,
 				910CA1362F4A9C1500AC88E6 /* MANUAL_UPDATE_REQUIRED.md in Resources */,
 				910CA12E2F4A984C00AC88E6 /* FILTER_VIEW_FIX.md in Resources */,
@@ -368,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9118BC3C2B2659AF00790686 /* TaskListView.swift in Sources */,
+				912843652F4EAD80004D8277 /* DashboardView.swift in Sources */,
 				9118BC4C2B265A9F00790686 /* FileManager+Extension.swift in Sources */,
 				9118BC7B2B29437000790686 /* TaskItem.swift in Sources */,
 				91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */,
@@ -385,6 +400,7 @@
 				9118BC7F2B2A392B00790686 /* TaskItemListView.swift in Sources */,
 				9118BC6D2B278E7C00790686 /* CategoryEnum.swift in Sources */,
 				9118BC512B265AD600790686 /* DatabaseError.swift in Sources */,
+				912843672F4EAE2B004D8277 /* MainTabView.swift in Sources */,
 				9118BC662B26C90E00790686 /* Project.swift in Sources */,
 				9118BC692B26CDD100790686 /* LocationEnum.swift in Sources */,
 				9118BC6B2B26D45F00790686 /* PriorityEnum.swift in Sources */,

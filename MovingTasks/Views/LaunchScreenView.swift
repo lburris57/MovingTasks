@@ -67,7 +67,7 @@ struct LaunchScreenView: View
     {
         if isActive
         {
-            TaskListView()
+            MainTabView()
         }
         else
         {

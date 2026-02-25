@@ -49,11 +49,25 @@ class TaskItem:  Identifiable, Hashable
         wasPurchased ? Constants.YES : Constants.NO
     }
     
+    /// Updates the purchased price and automatically marks the item as purchased if a valid price is provided
+    func updatePurchasedPrice(_ newPrice: String)
+    {
+        purchasedPrice = newPrice
+        
+        // Auto-check wasPurchased if there's a valid price > 0
+        let cleanPrice = newPrice.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING)
+        if let decimal = Decimal(string: cleanPrice), decimal > 0
+        {
+            wasPurchased = true
+        }
+    }
+    
     var totalPrice: Decimal
     {
         guard let decimalQuantity = Decimal(string: quantity) else { return Constants.ZERO_DECIMAL}
         
-        guard let decimalPurchasedPrice = Decimal(string: purchasedPrice) else { return Constants.ZERO_DECIMAL }
+        // Remove dollar sign before parsing
+        guard let decimalPurchasedPrice = Decimal(string: purchasedPrice.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING)) else { return Constants.ZERO_DECIMAL }
         
         return decimalQuantity * decimalPurchasedPrice
     }

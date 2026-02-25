@@ -109,10 +109,13 @@ struct TaskListView: View
     {
         var total: Decimal = 0.00
         
-        for taskItem in taskItems
+        // Only include purchased items
+        let purchasedItems = taskItems.filter { $0.wasPurchased }
+        
+        for taskItem in purchasedItems
         {
-            let totalPrice = Decimal(string: taskItem.totalPriceString.replacingOccurrences(of: Constants.DOLLAR_SIGN, with: Constants.EMPTY_STRING))
-            total += totalPrice ?? 0.00
+            // Use totalPrice property which already returns Decimal
+            total += taskItem.totalPrice
         }
         
         grandTotal = total.formatted(.currency(code: "USD"))

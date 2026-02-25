@@ -110,6 +110,10 @@ struct EditTaskView: View
 
     /// Track if we're currently loading an after image to prevent duplicate loads
     @State private var isLoadingAfterImage = false
+    
+    /// Which picker is currently active
+    enum ActivePicker { case none, before, after }
+    @State private var activePicker: ActivePicker = .none
 
     /// The navigation path used for programmatic navigation.
     ///
@@ -157,6 +161,27 @@ struct EditTaskView: View
         task.isCompleted.toggle()
     }
 
+    // New helper function for image picker buttons
+    private func imagePickerButton(
+        titlePrefix: String,
+        hasImage: Bool,
+        isLoading: Bool,
+        targetCase: ActivePicker,
+        clearOppositeSelection: @escaping () -> Void
+    ) -> some View {
+        Button {
+            print("🖼️ User tapped \(titlePrefix) Image button")
+            let opposite: ActivePicker = (targetCase == .before) ? .after : .before
+            guard activePicker != opposite, !isLoading else { return }
+            clearOppositeSelection()
+            activePicker = targetCase
+        } label: {
+            Label(hasImage ? "Modify \(titlePrefix) Image" : "Add \(titlePrefix) Image", systemImage: "photo")
+                .font(.caption)
+        }
+        .disabled(isLoading || activePicker == targetCase)
+    }
+
     // MARK: - Body
 
     /// The main view body containing the task editing interface.
@@ -179,7 +204,7 @@ struct EditTaskView: View
             backgroundGradient
 
             formContent
-                .navigationTitle(isNew ? "Create Task" : (validateFields() ? "Edit Task" : "Add Task"))
+                .navigationTitle(navigationTitleText)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbarBackground(.visible, for: .navigationBar)
@@ -187,64 +212,44 @@ struct EditTaskView: View
                 .onAppear(perform: handleViewAppear)
                 .onDisappear(perform: handleViewDisappear)
                 .modifier(NavigationModifier(path: $path))
-                .modifier(PhotoLoadingModifier(
-                    selectedBeforePhoto: $selectedBeforePhoto,
-                    selectedAfterPhoto: $selectedAfterPhoto,
-                    loadBeforeImage: loadBeforeImage,
-                    loadAfterImage: loadAfterImage
-                ))
-                .onChange(of: beforeImageData)
-                { oldValue, newValue in
-                    handleBeforeImageDataChange(oldValue: oldValue, newValue: newValue)
+                .onChange(of: selectedBeforePhoto) { oldValue, newValue in
+                    handleBeforePhotoChange(oldValue: oldValue, newValue: newValue)
                 }
-                .onChange(of: afterImageData)
-                { oldValue, newValue in
-                    handleAfterImageDataChange(oldValue: oldValue, newValue: newValue)
+                .onChange(of: selectedAfterPhoto) { oldValue, newValue in
+                    handleAfterPhotoChange(oldValue: oldValue, newValue: newValue)
                 }
-                .toolbar
-                {
-                    ToolbarItem(placement: .cancellationAction)
-                    {
-                        Button("Cancel")
-                        {
-                            // In creation mode, just go back without inserting a task
-                            // In edit mode, simply navigate back
-                            path = NavigationPath()
-                        }
-                    }
-
-                    ToolbarItem(placement: .confirmationAction)
-                    {
-                        Button(isNew ? "Create" : "Save")
-                        {
-                            if isNew
-                            {
-                                let newTask = Task(taskTitle: draftTitle, taskDescription: draftDescription, comment: draftComment)
-                                newTask.location = draftLocation
-                                newTask.category = draftCategory
-                                newTask.priority = draftPriority
-                                newTask.beforeImage = beforeImageData
-                                newTask.afterImage = afterImageData
-                                modelContext.insert(newTask)
-                                do
-                                {
-                                    try modelContext.save()
-                                }
-                                catch
-                                {
-                                    print("❌ Error creating task: \(error)")
-                                }
-                                path = NavigationPath()
-                            }
-                            else
-                            {
-                                applyImagesFromCacheToTask()
-                                path = NavigationPath()
-                            }
-                        }
-                        .disabled(isNew ? !validateDraftFields() : !validateFields())
-                    }
+                .onChange(of: activePicker) { oldValue, newValue in
+                    print("🎭 activePicker changed: \(oldValue) → \(newValue)")
                 }
+                .toolbar { toolbarContent }
+        }
+    }
+    
+    // MARK: - Computed Properties
+    
+    private var navigationTitleText: String {
+        if isNew {
+            return "Create Task"
+        } else {
+            return validateFields() ? "Edit Task" : "Add Task"
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                // In creation mode, just go back without inserting a task
+                // In edit mode, simply navigate back
+                path = NavigationPath()
+            }
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(isNew ? "Create" : "Save") {
+                handleSaveAction()
+            }
+            .disabled(isNew ? !validateDraftFields() : !validateFields())
         }
     }
 
@@ -611,22 +616,41 @@ struct EditTaskView: View
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                     }
+                
+                Text("\(imageData.count) bytes")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
 
-                PhotosPicker(
-                    selection: $selectedBeforePhoto,
-                    matching: .images,
-                    photoLibrary: .shared()
-                )
-                {
-                    Label("Modify Before Image", systemImage: "photo")
-                        .font(.caption)
+                imagePickerButton(
+                    titlePrefix: "Before",
+                    hasImage: beforeImageData != nil,
+                    isLoading: isLoadingBeforeImage,
+                    targetCase: .before
+                ) {
+                    selectedAfterPhoto = nil
                 }
 
                 Button(role: .destructive)
                 {
+                    guard !isLoadingBeforeImage
+                    else
+                    {
+                        print("⚠️ Ignoring remove request - image is being loaded")
+                        return
+                    }
+                    
                     print("🗑️ User explicitly removing before image")
+                    print("   Current before image data: \(beforeImageData?.count ?? 0) bytes")
+                    print("   Current picker selection: \(selectedBeforePhoto?.itemIdentifier ?? "nil")")
+                    
                     selectedBeforePhoto = nil
                     beforeImageData = nil
+                    activePicker = EditTaskView.ActivePicker.none
+                    
+                    if !isNew
+                    {
+                        applyImagesFromCacheToTask()
+                    }
                 }
                 label:
                 {
@@ -635,21 +659,31 @@ struct EditTaskView: View
                         .foregroundStyle(.red)
                 }
                 .padding(.top, 4)
+                .disabled(isLoadingBeforeImage)
             }
             else
             {
-                PhotosPicker(
-                    selection: $selectedBeforePhoto,
-                    matching: .images,
-                    photoLibrary: .shared()
-                )
-                {
-                    Label("Add Before Image", systemImage: "photo")
-                        .font(.caption)
+                imagePickerButton(
+                    titlePrefix: "Before",
+                    hasImage: beforeImageData != nil,
+                    isLoading: isLoadingBeforeImage,
+                    targetCase: .before
+                ) {
+                    selectedAfterPhoto = nil
                 }
             }
         }
         .frame(maxWidth: .infinity)
+        .allowsHitTesting(!isLoadingBeforeImage)
+        .photosPicker(
+            isPresented: .init(
+                get: { activePicker == EditTaskView.ActivePicker.before },
+                set: { $0 ? (activePicker = EditTaskView.ActivePicker.before) : (activePicker = EditTaskView.ActivePicker.none) }
+            ),
+            selection: $selectedBeforePhoto,
+            matching: .images,
+            photoLibrary: .shared()
+        )
     }
 
     private var afterImageColumn: some View
@@ -674,22 +708,41 @@ struct EditTaskView: View
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                     }
+                
+                Text("\(imageData.count) bytes")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
 
-                PhotosPicker(
-                    selection: $selectedAfterPhoto,
-                    matching: .images,
-                    photoLibrary: .shared()
-                )
-                {
-                    Label("Modify After Image", systemImage: "photo")
-                        .font(.caption)
+                imagePickerButton(
+                    titlePrefix: "After",
+                    hasImage: afterImageData != nil,
+                    isLoading: isLoadingAfterImage,
+                    targetCase: .after
+                ) {
+                    selectedBeforePhoto = nil
                 }
 
                 Button(role: .destructive)
                 {
+                    guard !isLoadingAfterImage
+                    else
+                    {
+                        print("⚠️ Ignoring remove request - image is being loaded")
+                        return
+                    }
+                    
                     print("🗑️ User explicitly removing after image")
+                    print("   Current after image data: \(afterImageData?.count ?? 0) bytes")
+                    print("   Current picker selection: \(selectedAfterPhoto?.itemIdentifier ?? "nil")")
+                    
                     selectedAfterPhoto = nil
                     afterImageData = nil
+                    activePicker = EditTaskView.ActivePicker.none
+                    
+                    if !isNew
+                    {
+                        applyImagesFromCacheToTask()
+                    }
                 }
                 label:
                 {
@@ -698,21 +751,31 @@ struct EditTaskView: View
                         .foregroundStyle(.red)
                 }
                 .padding(.top, 4)
+                .disabled(isLoadingAfterImage)
             }
             else
             {
-                PhotosPicker(
-                    selection: $selectedAfterPhoto,
-                    matching: .images,
-                    photoLibrary: .shared()
-                )
-                {
-                    Label("Add After Image", systemImage: "photo")
-                        .font(.caption)
+                imagePickerButton(
+                    titlePrefix: "After",
+                    hasImage: afterImageData != nil,
+                    isLoading: isLoadingAfterImage,
+                    targetCase: .after
+                ) {
+                    selectedBeforePhoto = nil
                 }
             }
         }
         .frame(maxWidth: .infinity)
+        .allowsHitTesting(!isLoadingAfterImage)
+        .photosPicker(
+            isPresented: .init(
+                get: { activePicker == EditTaskView.ActivePicker.after },
+                set: { $0 ? (activePicker = EditTaskView.ActivePicker.after) : (activePicker = EditTaskView.ActivePicker.none) }
+            ),
+            selection: $selectedAfterPhoto,
+            matching: .images,
+            photoLibrary: .shared()
+        )
     }
 
     @ViewBuilder
@@ -966,6 +1029,51 @@ struct EditTaskView: View
     }
 
     // MARK: - Helper Methods
+    
+    private func handleBeforePhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?) {
+        // Trigger load when a new before photo is selected
+        guard let newItem = newValue else { return }
+        // Compare identifiers to avoid reloading the same image
+        if let oldItem = oldValue {
+            if oldItem.itemIdentifier == newItem.itemIdentifier {
+                return
+            }
+        }
+        Swift.Task { await loadBeforeImage(from: newItem) }
+    }
+    
+    private func handleAfterPhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?) {
+        // Trigger load when a new after photo is selected
+        guard let newItem = newValue else { return }
+        // Compare identifiers to avoid reloading the same image
+        if let oldItem = oldValue {
+            if oldItem.itemIdentifier == newItem.itemIdentifier {
+                return
+            }
+        }
+        Swift.Task { await loadAfterImage(from: newItem) }
+    }
+    
+    private func handleSaveAction() {
+        if isNew {
+            let newTask = Task(taskTitle: draftTitle, taskDescription: draftDescription, comment: draftComment)
+            newTask.location = draftLocation
+            newTask.category = draftCategory
+            newTask.priority = draftPriority
+            newTask.beforeImage = beforeImageData
+            newTask.afterImage = afterImageData
+            modelContext.insert(newTask)
+            do {
+                try modelContext.save()
+            } catch {
+                print("❌ Error creating task: \(error)")
+            }
+            path = NavigationPath()
+        } else {
+            applyImagesFromCacheToTask()
+            path = NavigationPath()
+        }
+    }
 
     private func handleViewAppear()
     {
@@ -1042,18 +1150,34 @@ struct EditTaskView: View
         let newSize = newValue?.count ?? 0
 
         print("💾 beforeImageData changed from \(oldSize) bytes to \(newSize) bytes")
+        print("   Stack trace: \(Thread.callStackSymbols.prefix(5).joined(separator: "\n   "))")
 
-        // CRITICAL: If data is being unexpectedly cleared, restore it!
-        if oldSize > 0 && newSize == 0 && !hasInitializedImageCaches
+        // CRITICAL: If data is being unexpectedly cleared, log it but DON'T restore
+        // The cache should never be overwritten once set
+        if oldSize > 0 && newSize == 0
         {
-            print("⚠️ WARNING: Before image data was cleared unexpectedly! This shouldn't happen.")
-            print("   Stack trace would show what caused this...")
+            print("⚠️ WARNING: Before image cache was cleared!")
+            print("   Has initialized caches: \(hasInitializedImageCaches)")
+            print("   Is loading before image: \(isLoadingBeforeImage)")
+            print("   Selected before photo: \(selectedBeforePhoto?.itemIdentifier ?? "nil")")
+            print("   This might indicate a problem with state management")
         }
     }
 
     private func handleAfterImageDataChange(oldValue: Data?, newValue: Data?)
     {
-        print("💾 afterImageData changed from \(oldValue?.count ?? 0) bytes to \(newValue?.count ?? 0) bytes")
+        let oldSize = oldValue?.count ?? 0
+        let newSize = newValue?.count ?? 0
+        
+        print("💾 afterImageData changed from \(oldSize) bytes to \(newSize) bytes")
+        
+        // CRITICAL: If data is being unexpectedly cleared, log it
+        if oldSize > 0 && newSize == 0
+        {
+            print("⚠️ WARNING: After image cache was cleared!")
+            print("   Has initialized caches: \(hasInitializedImageCaches)")
+            print("   This might indicate a problem with state management")
+        }
     }
 
     private func addNewTaskItem()
@@ -1101,8 +1225,12 @@ struct EditTaskView: View
         }
 
         print("📷 Loading before image...")
+        print("   Item ID: \(item.itemIdentifier ?? "unknown")")
         isLoadingBeforeImage = true
-        defer { isLoadingBeforeImage = false }
+        defer
+        {
+            isLoadingBeforeImage = false
+        }
 
         do
         {
@@ -1112,12 +1240,32 @@ struct EditTaskView: View
 
                 await MainActor.run
                 {
+                    // Drop stale loads if user switched context
+                    guard activePicker == EditTaskView.ActivePicker.before || selectedBeforePhoto != nil else {
+                        print("   ⏭️ Dropping stale before image load")
+                        return
+                    }
+
+                    // CRITICAL: Clear the picker selection FIRST to prevent re-triggering
+                    // This must happen before updating the cache to avoid race conditions
+                    selectedBeforePhoto = nil
+                    
                     // Update cache - this will be saved when the user leaves the view
                     // or manually saves via the toolbar button
                     beforeImageData = data
-
-                    // CRITICAL: Clear the picker selection to prevent it from triggering again
+                    
+                    // Reset picker presentation state
+                    activePicker = EditTaskView.ActivePicker.none
+                    
+                    print("   📦 Before image cache updated and picker cleared")
+                }
+            }
+            else
+            {
+                await MainActor.run
+                {
                     selectedBeforePhoto = nil
+                    activePicker = EditTaskView.ActivePicker.none
                 }
             }
         }
@@ -1127,6 +1275,7 @@ struct EditTaskView: View
             await MainActor.run
             {
                 selectedBeforePhoto = nil
+                activePicker = EditTaskView.ActivePicker.none
             }
         }
     }
@@ -1149,8 +1298,12 @@ struct EditTaskView: View
         }
 
         print("📷 Loading after image...")
+        print("   Item ID: \(item.itemIdentifier ?? "unknown")")
         isLoadingAfterImage = true
-        defer { isLoadingAfterImage = false }
+        defer
+        {
+            isLoadingAfterImage = false
+        }
 
         do
         {
@@ -1160,15 +1313,42 @@ struct EditTaskView: View
 
                 await MainActor.run
                 {
+                    // Drop stale loads if user switched context
+                    guard activePicker == EditTaskView.ActivePicker.after || selectedAfterPhoto != nil else {
+                        print("   ⏭️ Dropping stale after image load")
+                        return
+                    }
+                    
+                    // CRITICAL: Clear the picker selection to prevent it from triggering again
+                    selectedAfterPhoto = nil
+
                     // Update cache - this will be saved when the user leaves the view
                     // or manually saves via the toolbar button
                     afterImageData = data
+                    
+                    // Reset picker presentation state
+                    activePicker = EditTaskView.ActivePicker.none
+                    
+                    print("   📦 After image cache updated and picker cleared")
+                }
+            }
+            else
+            {
+                await MainActor.run
+                {
+                    selectedAfterPhoto = nil
+                    activePicker = EditTaskView.ActivePicker.none
                 }
             }
         }
         catch
         {
             print("❌ Error loading after image: \(error)")
+            await MainActor.run
+            {
+                selectedAfterPhoto = nil
+                activePicker = EditTaskView.ActivePicker.none
+            }
         }
     }
 
@@ -1185,8 +1365,15 @@ struct EditTaskView: View
 
         // IMPORTANT: Set both images in a single transaction for iCloud sync reliability
         // This prevents SwiftData from refaulting and losing one image while saving the other
-        if writeBefore { task.beforeImage = beforeImageData }
-        if writeAfter { task.afterImage = afterImageData }
+        // Always write both images, even if nil, to ensure deletions are persisted
+        if writeBefore { 
+            task.beforeImage = beforeImageData 
+            print("   ✍️ Wrote before image: \(beforeImageData != nil ? "\(beforeImageData!.count) bytes" : "nil (removed)")")
+        }
+        if writeAfter { 
+            task.afterImage = afterImageData 
+            print("   ✍️ Wrote after image: \(afterImageData != nil ? "\(afterImageData!.count) bytes" : "nil (removed)")")
+        }
 
         do
         {
@@ -1195,8 +1382,8 @@ struct EditTaskView: View
 
             // Verify the task still has both images after save
             print("📋 After save verification:")
-            print("   Task before image: \(task.beforeImage?.count ?? 0) bytes")
-            print("   Task after image: \(task.afterImage?.count ?? 0) bytes")
+            print("   Task before image: \(task.beforeImage != nil ? "\(task.beforeImage!.count) bytes" : "nil")")
+            print("   Task after image: \(task.afterImage != nil ? "\(task.afterImage!.count) bytes" : "nil")")
 
             // DO NOT update cache from task - cache is the source of truth!
             // The task object may be refaulted by SwiftData at any time,
@@ -1296,58 +1483,6 @@ private struct NavigationModifier: ViewModifier
     }
 }
 
-/// A view modifier that handles photo picker changes and triggers image loading.
-private struct PhotoLoadingModifier: ViewModifier
-{
-    @Binding var selectedBeforePhoto: PhotosPickerItem?
-    @Binding var selectedAfterPhoto: PhotosPickerItem?
-    let loadBeforeImage: (PhotosPickerItem?) async -> Void
-    let loadAfterImage: (PhotosPickerItem?) async -> Void
-
-    func body(content: Content) -> some View
-    {
-        content
-            .onChange(of: selectedBeforePhoto)
-            { oldValue, newValue in
-                handleBeforePhotoChange(oldValue: oldValue, newValue: newValue)
-            }
-            .onChange(of: selectedAfterPhoto)
-            { oldValue, newValue in
-                handleAfterPhotoChange(oldValue: oldValue, newValue: newValue)
-            }
-    }
-
-    private func handleBeforePhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?)
-    {
-        // Only load if the value actually changed and is not nil
-        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier
-        else
-        {
-            return
-        }
-
-        _Concurrency.Task
-        {
-            await self.loadBeforeImage(newValue)
-        }
-    }
-
-    private func handleAfterPhotoChange(oldValue: PhotosPickerItem?, newValue: PhotosPickerItem?)
-    {
-        // Only load if the value actually changed and is not nil
-        guard newValue != nil, newValue?.itemIdentifier != oldValue?.itemIdentifier
-        else
-        {
-            return
-        }
-
-        _Concurrency.Task
-        {
-            await self.loadAfterImage(newValue)
-        }
-    }
-}
-
 // MARK: - Preview
 
 /// Preview provider for `EditTaskView`.
@@ -1366,3 +1501,4 @@ private struct PhotoLoadingModifier: ViewModifier
     EditTaskView(task: Task.sampleData()[0], path: $path)
         .modelContainer(container)
 }
+
