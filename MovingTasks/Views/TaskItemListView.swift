@@ -134,58 +134,176 @@ struct TaskItemListView: View
     
     var body: some View
     {
-        VStack(alignment: .leading, spacing: 5)
+        ZStack
+        {
+            // Modern gradient background
+            backgroundGradient
+            
+            VStack(spacing: 0)
+            {
+                // Grand Total Card at top
+                grandTotalCard
+                    .padding()
+                
+                // Task Items List
+                List
+                {
+                    ForEach(taskItems, id: \.taskItemId)
+                    {
+                        taskItem in
+
+                        Button(action: {
+                            path.append(taskItem)
+                        }) {
+                            TaskItemRow(taskItem: taskItem)
+                        }
+                        .buttonStyle(.plain)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                    }
+                    .onDelete(perform: deleteTaskItem)
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+            }
+        }
+        .navigationTitle("Task Item List")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar
+        {
+            Menu("\(Image(systemName: "arrowshape.turn.up.left.fill"))")
+            {
+                Button("Go to Task List")
+                {
+                    path = NavigationPath()
+                }
+            }
+            .padding(.horizontal)
+        }
+        .onAppear(perform: populateGrandTotal)
+    }
+    
+    // MARK: - View Components
+    
+    private var backgroundGradient: some View
+    {
+        LinearGradient(
+            colors: [
+                Color.cyan.opacity(0.15),
+                Color.blue.opacity(0.12),
+                Color.purple.opacity(0.15),
+                Color.pink.opacity(0.10),
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+    }
+    
+    private var grandTotalCard: some View
+    {
+        VStack(spacing: 8)
         {
             HStack
             {
-                Spacer()
-                
-                Text("Grand Total: " + grandTotal).font(.body).bold()
+                Image(systemName: "dollarsign.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.green, .mint],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                 
                 Spacer()
             }
             
-            List
+            HStack
             {
-                ForEach(taskItems, id: \.taskItemId)
+                VStack(alignment: .leading, spacing: 4)
                 {
-                    taskItem in
-
-                    Button(action: {
-                        path.append(taskItem)
-                    }) {
-                        VStack(alignment: .leading, spacing: 5)
-                        {
-                            Text("\(taskItem.itemTitle)").font(.body).foregroundStyle(.primary).bold()
-                            Text("\(taskItem.itemDescription)").font(.callout).foregroundStyle(.secondary).bold()
-                            
-                            if(taskItem.wasPurchased)
-                            {
-                                Text("\(taskItem.formattedTotalPriceString)").font(.callout).foregroundStyle(.secondary).bold()
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
+                    Text("Grand Total")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(grandTotal)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
                 }
-                .onDelete(perform: deleteTaskItem)
-                .listStyle(.plain)
-                .padding(.bottom)
-                .navigationTitle("Task Item List")
-                .navigationBarTitleDisplayMode(.inline)
-            }
-            .toolbar
-            {
-                Menu("\(Image(systemName: "arrowshape.turn.up.left.fill"))")
-                {
-                    Button("Go to Task List")
-                    {
-                        path = NavigationPath()
-                    }
-                }
-                .padding(.horizontal)
+                
+                Spacer()
             }
         }
-        .onAppear(perform: populateGrandTotal)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.green.opacity(0.3), .mint.opacity(0.2)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
+        )
+    }
+}
+
+/// A row displaying a task item in a modern card style
+struct TaskItemRow: View
+{
+    let taskItem: TaskItem
+    
+    var body: some View
+    {
+        VStack(alignment: .leading, spacing: 8)
+        {
+            Text(taskItem.itemTitle)
+                .font(.headline)
+                .foregroundStyle(.primary)
+            
+            Text(taskItem.itemDescription)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+            
+            HStack
+            {
+                if taskItem.wasPurchased
+                {
+                    Label(taskItem.formattedTotalPriceString, systemImage: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.green)
+                        .fontWeight(.semibold)
+                }
+                else
+                {
+                    Label("Not Purchased", systemImage: "circle")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.ultraThinMaterial)
+        )
+        .padding(.horizontal)
+        .padding(.vertical, 4)
     }
 }
 

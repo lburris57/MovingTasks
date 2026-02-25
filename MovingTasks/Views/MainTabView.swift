@@ -14,7 +14,7 @@ import SwiftUI
 /// - Dashboard: Overview and statistics of all tasks
 /// - Tasks: Full task list with filtering and management
 ///
-/// The tab bar uses SF Symbols for icons and includes visual feedback for the selected tab.
+/// Uses a custom compact tab bar with opaque background for reduced vertical space usage.
 ///
 /// ## Usage Example
 ///
@@ -31,35 +31,109 @@ import SwiftUI
 struct MainTabView: View
 {
     /// Tracks the currently selected tab
-    @State private var selectedTab = 0
+    @State private var selectedTab: Tab = .dashboard
     
     /// Navigation path for dashboard navigation
     @State private var dashboardPath = NavigationPath()
     
+    /// Available tabs
+    enum Tab: String, CaseIterable
+    {
+        case dashboard = "Dashboard"
+        case tasks = "Tasks"
+        
+        var icon: String
+        {
+            switch self
+            {
+            case .dashboard: return "chart.bar.fill"
+            case .tasks: return "list.bullet"
+            }
+        }
+    }
+    
     var body: some View
     {
-        TabView(selection: $selectedTab)
+        ZStack(alignment: .bottom)
         {
-            // Dashboard Tab
-            NavigationStack(path: $dashboardPath)
+            // Main content
+            Group
             {
-                DashboardView(path: $dashboardPath)
-            }
-            .tabItem
-            {
-                Label("Dashboard", systemImage: "chart.bar.fill")
-            }
-            .tag(0)
-            
-            // Tasks Tab
-            TaskListView()
-                .tabItem
+                switch selectedTab
                 {
-                    Label("Tasks", systemImage: "list.bullet")
+                case .dashboard:
+                    NavigationStack(path: $dashboardPath)
+                    {
+                        DashboardView(path: $dashboardPath)
+                    }
+                    
+                case .tasks:
+                    TaskListView()
                 }
-                .tag(1)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            // Custom compact tab bar with opaque background
+            compactTabBar
         }
-        .tint(.blue) // Accent color for selected tab
+        .ignoresSafeArea(.keyboard)
+    }
+    
+    private var compactTabBar: some View
+    {
+        HStack(spacing: 0)
+        {
+            ForEach(Tab.allCases, id: \.self)
+            { tab in
+                compactTabButton(for: tab)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 8) // Compact vertical padding
+        .background(
+            ZStack
+            {
+                // Solid opaque base layer to prevent data bleed-through
+                Color(.systemBackground)
+                
+                // Subtle material effect on top for visual interest
+                Color(.systemBackground)
+                    .opacity(0.95)
+                    .background(.ultraThinMaterial)
+            }
+        )
+        .overlay(alignment: .top)
+        {
+            Divider()
+        }
+        .shadow(color: Color.black.opacity(0.1), radius: 2, y: -1)
+    }
+    
+    private func compactTabButton(for tab: Tab) -> some View
+    {
+        Button
+        {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7))
+            {
+                selectedTab = tab
+            }
+        } label: {
+            VStack(spacing: 4)
+            {
+                Image(systemName: tab.icon)
+                    .font(.system(size: 22))
+                    .symbolRenderingMode(.hierarchical)
+                
+                Text(tab.rawValue)
+                    .font(.caption2)
+                    .fontWeight(.medium)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 6) // Compact padding
+            .foregroundStyle(selectedTab == tab ? Color.blue : Color.secondary)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 

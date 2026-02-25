@@ -142,105 +142,97 @@ struct EditTaskItemView: View
     
     var body: some View
     {
-        VStack(spacing: 8)
+        ZStack
         {
-            Form
+            // Modern gradient background
+            backgroundGradient
+            
+            VStack(spacing: 0)
             {
-                Section("Task Item Information")
+                Form
                 {
-                    FloatingPromptTextField(text: $taskItem.itemTitle, prompt: Text("Title:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
-                    
-                    FloatingPromptTextField(text: $taskItem.itemDescription, prompt: Text("Description:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
-                    
-                    FloatingPromptTextField(text: $taskItem.comment, prompt: Text("Comment:")
-                        .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                    .floatingPromptScale(1.0)
-                }
-                
-                Section("Purchase Information")
-                {
-                    VStack(alignment: .leading, spacing: 12)
+                    Section("Task Item Information")
                     {
-                        Text("Was this item purchased?").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                        FloatingPromptTextField(text: $taskItem.itemTitle, prompt: Text("Title:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
                         
-                        HStack
-                        {
-                            Text(taskItem.wrappedWasPurchased)
-                            
-                            Spacer()
-                            
-                            Button(action:
-                            {
-                                toggleWasPurchased()
-                                
-                                if taskItem.wasPurchased
-                                {
-                                    taskItem.purchaseDate = Date.now//.formatted(date: .abbreviated, time: .shortened)
-                                }
-                                else
-                                {
-                                    taskItem.purchaseDate = Date.distantFuture
-                                }
-                            },
-                            label:
-                            {
-                                Image(systemName: taskItem.wasPurchased ? "checkmark.square" : "square")
-                                    .foregroundStyle(colorScheme == .dark ? .gray : .blue)
-                            })
-                        }
+                        FloatingPromptTextField(text: $taskItem.itemDescription, prompt: Text("Description:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
                         
-                        if taskItem.wasPurchased
+                        FloatingPromptTextField(text: $taskItem.comment, prompt: Text("Comment:")
+                            .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                        .floatingPromptScale(1.0)
+                    }
+                    
+                    Section("Purchase Information")
+                    {
+                        VStack(alignment: .leading, spacing: 12)
                         {
-                            FloatingPromptTextField(text: $taskItem.url, prompt: Text("URL:")
-                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                            .floatingPromptScale(1.0)
+                            Text("Was this item purchased?").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
                             
-                            FloatingPromptTextField(text: $taskItem.quantity, prompt: Text("Quantity:")
-                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                            .floatingPromptScale(1.0)
-                            
-                            FloatingPromptTextField(text: $taskItem.purchasedPrice, prompt: Text("Purchase Price:")
-                                .foregroundStyle(colorScheme == .dark ? .gray : .blue))
-                            .floatingPromptScale(1.0)
-                            
-                            VStack(alignment: .leading, spacing: 12)
+                            HStack
                             {
-                                Text("Total Price:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                Text(taskItem.wrappedWasPurchased)
                                 
-                                Text("\(taskItem.formattedTotalPriceString)").font(.body).bold()
+                                Spacer()
                                 
-                                Text("Purchase Date:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                Button(action:
+                                {
+                                    toggleWasPurchased()
+                                    
+                                    if taskItem.wasPurchased
+                                    {
+                                        taskItem.purchaseDate = Date.now
+                                    }
+                                    else
+                                    {
+                                        taskItem.purchaseDate = Date.distantFuture
+                                    }
+                                },
+                                label:
+                                {
+                                    Image(systemName: taskItem.wasPurchased ? "checkmark.square" : "square")
+                                        .foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                })
+                            }
+                            
+                            if taskItem.wasPurchased
+                            {
+                                FloatingPromptTextField(text: $taskItem.url, prompt: Text("URL:")
+                                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                                .floatingPromptScale(1.0)
                                 
-                                DatePicker("Please enter a date", selection: $taskItem.purchaseDate, displayedComponents: .date)
-                                    .labelsHidden()
+                                FloatingPromptTextField(text: $taskItem.quantity, prompt: Text("Quantity:")
+                                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                                .floatingPromptScale(1.0)
+                                
+                                FloatingPromptTextField(text: $taskItem.purchasedPrice, prompt: Text("Purchase Price:")
+                                    .foregroundStyle(colorScheme == .dark ? .gray : .blue))
+                                .floatingPromptScale(1.0)
+                                
+                                VStack(alignment: .leading, spacing: 12)
+                                {
+                                    Text("Total Price:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                    
+                                    Text("\(taskItem.formattedTotalPriceString)").font(.body).bold()
+                                    
+                                    Text("Purchase Date:").font(.body).foregroundStyle(colorScheme == .dark ? .gray : .blue)
+                                    
+                                    DatePicker("Please enter a date", selection: $taskItem.purchaseDate, displayedComponents: .date)
+                                        .labelsHidden()
+                                }
                             }
                         }
                     }
                 }
-            }
-            .scrollContentBackground(.hidden)
-            
-            HStack
-            {
-                Button("Cancel")
-                {
-                    path.removeLast(1)
-                }
+                .scrollContentBackground(.hidden)
                 
-                Button("Save")
-                {
-                    path.removeLast(1)
-                }
-                .disabled(!validateFields())
+                // Modern styled buttons
+                modernButtonsView
             }
-            
-            Spacer()
         }
-        .padding()
         .toolbar
         {
             Menu("\(Image(systemName: "arrowshape.turn.up.left.fill"))")
@@ -265,5 +257,82 @@ struct EditTaskItemView: View
         .onDisappear(perform: validateTaskItem)
         .navigationTitle(validateFields() ? "Edit Task Item" : "Add Task Item")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    // MARK: - View Components
+    
+    private var backgroundGradient: some View
+    {
+        ZStack
+        {
+            // Solid base layer to prevent transparency
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            // Main gradient background
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.25),
+                    Color.blue.opacity(0.20),
+                    Color.purple.opacity(0.22),
+                    Color.pink.opacity(0.18),
+                    Color.orange.opacity(0.15),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        }
+    }
+    
+    private var modernButtonsView: some View
+    {
+        HStack(spacing: 16)
+        {
+            // Cancel Button
+            Button(action: {
+                path.removeLast(1)
+            }) {
+                Text("Cancel")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(
+                            colors: [.gray, .gray.opacity(0.8)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+            }
+            .buttonStyle(.plain)
+            
+            // Save Button
+            Button(action: {
+                path.removeLast(1)
+            }) {
+                Text("Save")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(
+                            colors: validateFields() ? [.blue, .purple] : [.gray.opacity(0.5), .gray.opacity(0.3)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+            }
+            .buttonStyle(.plain)
+            .disabled(!validateFields())
+            .opacity(validateFields() ? 1.0 : 0.6)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(.ultraThinMaterial)
     }
 }

@@ -150,10 +150,13 @@ struct DashboardView: View
         ZStack
         {
             backgroundGradient
+            
             mainScrollView
         }
         .navigationTitle("Dashboard")
         .navigationBarTitleDisplayMode(.large)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color(.systemBackground), for: .navigationBar)
     }
 
     private var mainScrollView: some View
@@ -174,8 +177,9 @@ struct DashboardView: View
                 breakdownSections
                 priorityTaskSections
             }
-            .padding()
-            .padding(.bottom, 60) // Extra padding to clear the tab bar
+            .padding(.horizontal)
+            .padding(.top)
+            .padding(.bottom, 1) // Minimal bottom padding - let safe area handle it
         }
         .scrollContentBackground(.hidden)
     }
@@ -210,17 +214,25 @@ struct DashboardView: View
 
     private var backgroundGradient: some View
     {
-        LinearGradient(
-            colors: [
-                Color.cyan.opacity(0.15),
-                Color.blue.opacity(0.12),
-                Color.purple.opacity(0.15),
-                Color.pink.opacity(0.10),
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .ignoresSafeArea()
+        ZStack
+        {
+            // Solid base layer to prevent transparency
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            // Main gradient background
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.15),
+                    Color.blue.opacity(0.12),
+                    Color.purple.opacity(0.15),
+                    Color.pink.opacity(0.10),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        }
     }
 
     private var dashboardHeader: some View

@@ -192,9 +192,9 @@ struct EditTaskView: View
     /// 3. **Task Items** - Navigation to associated task items (conditional)
     /// 4. **Status Information** - Completion status and dates
     ///
-    /// The view includes a toolbar with:
-    /// - Leading button for navigation (Save/Back)
-    /// - Trailing button to add new task items
+    /// The view includes Save and Cancel buttons at the bottom of the screen:
+    /// - Cancel button returns to the task list
+    /// - Save/Create button saves changes and returns to the task list (disabled if required fields are empty)
     ///
     /// - Returns: A view displaying the task editing interface with a gradient background.
     var body: some View
@@ -203,25 +203,29 @@ struct EditTaskView: View
         {
             backgroundGradient
 
-            formContent
-                .navigationTitle(navigationTitleText)
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarBackButtonHidden(true)
-                .toolbarBackground(.visible, for: .navigationBar)
-                .toolbarBackground(.regularMaterial, for: .navigationBar)
-                .onAppear(perform: handleViewAppear)
-                .onDisappear(perform: handleViewDisappear)
-                .modifier(NavigationModifier(path: $path))
-                .onChange(of: selectedBeforePhoto) { oldValue, newValue in
-                    handleBeforePhotoChange(oldValue: oldValue, newValue: newValue)
-                }
-                .onChange(of: selectedAfterPhoto) { oldValue, newValue in
-                    handleAfterPhotoChange(oldValue: oldValue, newValue: newValue)
-                }
-                .onChange(of: activePicker) { oldValue, newValue in
-                    print("🎭 activePicker changed: \(oldValue) → \(newValue)")
-                }
-                .toolbar { toolbarContent }
+            VStack(spacing: 0)
+            {
+                formContent
+                    .navigationTitle(navigationTitleText)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarBackground(.visible, for: .navigationBar)
+                    .toolbarBackground(.regularMaterial, for: .navigationBar)
+                    .onAppear(perform: handleViewAppear)
+                    .onDisappear(perform: handleViewDisappear)
+                    .modifier(NavigationModifier(path: $path))
+                    .onChange(of: selectedBeforePhoto) { oldValue, newValue in
+                        handleBeforePhotoChange(oldValue: oldValue, newValue: newValue)
+                    }
+                    .onChange(of: selectedAfterPhoto) { oldValue, newValue in
+                        handleAfterPhotoChange(oldValue: oldValue, newValue: newValue)
+                    }
+                    .onChange(of: activePicker) { oldValue, newValue in
+                        print("🎭 activePicker changed: \(oldValue) → \(newValue)")
+                    }
+                
+                // Modern styled buttons
+                modernButtonsView
+            }
         }
     }
     
@@ -234,24 +238,6 @@ struct EditTaskView: View
             return validateFields() ? "Edit Task" : "Add Task"
         }
     }
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel") {
-                // In creation mode, just go back without inserting a task
-                // In edit mode, simply navigate back
-                path = NavigationPath()
-            }
-        }
-        
-        ToolbarItem(placement: .confirmationAction) {
-            Button(isNew ? "Create" : "Save") {
-                handleSaveAction()
-            }
-            .disabled(isNew ? !validateDraftFields() : !validateFields())
-        }
-    }
 
     // MARK: - View Components
 
@@ -259,6 +245,10 @@ struct EditTaskView: View
     {
         ZStack
         {
+            // Solid base layer to prevent transparency
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
             // Main gradient background
             LinearGradient(
                 colors: [
@@ -1026,6 +1016,59 @@ struct EditTaskView: View
                 .font(.body)
                 .foregroundStyle(.secondary)
         }
+    }
+    
+    private var modernButtonsView: some View
+    {
+        HStack(spacing: 16)
+        {
+            // Cancel Button
+            Button(action: {
+                // In creation mode, just go back without inserting a task
+                // In edit mode, simply navigate back
+                path = NavigationPath()
+            }) {
+                Text("Cancel")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(
+                            colors: [.gray, .gray.opacity(0.8)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+            }
+            .buttonStyle(.plain)
+            
+            // Save Button
+            Button(action: {
+                handleSaveAction()
+            }) {
+                Text(isNew ? "Create" : "Save")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(
+                            colors: (isNew ? validateDraftFields() : validateFields()) ? [.blue, .purple] : [.gray.opacity(0.5), .gray.opacity(0.3)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+            }
+            .buttonStyle(.plain)
+            .disabled(isNew ? !validateDraftFields() : !validateFields())
+            .opacity((isNew ? validateDraftFields() : validateFields()) ? 1.0 : 0.6)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(.ultraThinMaterial)
     }
 
     // MARK: - Helper Methods

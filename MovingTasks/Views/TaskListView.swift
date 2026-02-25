@@ -279,49 +279,54 @@ struct TaskListView: View
     
     private var emptyTasksView: some View
     {
-        VStack(spacing: 24)
+        ZStack
         {
-            Spacer()
+            backgroundGradientView
             
-            ZStack
+            VStack(spacing: 24)
             {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [.blue.opacity(0.1), .purple.opacity(0.05)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 120, height: 120)
+                Spacer()
                 
-                Image(systemName: "checklist")
-                    .font(.system(size: 50))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.blue, .purple],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+                ZStack
+                {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [.blue.opacity(0.1), .purple.opacity(0.05)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
-                    )
-            }
-            
-            VStack(spacing: 8)
-            {
-                Text("No Tasks Yet")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: "checklist")
+                        .font(.system(size: 50))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.blue, .purple],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
                 
-                Text("Tap the plus button to create your first task, or use Sample Data to explore.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+                VStack(spacing: 8)
+                {
+                    Text("No Tasks Yet")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("Tap the plus button to create your first task, or use Sample Data to explore.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                }
+                
+                emptyTasksButtons
+                
+                Spacer()
             }
-            
-            emptyTasksButtons
-            
-            Spacer()
         }
     }
     
@@ -371,74 +376,79 @@ struct TaskListView: View
     
     private var noMatchingTasksView: some View
     {
-        VStack(spacing: 24)
+        ZStack
         {
-            Spacer()
+            backgroundGradientView
             
-            ZStack
+            VStack(spacing: 24)
             {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [.orange.opacity(0.1), .yellow.opacity(0.05)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 120, height: 120)
+                Spacer()
                 
-                Image(systemName: "line.3.horizontal.decrease.circle")
-                    .font(.system(size: 50))
-                    .foregroundStyle(
+                ZStack
+                {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [.orange.opacity(0.1), .yellow.opacity(0.05)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .font(.system(size: 50))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.orange, .yellow],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+                
+                VStack(spacing: 8)
+                {
+                    Text("No Matching Tasks")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("Try adjusting your filter to see more results.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                }
+                
+                Button
+                {
+                    withAnimation
+                    {
+                        selectedSearchType = .none
+                        filterValue = "All"
+                    }
+                } label: {
+                    HStack
+                    {
+                        Image(systemName: "xmark.circle.fill")
+                        Text("Clear Filter")
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(
                         LinearGradient(
                             colors: [.orange, .yellow],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        in: RoundedRectangle(cornerRadius: 12)
                     )
-            }
-            
-            VStack(spacing: 8)
-            {
-                Text("No Matching Tasks")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                }
+                .buttonStyle(.plain)
                 
-                Text("Try adjusting your filter to see more results.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+                Spacer()
             }
-            
-            Button
-            {
-                withAnimation
-                {
-                    selectedSearchType = .none
-                    filterValue = "All"
-                }
-            } label: {
-                HStack
-                {
-                    Image(systemName: "xmark.circle.fill")
-                    Text("Clear Filter")
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-                .background(
-                    LinearGradient(
-                        colors: [.orange, .yellow],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    ),
-                    in: RoundedRectangle(cornerRadius: 12)
-                )
-                .foregroundStyle(.white)
-            }
-            .buttonStyle(.plain)
-            
-            Spacer()
         }
     }
     
@@ -464,7 +474,7 @@ struct TaskListView: View
                     
                     taskListView
                 }
-                .padding(.vertical)
+                .padding(.top)
             }
             .scrollIndicators(.hidden)
             .animation(.spring(response: 0.4, dampingFraction: 0.7), value: filteredTasks)
@@ -473,18 +483,26 @@ struct TaskListView: View
     
     private var backgroundGradientView: some View
     {
-        LinearGradient(
-            colors: [
-                Color.cyan.opacity(0.25),
-                Color.blue.opacity(0.20),
-                Color.purple.opacity(0.22),
-                Color.pink.opacity(0.18),
-                Color.orange.opacity(0.15)
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .ignoresSafeArea()
+        ZStack
+        {
+            // Solid base layer to prevent transparency
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            // Main gradient background
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.25),
+                    Color.blue.opacity(0.20),
+                    Color.purple.opacity(0.22),
+                    Color.pink.opacity(0.18),
+                    Color.orange.opacity(0.15)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        }
     }
     
     private var decorativeOrbsView: some View
@@ -990,7 +1008,7 @@ struct TaskListView: View
             .navigationTitle("Tasks")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarBackground(.regularMaterial, for: .navigationBar)
+            .toolbarBackground(Color(.systemBackground), for: .navigationBar)
             .onAppear(perform: populateGrandTotal)
         }
     }
