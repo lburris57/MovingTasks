@@ -156,6 +156,9 @@ struct DashboardView: View
         .navigationTitle("Dashboard")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.regularMaterial, for: .navigationBar)
+        .navigationDestination(for: Task.self) { task in
+            EditTaskView(task: task, path: $path)
+        }
     }
 
     private var mainScrollView: some View
@@ -528,7 +531,13 @@ struct DashboardView: View
         {
             ForEach(highPriorityTasks, id: \.taskId)
             { task in
-                DashboardTaskRow(task: task)
+                Button
+                {
+                    path.append(task)
+                } label: {
+                    DashboardTaskRow(task: task)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -586,7 +595,13 @@ struct DashboardView: View
         {
             ForEach(recentlyCompletedTasks, id: \.taskId)
             { task in
-                DashboardTaskRow(task: task, showCompletedDate: true)
+                Button
+                {
+                    path.append(task)
+                } label: {
+                    DashboardTaskRow(task: task, showCompletedDate: true)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -846,6 +861,10 @@ struct DashboardTaskRow: View
             Spacer()
 
             PriorityBadge(priority: task.priority)
+            
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 12)
