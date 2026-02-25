@@ -44,9 +44,24 @@ struct DashboardView: View
 
     /// The current color scheme (light or dark mode)
     @Environment(\.colorScheme) var colorScheme
+    
+    /// Model context for updating tasks
+    @Environment(\.modelContext) private var modelContext
 
     /// Navigation path for programmatic navigation
     @Binding var path: NavigationPath
+    
+    /// Track if user has seen the swipe tutorial
+    @AppStorage("hasSeenSwipeTutorial") private var hasSeenSwipeTutorial = false
+    
+    /// State to control the partial swipe animation
+    @State private var showSwipeHint = false
+    
+    /// State to control tooltip visibility
+    @State private var showTooltip = false
+    
+    /// State to control purchased items sheet visibility
+    @State private var showPurchasedItemsSheet = false
 
     // MARK: - Computed Properties
 
@@ -158,6 +173,10 @@ struct DashboardView: View
         .toolbarBackground(.regularMaterial, for: .navigationBar)
         .navigationDestination(for: Task.self) { task in
             EditTaskView(task: task, path: $path)
+        }
+        .sheet(isPresented: $showPurchasedItemsSheet)
+        {
+            PurchasedItemsSheet(tasks: tasks, taskItems: taskItems, totalSpent: totalSpent)
         }
     }
 
@@ -371,13 +390,19 @@ struct DashboardView: View
 
     private var financialSection: some View
     {
-        VStack(alignment: .leading, spacing: 16)
+        Button
         {
-            financialHeader
-            financialContent
+            showPurchasedItemsSheet = true
+        } label: {
+            VStack(alignment: .leading, spacing: 16)
+            {
+                financialHeader
+                financialContent
+            }
+            .padding()
+            .background(financialBackground)
         }
-        .padding()
-        .background(financialBackground)
+        .buttonStyle(.plain)
     }
 
     private var financialHeader: some View
@@ -396,6 +421,10 @@ struct DashboardView: View
                 .font(.headline)
                 .fontWeight(.semibold)
             Spacer()
+            
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -433,7 +462,7 @@ struct DashboardView: View
 
             HStack
             {
-                Text("Total Spent")
+                Text("Grand Total")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -529,8 +558,8 @@ struct DashboardView: View
     {
         VStack(spacing: 8)
         {
-            ForEach(highPriorityTasks, id: \.taskId)
-            { task in
+            ForEach(Array(highPriorityTasks.enumerated()), id: \.element.taskId)
+            { index, task in
                 Button
                 {
                     path.append(task)
@@ -538,6 +567,61 @@ struct DashboardView: View
                     DashboardTaskRow(task: task)
                 }
                 .buttonStyle(.plain)
+                .swipeActions(edge: .trailing, allowsFullSwipe: true)
+                {
+                    Button
+                    {
+                        toggleTaskCompletion(task)
+                    } label: {
+                        Label("Complete", systemImage: "checkmark.circle.fill")
+                    }
+                    .tint(.green)
+                }
+                .offset(x: (index == 0 && showSwipeHint) ? -60 : 0)
+                .animation(.easeInOut(duration: 0.8), value: showSwipeHint)
+                .overlay(alignment: .topTrailing)
+                {
+                    if index == 0 && showTooltip
+                    {
+                        SwipeTutorialTooltip()
+                            .offset(x: 10, y: -40)
+                            .transition(.opacity.combined(with: .scale))
+                    }
+                }
+            }
+        }
+        .onAppear
+        {
+            if !hasSeenSwipeTutorial && !highPriorityTasks.isEmpty
+            {
+                // Show hint after a brief delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5)
+                {
+                    withAnimation
+                    {
+                        showSwipeHint = true
+                        showTooltip = true
+                    }
+                    
+                    // Hide the swipe hint
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0)
+                    {
+                        withAnimation
+                        {
+                            showSwipeHint = false
+                        }
+                    }
+                    
+                    // Hide tooltip after longer duration
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0)
+                    {
+                        withAnimation
+                        {
+                            showTooltip = false
+                        }
+                        hasSeenSwipeTutorial = true
+                    }
+                }
             }
         }
     }
@@ -602,6 +686,16 @@ struct DashboardView: View
                     DashboardTaskRow(task: task, showCompletedDate: true)
                 }
                 .buttonStyle(.plain)
+                .swipeActions(edge: .trailing, allowsFullSwipe: true)
+                {
+                    Button
+                    {
+                        toggleTaskCompletion(task)
+                    } label: {
+                        Label("Mark Incomplete", systemImage: "arrow.uturn.backward.circle.fill")
+                    }
+                    .tint(.orange)
+                }
             }
         }
     }
@@ -621,6 +715,31 @@ struct DashboardView: View
                         lineWidth: 1
                     )
             )
+    }
+    
+    // MARK: - Helper Methods
+    
+    /// Toggles the completion status of a task
+    private func toggleTaskCompletion(_ task: Task)
+    {
+        withAnimation
+        {
+            task.isCompleted.toggle()
+            
+            if task.isCompleted
+            {
+                // Set completion date
+                task.completedDate = Date.now.formatted(date: .abbreviated, time: .shortened)
+            }
+            else
+            {
+                // Clear completion date
+                task.completedDate = ""
+            }
+            
+            // Save changes
+            try? modelContext.save()
+        }
     }
 }
 
@@ -901,6 +1020,372 @@ struct PriorityBadge: View
             .background(color.opacity(0.2))
             .foregroundStyle(color)
             .cornerRadius(6)
+    }
+}
+
+/// A tooltip showing swipe tutorial hint
+struct SwipeTutorialTooltip: View
+{
+    var body: some View
+    {
+        HStack(spacing: 6)
+        {
+            Image(systemName: "hand.draw.fill")
+                .font(.caption)
+            
+            Text("Swipe to complete")
+                .font(.caption)
+                .fontWeight(.medium)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [.blue, .purple],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
+        )
+        .overlay(alignment: .bottomLeading)
+        {
+            // Arrow pointing down to the task
+            Triangle()
+                .fill(
+                    LinearGradient(
+                        colors: [.blue, .purple],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(width: 12, height: 8)
+                .offset(x: 20, y: 12)
+        }
+    }
+}
+
+/// Triangle shape for tooltip arrow
+struct Triangle: Shape
+{
+    func path(in rect: CGRect) -> Path
+    {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// A sheet view displaying all purchased items grouped by task
+struct PurchasedItemsSheet: View
+{
+    let tasks: [Task]
+    let taskItems: [TaskItem]
+    let totalSpent: Double
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    /// Group purchased items by their parent task
+    private var purchasedItemsByTask: [(Task, [TaskItem])]
+    {
+        // Get only purchased items
+        let purchased = taskItems.filter { $0.wasPurchased }
+        
+        // Group by task
+        let grouped = Dictionary(grouping: purchased) { item in
+            item.task
+        }
+        
+        // Convert to sorted array (by task title)
+        return grouped
+            .compactMap { task, items in
+                guard let task = task else { return nil }
+                return (task, items.sorted { $0.itemTitle < $1.itemTitle })
+            }
+            .sorted { $0.0.taskTitle < $1.0.taskTitle }
+    }
+    
+    var body: some View
+    {
+        NavigationStack
+        {
+            ZStack
+            {
+                // Background gradient matching dashboard
+                backgroundGradient
+                
+                if purchasedItemsByTask.isEmpty
+                {
+                    emptyStateView
+                }
+                else
+                {
+                    ScrollView
+                    {
+                        VStack(spacing: 20)
+                        {
+                            summaryHeader
+                            
+                            ForEach(0..<purchasedItemsByTask.count, id: \.self)
+                            { index in
+                                let task = purchasedItemsByTask[index].0
+                                let items = purchasedItemsByTask[index].1
+                                taskItemsSection(task: task, items: items)
+                            }
+                            
+                            grandTotalSection
+                        }
+                        .padding()
+                        .padding(.bottom, 20)
+                    }
+                    .scrollContentBackground(.hidden)
+                }
+            }
+            .navigationTitle("Purchased Items")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar
+            {
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Button("Done")
+                    {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
+    private var backgroundGradient: some View
+    {
+        ZStack
+        {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.15),
+                    Color.blue.opacity(0.12),
+                    Color.purple.opacity(0.15),
+                    Color.pink.opacity(0.10),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+        }
+    }
+    
+    private var summaryHeader: some View
+    {
+        HStack(spacing: 12)
+        {
+            Image(systemName: "cart.fill")
+                .font(.title2)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.green, .mint],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+            
+            VStack(alignment: .leading, spacing: 4)
+            {
+                Text("All Purchased Items")
+                    .font(.headline)
+                
+                Text("\(taskItems.filter { $0.wasPurchased }.count) items across \(purchasedItemsByTask.count) tasks")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+    
+    private func taskItemsSection(task: Task, items: [TaskItem]) -> some View
+    {
+        VStack(alignment: .leading, spacing: 12)
+        {
+            // Task header
+            HStack
+            {
+                VStack(alignment: .leading, spacing: 4)
+                {
+                    Text(task.taskTitle)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    HStack(spacing: 8)
+                    {
+                        Label(task.location, systemImage: "location.fill")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        
+                        Label(task.category, systemImage: "folder.fill")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                
+                Spacer()
+                
+                // Task subtotal
+                VStack(alignment: .trailing, spacing: 2)
+                {
+                    Text("Subtotal")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(taskSubtotal(items: items))
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.green)
+                }
+            }
+            
+            Divider()
+            
+            // Items list
+            VStack(spacing: 8)
+            {
+                ForEach(0..<items.count, id: \.self)
+                { index in
+                    purchasedItemRow(item: items[index])
+                }
+            }
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+    
+    private func purchasedItemRow(item: TaskItem) -> some View
+    {
+        HStack(alignment: .top, spacing: 12)
+        {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+                .font(.caption)
+            
+            VStack(alignment: .leading, spacing: 4)
+            {
+                Text(item.itemTitle)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                if !item.itemDescription.isEmpty
+                {
+                    Text(item.itemDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 2)
+            {
+                if let quantity = Int(item.quantity), quantity > 1
+                {
+                    Text("×\(quantity)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Text(item.totalPrice.formatted(.currency(code: "USD")))
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private var grandTotalSection: some View
+    {
+        VStack(spacing: 16)
+        {
+            Divider()
+            
+            HStack
+            {
+                VStack(alignment: .leading, spacing: 4)
+                {
+                    Text("Grand Total")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("\(taskItems.filter { $0.wasPurchased }.count) purchased items")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                Text(String(format: "$%.2f", totalSpent))
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.green, .mint],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [.green.opacity(0.3), .mint.opacity(0.2)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                    )
+            )
+        }
+    }
+    
+    private var emptyStateView: some View
+    {
+        VStack(spacing: 20)
+        {
+            Image(systemName: "cart.badge.questionmark")
+                .font(.system(size: 60))
+                .foregroundStyle(.secondary)
+            
+            Text("No Purchased Items")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("Items marked as purchased will appear here")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+    }
+    
+    private func taskSubtotal(items: [TaskItem]) -> String
+    {
+        let subtotal = items.reduce(Decimal.zero) { $0 + $1.totalPrice }
+        return subtotal.formatted(.currency(code: "USD"))
     }
 }
 
