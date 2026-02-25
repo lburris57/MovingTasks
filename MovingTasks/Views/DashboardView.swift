@@ -154,9 +154,8 @@ struct DashboardView: View
             mainScrollView
         }
         .navigationTitle("Dashboard")
-        .navigationBarTitleDisplayMode(.large)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.regularMaterial, for: .navigationBar)
     }
 
     private var mainScrollView: some View

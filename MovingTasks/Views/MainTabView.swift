@@ -54,58 +54,85 @@ struct MainTabView: View
     
     var body: some View
     {
-        ZStack(alignment: .bottom)
+        ZStack
         {
-            // Main content
-            Group
-            {
-                switch selectedTab
-                {
-                case .dashboard:
-                    NavigationStack(path: $dashboardPath)
-                    {
-                        DashboardView(path: $dashboardPath)
-                    }
-                    
-                case .tasks:
-                    TaskListView()
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // Background that extends into safe areas - matches the gradient style
+            LinearGradient(
+                colors: [
+                    Color.cyan.opacity(0.15),
+                    Color.blue.opacity(0.12),
+                    Color.purple.opacity(0.15),
+                    Color.pink.opacity(0.10)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
-            // Custom compact tab bar with opaque background
-            compactTabBar
+            VStack(spacing: 0)
+            {
+                // Main content
+                Group
+                {
+                    switch selectedTab
+                    {
+                    case .dashboard:
+                        NavigationStack(path: $dashboardPath)
+                        {
+                            DashboardView(path: $dashboardPath)
+                        }
+                        
+                    case .tasks:
+                        TaskListView()
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                // Custom compact tab bar with opaque background
+                compactTabBar
+            }
         }
         .ignoresSafeArea(.keyboard)
     }
     
     private var compactTabBar: some View
     {
-        HStack(spacing: 0)
+        VStack(spacing: 0)
         {
-            ForEach(Tab.allCases, id: \.self)
-            { tab in
-                compactTabButton(for: tab)
+            Divider()
+                .background(Color.white.opacity(0.2))
+            
+            HStack(spacing: 0)
+            {
+                ForEach(Tab.allCases, id: \.self)
+                { tab in
+                    compactTabButton(for: tab)
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .padding(.bottom, 8)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 8) // Compact vertical padding
         .background(
             ZStack
             {
-                // Solid opaque base layer to prevent data bleed-through
+                // Solid opaque base layer
                 Color(.systemBackground)
                 
-                // Subtle material effect on top for visual interest
-                Color(.systemBackground)
-                    .opacity(0.95)
-                    .background(.ultraThinMaterial)
+                // Modern gradient overlay matching the app's design
+                LinearGradient(
+                    colors: [
+                        Color.cyan.opacity(0.25),
+                        Color.blue.opacity(0.20),
+                        Color.purple.opacity(0.22),
+                        Color.pink.opacity(0.18)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
             }
+            .ignoresSafeArea(edges: .bottom)
         )
-        .overlay(alignment: .top)
-        {
-            Divider()
-        }
         .shadow(color: Color.black.opacity(0.1), radius: 2, y: -1)
     }
     

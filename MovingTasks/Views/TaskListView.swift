@@ -1007,8 +1007,7 @@ struct TaskListView: View
             }
             .navigationTitle("Tasks")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+            .toolbarBackground(.regularMaterial, for: .navigationBar)
             .onAppear(perform: populateGrandTotal)
         }
     }
