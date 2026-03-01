@@ -184,7 +184,7 @@ struct TaskRowView: View
                 {
                     Image(systemName: "list.bullet.circle.fill")
                         .font(.caption)
-                    Text("\(task.taskItemsArray.count) items")
+                    Text("\(task.taskItemsArray.count) \(task.taskItemsArray.count == 1 ? "item" : "items")")
                         .font(.caption)
                         .fontWeight(.medium)
                 }

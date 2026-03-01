@@ -43,6 +43,9 @@
 		912843672F4EAE2B004D8277 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912843662F4EAE2B004D8277 /* MainTabView.swift */; };
 		912843692F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md in Resources */ = {isa = PBXBuildFile; fileRef = 912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */; };
 		9128436B2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md in Resources */ = {isa = PBXBuildFile; fileRef = 9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */; };
+		91AD95CC2F53B326001B3DA3 /* Journal.md in Resources */ = {isa = PBXBuildFile; fileRef = 91AD95CB2F53B326001B3DA3 /* Journal.md */; };
+		91AD95CE2F53B36C001B3DA3 /* PERFORMANCE_OPPORTUNITIES.md in Resources */ = {isa = PBXBuildFile; fileRef = 91AD95CD2F53B36C001B3DA3 /* PERFORMANCE_OPPORTUNITIES.md */; };
+		91AD95D02F53B3A6001B3DA3 /* ASSISTANT_SUMMARY.md in Resources */ = {isa = PBXBuildFile; fileRef = 91AD95CF2F53B3A6001B3DA3 /* ASSISTANT_SUMMARY.md */; };
 		91C25D3F2B474AB200A9FE50 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */; };
 		91C25D412B474AE700A9FE50 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C25D402B474AE700A9FE50 /* ImagePicker.swift */; };
 		91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */ = {isa = PBXBuildFile; fileRef = 91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */; };
@@ -100,6 +103,9 @@
 		912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DASHBOARD_INTEGRATION.md; sourceTree = "<group>"; };
 		9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DASHBOARD_QUICK_START.md; sourceTree = "<group>"; };
 		916066AD2ED6AA3800FD58DA /* MovingTasksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovingTasksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		91AD95CB2F53B326001B3DA3 /* Journal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Journal.md; sourceTree = "<group>"; };
+		91AD95CD2F53B36C001B3DA3 /* PERFORMANCE_OPPORTUNITIES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PERFORMANCE_OPPORTUNITIES.md; sourceTree = "<group>"; };
+		91AD95CF2F53B3A6001B3DA3 /* ASSISTANT_SUMMARY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ASSISTANT_SUMMARY.md; sourceTree = "<group>"; };
 		91C25D3E2B474AB200A9FE50 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		91C25D402B474AE700A9FE50 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		91E5AE342EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SwiftRouting_Migration_Summary.md; sourceTree = "<group>"; };
@@ -141,6 +147,11 @@
 				910CA1352F4A9C1500AC88E6 /* MANUAL_UPDATE_REQUIRED.md */,
 				910CA12B2F4A975C00AC88E6 /* TASK_ITEMS_FEATURE.md */,
 				910CA12D2F4A984C00AC88E6 /* FILTER_VIEW_FIX.md */,
+				912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */,
+				9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */,
+				91AD95CB2F53B326001B3DA3 /* Journal.md */,
+				91AD95CD2F53B36C001B3DA3 /* PERFORMANCE_OPPORTUNITIES.md */,
+				91AD95CF2F53B3A6001B3DA3 /* ASSISTANT_SUMMARY.md */,
 				910CA12F2F4A99FA00AC88E6 /* MODERN_UI_FINAL.md */,
 				910CA1312F4A9B5500AC88E6 /* FILTER_TOOLBAR_IMPLEMENTATION.md */,
 			);
@@ -234,8 +245,6 @@
 				910CA1332F4A9BBB00AC88E6 /* TaskRowView.swift */,
 				912843642F4EAD80004D8277 /* DashboardView.swift */,
 				912843662F4EAE2B004D8277 /* MainTabView.swift */,
-				912843682F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md */,
-				9128436A2F4EAE70004D8277 /* DASHBOARD_QUICK_START.md */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -356,8 +365,11 @@
 				9118BC412B2659B100790686 /* Preview Assets.xcassets in Resources */,
 				912843692F4EAE51004D8277 /* DASHBOARD_INTEGRATION.md in Resources */,
 				91E5AE352EE3DEA300A7FD4F /* SwiftRouting_Migration_Summary.md in Resources */,
+				91AD95D02F53B3A6001B3DA3 /* ASSISTANT_SUMMARY.md in Resources */,
+				91AD95CC2F53B326001B3DA3 /* Journal.md in Resources */,
 				910CA1362F4A9C1500AC88E6 /* MANUAL_UPDATE_REQUIRED.md in Resources */,
 				910CA12E2F4A984C00AC88E6 /* FILTER_VIEW_FIX.md in Resources */,
+				91AD95CE2F53B36C001B3DA3 /* PERFORMANCE_OPPORTUNITIES.md in Resources */,
 				910CA12A2F4A94A200AC88E6 /* MODERN_UI_UPDATES.md in Resources */,
 				910CA1302F4A99FA00AC88E6 /* MODERN_UI_FINAL.md in Resources */,
 				910CA1322F4A9B5500AC88E6 /* FILTER_TOOLBAR_IMPLEMENTATION.md in Resources */,

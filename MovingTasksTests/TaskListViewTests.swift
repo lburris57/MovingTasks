@@ -20,43 +20,7 @@ struct TaskListViewTests
 
     init() async throws
     {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: Task.self, TaskItem.self, configurations: config)
-        modelContext = ModelContext(modelContainer)
-    }
-
-    // MARK: - Helper Methods
-
-    func createTestTask(
-        title: String = "Test Task",
-        description: String = "Test Description",
-        category: String = "Kitchen",
-        location: String = "Inside",
-        priority: String = "High",
-        isCompleted: Bool = false
-    ) -> Task
-    {
-        let task = Task(taskTitle: title, taskDescription: description, comment: "Test comment")
-        task.category = category
-        task.location = location
-        task.priority = priority
-        task.isCompleted = isCompleted
-        return task
-    }
-
-    func createTestTaskItem(
-        itemTitle: String = "Test Item Title",
-        itemDescription: String = "Test Item",
-        comment: String = "Test Comment "
-    ) -> TaskItem
-    {
-        let taskItem = TaskItem(
-            itemTitle: itemTitle,
-            itemDescription: itemDescription,
-            comment: comment
-        )
-        
-        return taskItem
+        (modelContainer, modelContext) = try TestHelpers.createTestContainer()
     }
 
     // MARK: - Priority Styling Tests
@@ -112,8 +76,8 @@ struct TaskListViewTests
     @Test("Filter by specific category matches correctly")
     func filterByCategory()
     {
-        let kitchenTask = createTestTask(title: "Kitchen Task", category: "Kitchen")
-        let bathroomTask = createTestTask(title: "Bathroom Task", category: "Bathroom")
+        let kitchenTask = TestHelpers.createTestTask(title: "Kitchen Task", category: "Kitchen")
+        let bathroomTask = TestHelpers.createTestTask(title: "Bathroom Task", category: "Bathroom")
 
         modelContext.insert(kitchenTask)
         modelContext.insert(bathroomTask)
@@ -126,8 +90,8 @@ struct TaskListViewTests
     @Test("Filter by specific location matches correctly")
     func filterByLocation()
     {
-        let insideTask = createTestTask(title: "Inside Task", location: "Inside")
-        let outsideTask = createTestTask(title: "Outside Task", location: "Outside")
+        let insideTask = TestHelpers.createTestTask(title: "Inside Task", location: "Inside")
+        let outsideTask = TestHelpers.createTestTask(title: "Outside Task", location: "Outside")
 
         modelContext.insert(insideTask)
         modelContext.insert(outsideTask)
@@ -139,8 +103,8 @@ struct TaskListViewTests
     @Test("Filter by priority matches correctly")
     func filterByPriority()
     {
-        let highPriorityTask = createTestTask(title: "High Priority", priority: "High")
-        let lowPriorityTask = createTestTask(title: "Low Priority", priority: "Low")
+        let highPriorityTask = TestHelpers.createTestTask(title: "High Priority", priority: "High")
+        let lowPriorityTask = TestHelpers.createTestTask(title: "Low Priority", priority: "Low")
 
         modelContext.insert(highPriorityTask)
         modelContext.insert(lowPriorityTask)
@@ -152,8 +116,8 @@ struct TaskListViewTests
     @Test("Filter by completed status works correctly")
     func filterByCompletedStatus()
     {
-        let completedTask = createTestTask(title: "Completed Task", isCompleted: true)
-        let incompleteTask = createTestTask(title: "Incomplete Task", isCompleted: false)
+        let completedTask = TestHelpers.createTestTask(title: "Completed Task", isCompleted: true)
+        let incompleteTask = TestHelpers.createTestTask(title: "Incomplete Task", isCompleted: false)
 
         modelContext.insert(completedTask)
         modelContext.insert(incompleteTask)
@@ -165,8 +129,8 @@ struct TaskListViewTests
     @Test("Filter by incomplete status works correctly")
     func filterByIncompleteStatus()
     {
-        let completedTask = createTestTask(title: "Completed Task", isCompleted: true)
-        let incompleteTask = createTestTask(title: "Incomplete Task", isCompleted: false)
+        let completedTask = TestHelpers.createTestTask(title: "Completed Task", isCompleted: true)
+        let incompleteTask = TestHelpers.createTestTask(title: "Incomplete Task", isCompleted: false)
 
         modelContext.insert(completedTask)
         modelContext.insert(incompleteTask)
@@ -177,7 +141,7 @@ struct TaskListViewTests
     @Test("Filter matching is case-insensitive")
     func caseInsensitiveFiltering()
     {
-        let task = createTestTask(title: "Test Task", category: "KITCHEN")
+        let task = TestHelpers.createTestTask(title: "Test Task", category: "KITCHEN")
         modelContext.insert(task)
 
         #expect(task.category.lowercased().contains("kitchen"))
@@ -190,8 +154,8 @@ struct TaskListViewTests
     @Test("Deleting a task removes it from context")
     func deleteTaskRemovesFromContext() throws
     {
-        let task1 = createTestTask(title: "Task 1")
-        let task2 = createTestTask(title: "Task 2")
+        let task1 = TestHelpers.createTestTask(title: "Task 1")
+        let task2 = TestHelpers.createTestTask(title: "Task 2")
 
         modelContext.insert(task1)
         modelContext.insert(task2)
@@ -210,9 +174,9 @@ struct TaskListViewTests
     @Test("Deleting multiple tasks works correctly")
     func deleteMultipleTasks() throws
     {
-        let task1 = createTestTask(title: "Task 1")
-        let task2 = createTestTask(title: "Task 2")
-        let task3 = createTestTask(title: "Task 3")
+        let task1 = TestHelpers.createTestTask(title: "Task 1")
+        let task2 = TestHelpers.createTestTask(title: "Task 2")
+        let task3 = TestHelpers.createTestTask(title: "Task 3")
 
         modelContext.insert(task1)
         modelContext.insert(task2)
@@ -350,7 +314,7 @@ struct TaskListViewTests
     func navigationPathAppendsTask()
     {
         var path = NavigationPath()
-        let task = createTestTask()
+        let task = TestHelpers.createTestTask()
 
         path.append(task)
 
@@ -361,8 +325,8 @@ struct TaskListViewTests
     func navigationPathAppendsMultipleTasks()
     {
         var path = NavigationPath()
-        let task1 = createTestTask(title: "Task 1")
-        let task2 = createTestTask(title: "Task 2")
+        let task1 = TestHelpers.createTestTask(title: "Task 1")
+        let task2 = TestHelpers.createTestTask(title: "Task 2")
 
         path.append(task1)
         path.append(task2)
@@ -374,7 +338,7 @@ struct TaskListViewTests
     func navigationPathCanBeCleared()
     {
         var path = NavigationPath()
-        let task = createTestTask()
+        let task = TestHelpers.createTestTask()
 
         path.append(task)
         #expect(path.count == 1)
@@ -402,7 +366,7 @@ struct TaskListViewTests
     @Test("New task can be inserted into context")
     func insertTaskIntoContext() throws
     {
-        let task = createTestTask(title: "New Task")
+        let task = TestHelpers.createTestTask(title: "New Task")
 
         modelContext.insert(task)
         try modelContext.save()
@@ -417,9 +381,9 @@ struct TaskListViewTests
     @Test("Multiple tasks can be inserted into context")
     func insertMultipleTasksIntoContext() throws
     {
-        let task1 = createTestTask(title: "Task 1")
-        let task2 = createTestTask(title: "Task 2")
-        let task3 = createTestTask(title: "Task 3")
+        let task1 = TestHelpers.createTestTask(title: "Task 1")
+        let task2 = TestHelpers.createTestTask(title: "Task 2")
+        let task3 = TestHelpers.createTestTask(title: "Task 3")
 
         modelContext.insert(task1)
         modelContext.insert(task2)
@@ -446,7 +410,7 @@ struct TaskListViewTests
     @Test("Filter with empty result set returns no matches")
     func filterWithEmptyResultSet()
     {
-        let task = createTestTask(category: "Kitchen")
+        let task = TestHelpers.createTestTask(category: "Kitchen")
         modelContext.insert(task)
 
         let matchesNonExistent = task.category.lowercased().contains("bedroom".lowercased())
@@ -457,7 +421,7 @@ struct TaskListViewTests
     @Test("Task with all default values can be created")
     func taskWithDefaultValues()
     {
-        let task = createTestTask()
+        let task = TestHelpers.createTestTask()
 
         #expect(task.taskTitle == "Test Task")
         #expect(task.taskDescription == "Test Description")
@@ -566,30 +530,33 @@ struct TaskListViewIntegrationTests
         #expect(tasks.first?.taskTitle == "Bathroom Task")
     }
 
-//    @Test("Task with multiple task items calculates grand total correctly")
-//    func taskWithMultipleItems() throws
-//    {
-//        let task = Task(taskTitle: "Shopping Task", taskDescription: "Buy items", comment: "")
-//        modelContext.insert(task)
-//
-//        let item1 = TaskItem(itemDescription: "Item 1", quantity: "2", unitPriceString: "$10.00")
-//        let item2 = TaskItem(itemDescription: "Item 2", quantity: "1", unitPriceString: "$15.00")
-//
-//        modelContext.insert(item1)
-//        modelContext.insert(item2)
-//        try modelContext.save()
-//
-//        var total: Decimal = 0.00
-//        for item in [item1, item2]
-//        {
-//            let priceString = item.totalPriceString.replacingOccurrences(of: "$", with: "")
-//            if let price = Decimal(string: priceString)
-//            {
-//                total += price
-//            }
-//        }
-//
-//        // (2 * $10) + (1 * $15) = $35
-//        #expect(total == Decimal(35.00))
-//    }
+    @Test("Task with multiple task items calculates grand total correctly")
+    func taskWithMultipleItems() throws
+    {
+        let task = Task(taskTitle: "Shopping Task", taskDescription: "Buy items", comment: "")
+        modelContext.insert(task)
+
+        let item1 = TaskItem(itemTitle: "Item 1", itemDescription: "Description 1", comment: "")
+        item1.quantity = "2"
+        item1.purchasedPrice = "$10.00"
+        item1.task = task
+
+        let item2 = TaskItem(itemTitle: "Item 2", itemDescription: "Description 2", comment: "")
+        item2.quantity = "1"
+        item2.purchasedPrice = "$15.00"
+        item2.task = task
+
+        modelContext.insert(item1)
+        modelContext.insert(item2)
+        try modelContext.save()
+
+        var total: Decimal = 0.00
+        for item in [item1, item2]
+        {
+            total += item.totalPrice
+        }
+
+        // (2 * $10) + (1 * $15) = $35
+        #expect(total == Decimal(35.00))
+    }
 }
